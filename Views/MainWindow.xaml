@@ -6,9 +6,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
-    Title="MainWindow"
+    Title="Space Traders"
     Width="800"
     Height="450"
+    Background="{DynamicResource MainBackground}"
     d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
     mc:Ignorable="d">
     <Grid>
@@ -18,5 +19,6 @@
         </Grid.RowDefinitions>
         <ItemsControl x:Name="MainToolBar" prism:RegionManager.RegionName="MainToolbarRegion" />
         <ContentControl x:Name="MainArea" prism:RegionManager.RegionName="MainAreaRegion" />
+        <ContentControl x:Name="SplashScreen" Grid.RowSpan="2" prism:RegionManager.RegionName="SplashScreenRegion" VerticalAlignment="Center" />
     </Grid>
 </Window>

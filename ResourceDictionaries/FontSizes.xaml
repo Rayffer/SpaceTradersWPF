@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <sys:Double x:Key="Level0FontSize">26</sys:Double>
+    <sys:Double x:Key="Level1FontSize">20</sys:Double>
+    <sys:Double x:Key="Level2FontSize">18</sys:Double>
+    <sys:Double x:Key="Level3FontSize">16</sys:Double>
+    <sys:Double x:Key="Level4FontSize">14</sys:Double>
+    <sys:Double x:Key="Level5FontSize">12</sys:Double>
+</ResourceDictionary>

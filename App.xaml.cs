@@ -3,6 +3,8 @@
 using Prism.Ioc;
 using Prism.Unity;
 
+using RestSharp;
+
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 
@@ -20,6 +22,8 @@ public partial class App : PrismApplication
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        containerRegistry.Register<ICustomerStore, DbCustomerStore>();
+        var client = new RestClient("https://api.spacetraders.io/v2/");
+        containerRegistry.RegisterInstance(typeof(IRestClient), client);
+        containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
     }
 }

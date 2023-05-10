@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SpaceTradersWPF.Models;
 
 namespace SpaceTradersWPF.Services;
+
 internal interface ISpaceTradersApi
 {
+    AgentResponse RegisterAgent(string symbol, string faction);
+
+    void SetAccessTokenHeader(string token);
 }
