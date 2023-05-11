@@ -35,8 +35,5 @@ internal class SpaceTradersApi : ISpaceTradersApi
         accessToken = token;
         restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
         restClient.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-        var request = new RestRequest("my/agent", Method.Get);
-        var response = restClient.ExecuteAsync(request).Result;
-        Console.WriteLine(response.Content);
     }
 }
