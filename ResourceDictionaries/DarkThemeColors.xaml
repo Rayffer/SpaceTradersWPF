@@ -4,7 +4,8 @@
     <SolidColorBrush x:Key="ButtonBackgroundPressedSolidColorBrush" Color="#FFA26F00" />
     <SolidColorBrush x:Key="ButtonBackgroundDisabledSolidColorBrush" Color="#FFFFAE05" />
     <SolidColorBrush x:Key="ButtonForegroundDisabledSolidColorBrush" Color="#80000000" />
-    <SolidColorBrush x:Key="MainBackground" Color="#FF212A3B" />
-    <SolidColorBrush x:Key="DialogBackground" Color="#FF2d394e" />
-    <SolidColorBrush x:Key="TextFontColor" Color="#FFDBDBDB" />
+    <SolidColorBrush x:Key="MainBackgroundSolidColorBrush" Color="#FF212A3B" />
+    <SolidColorBrush x:Key="DialogBackgroundSolidColorBrush" Color="#FF2d394E" />
+    <SolidColorBrush x:Key="MainBackgroundSemiTransparentSolidColorBrush" Color="#C0212A3B" />
+    <SolidColorBrush x:Key="TextFontColorSolidColorBrush" Color="#FFDBDBDB" />
 </ResourceDictionary>

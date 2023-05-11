@@ -1,6 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource TextFontColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+    </Style>
+    <Style TargetType="TextBlock" x:Key="BasicTextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
     </Style>
 </ResourceDictionary>
