@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
@@ -28,6 +29,14 @@ internal class SpaceTradersApi : ISpaceTradersApi
         Console.WriteLine(response.Content);
 
         return JsonConvert.DeserializeObject<AgentResponse>(response.Content);
+    }
+
+    public async Task<Agent> GetAgent()
+    {
+        var request = new RestRequest("my/agent", Method.Get);
+        var response = await restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<Agent>>(response.Content).data;
     }
 
     public void SetAccessTokenHeader(string token)
