@@ -8,16 +8,11 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Border Margin="15"
-                Padding="10"
-                BorderThickness="1"
-                CornerRadius="10"
-                BorderBrush="{DynamicResource ButtonBackgroundSolidColorBrush}"
-                Background="{DynamicResource DialogBackground}">
-            <Grid VerticalAlignment="Center">
+        <Border Style="{DynamicResource Border}"
+                Background="{DynamicResource DialogBackgroundSolidColorBrush}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <Grid VerticalAlignment="Center" MinWidth="200">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />

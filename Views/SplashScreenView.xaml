@@ -7,7 +7,7 @@
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
     VerticalContentAlignment="Bottom"
-    Background="{DynamicResource MainBackground}"
+    Background="{DynamicResource MainBackgroundSolidColorBrush}"
     d:DataContext="{d:DesignInstance viewmodels:SplashScreenViewModel}"
     mc:Ignorable="d">
     <UserControl.Resources>
@@ -17,7 +17,7 @@
     <StackPanel HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Margin="10"
-                Background="{DynamicResource DialogBackground}">
+                Background="{DynamicResource DialogBackgroundSolidColorBrush}">
         <TextBlock
                 Margin="10"
                 HorizontalAlignment="Center"

@@ -5,13 +5,14 @@ using Newtonsoft.Json;
 
 using Prism.Commands;
 using Prism.Ioc;
+using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.Services;
 
 namespace SpaceTradersWPF.ViewModels;
 
-internal class AgentSelectionViewModel
+internal class AgentSelectionViewModel : BindableBase
 {
     private readonly IContainerExtension containerExtension;
     private readonly IRegionManager regionManager;
@@ -26,13 +27,6 @@ internal class AgentSelectionViewModel
         this.containerExtension = containerExtension;
         this.regionManager = regionManager;
         this.spaceTradersApi = spaceTradersApi;
-
-        if (Directory.Exists("Data") &&
-            File.Exists("Data/AccessToken.Token") &&
-            MessageBox.Show("Do you want to proceed with the current agent?", "Continue previous session", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-        {
-            this.spaceTradersApi.SetAccessTokenHeader(File.ReadAllText("Data/AccessToken.Token"));
-        }
     }
 
     public DelegateCommand<string> RegisterAgentCommand => registerAgentCommand ??= new DelegateCommand<string>(RegisterAgent);

@@ -6,19 +6,26 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+    xmlns:local="clr-namespace:SpaceTradersWPF"
     Title="Space Traders"
-    Width="800"
-    Height="450"
-    Background="{DynamicResource MainBackground}"
+    Width="1200"
+    Height="800"
+    Background="{DynamicResource MainBackgroundSolidColorBrush}"
     d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
     mc:Ignorable="d">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <ItemsControl x:Name="MainToolBar" prism:RegionManager.RegionName="MainToolbarRegion" />
-        <ContentControl x:Name="MainArea" prism:RegionManager.RegionName="MainAreaRegion" />
-        <ContentControl x:Name="SplashScreen" Grid.RowSpan="2" prism:RegionManager.RegionName="SplashScreenRegion" VerticalAlignment="Center" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ContentControl x:Name="MainMenu"
+                      prism:RegionManager.RegionName="{x:Static local:RegionNames.MainMenuRegion}" />
+        <ContentControl x:Name="MainArea"
+                        prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}"
+                        Grid.Column="1" />
+        <ContentControl x:Name="SplashScreen"
+                        Grid.ColumnSpan="2"
+                        prism:RegionManager.RegionName="{x:Static local:RegionNames.SplashScreenRegion}"
+                        VerticalAlignment="Center" />
     </Grid>
 </Window>

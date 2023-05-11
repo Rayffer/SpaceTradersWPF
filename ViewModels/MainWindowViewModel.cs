@@ -12,6 +12,6 @@ internal class MainWindowViewModel : BindableBase
     public MainWindowViewModel(IRegionManager regionManager)
     {
         this.regionManager = regionManager;
-        this.regionManager.RegisterViewWithRegion("SplashScreenRegion", typeof(SplashScreenView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(SplashScreenView));
     }
 }
