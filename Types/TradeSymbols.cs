@@ -113,5 +113,4 @@ internal enum TradeSymbols
     MountLaserCannon,
     MountMissileLauncher,
     MountTurret
-
 }

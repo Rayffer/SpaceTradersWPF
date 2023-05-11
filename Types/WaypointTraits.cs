@@ -7,7 +7,7 @@ internal enum WaypointTraits
     Marketplace,
     Shipyard,
     Outpost,
-    ScatteredSettlements, 
+    ScatteredSettlements,
     SprawlingCities,
     MegaStructures,
     Overcrowded,

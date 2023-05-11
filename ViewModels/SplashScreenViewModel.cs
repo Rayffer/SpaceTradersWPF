@@ -2,7 +2,6 @@
 using System.Windows;
 
 using Prism.Commands;
-using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 

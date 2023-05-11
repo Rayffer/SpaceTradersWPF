@@ -8,4 +8,3 @@ public class ScannedWaypointChart
     public string submittedBy { get; set; }
     public DateTime submittedOn { get; set; }
 }
-

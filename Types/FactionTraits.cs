@@ -69,5 +69,4 @@ internal enum FactionTraits
     Commercial,
     FreeMarkets,
     Entrepreneurial
-
 }

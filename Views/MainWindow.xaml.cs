@@ -1,8 +1,5 @@
 ﻿using System.Windows;
 
-using Prism.Ioc;
-using Prism.Regions;
-
 namespace SpaceTradersWPF.Views;
 
 /// <summary>
