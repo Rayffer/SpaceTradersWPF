@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Input;
 
-using Microsoft.Xaml.Behaviors.Core;
-
-using Prism.Common;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 
@@ -17,8 +14,8 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
 {
     private string header;
     private string message;
-    private ActionCommand confirmDialogCommand;
-    private ActionCommand rejectDialogCommand;
+    private DelegateCommand confirmDialogCommand;
+    private DelegateCommand rejectDialogCommand;
     private Action<IRegionManager, ISpaceTradersApi> confirmationAction;
     private Action<IRegionManager, ISpaceTradersApi> rejectionAction;
     private readonly IRegionManager regionManager;
@@ -36,8 +33,8 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
         set => SetProperty(ref message, value);
     }
 
-    public ICommand RejectDialogCommand => rejectDialogCommand ??= new ActionCommand(RejectDialog);
-    public ICommand ConfirmDialogCommand => confirmDialogCommand ??= new ActionCommand(ConfirmDialog);
+    public DelegateCommand RejectDialogCommand => rejectDialogCommand ??= new DelegateCommand(RejectDialog);
+    public DelegateCommand ConfirmDialogCommand => confirmDialogCommand ??= new DelegateCommand(ConfirmDialog);
 
     public YesNoDialogViewModel(
         IRegionManager regionManager,
