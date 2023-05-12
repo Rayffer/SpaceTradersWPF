@@ -11,4 +11,6 @@ internal interface ISpaceTradersApi
     void SetAccessTokenHeader(string token);
 
     Task<Agent> GetAgent();
+
+    Task<Waypoint> GetWaypoint(string symbol);
 }
