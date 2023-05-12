@@ -4,7 +4,7 @@
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBackgroundSolidColorBrush}" />
         <Setter Property="BorderThickness" Value="2" />
         <Setter Property="Padding" Value="10" />
-        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="Margin" Value="10" />
         <Setter Property="Background" Value="{DynamicResource DialogBackgroundSolidColorBrush}" />
     </Style>
 </ResourceDictionary>

@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/FontSizes.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/DarkThemeColors.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/BorderStyles.xaml" />
+                <ResourceDictionary Source="ResourceDictionaries/TooltipStyles.xaml" />
                 <ResourceDictionary Source="Resources/Icons/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
