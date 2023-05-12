@@ -6,6 +6,7 @@ using Prism.Unity;
 using RestSharp;
 
 using SpaceTradersWPF.Services;
+using SpaceTradersWPF.ViewModels;
 using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF;
@@ -25,5 +26,6 @@ public partial class App : PrismApplication
         var client = new RestClient("https://api.spacetraders.io/v2/");
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
+        containerRegistry.RegisterForNavigation<YesNoDialogView>();
     }
 }
