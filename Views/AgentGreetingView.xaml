@@ -30,64 +30,63 @@
             </DoubleAnimation>
         </Storyboard>
     </UserControl.Resources>
-    <Grid
+    <Border
+        Style="{DynamicResource Border}"
         HorizontalAlignment="Center"
-        VerticalAlignment="Center"
-        Margin="10">
-        <Grid.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
-            </EventTrigger>
-        </Grid.Triggers>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MaxHeight="70" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Border
-            Style="{DynamicResource Border}"
-            Grid.RowSpan="5" />
-        <TextBlock
+        VerticalAlignment="Center">
+        <Grid>
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                </EventTrigger>
+            </Grid.Triggers>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MaxHeight="70" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
             Margin="10"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level0FontSize}"
             Text="Connecting to the system"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-        <TextBlock
+            <TextBlock
             Grid.Row="1"
             Margin="10"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level0FontSize}"
             Text="Please, wait"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-        <Image
+            <Image
             Grid.Row="2"
             Source="{DynamicResource SpinnerSvgIcon}"
             Width="50"
             Height="50"
             Margin="10"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}">
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation2}" />
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
-        <TextBlock
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                        <BeginStoryboard Storyboard="{StaticResource FadeInAnimation2}" />
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+            <TextBlock
             Grid.Row="3"
             Margin="10"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level0FontSize}"
             Text="Greetings, Agent"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
-        <TextBlock
+            <TextBlock
             Grid.Row="4"
             Margin="10"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level1FontSize}"
             Text="{Binding CurrentAgent.symbol}"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
-    </Grid>
+        </Grid>
+    </Border>
 </UserControl>
