@@ -38,6 +38,11 @@ internal class AgentSelectionViewModel : BindableBase
             _ => default
         };
 
+        if (agentInformation == null)
+        {
+            // Launch dialog that data is not valid
+            return;
+        }
         Directory.CreateDirectory("Data");
         Directory.CreateDirectory("Data/Factions");
         Directory.CreateDirectory("Data/Contracts");

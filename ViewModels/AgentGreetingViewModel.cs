@@ -29,8 +29,10 @@ internal class AgentGreetingViewModel : BindableBase
         this.spaceTradersApi = spaceTradersApi;
         this.regionManager = regionManager;
 
-        DispatcherTimer dispatcherTimer = new DispatcherTimer();
-        dispatcherTimer.Interval = TimeSpan.FromSeconds(0.1);
+        DispatcherTimer dispatcherTimer = new()
+        {
+            Interval = TimeSpan.FromSeconds(0.5)
+        };
         dispatcherTimer.Tick += Timer_Tick;
         dispatcherTimer.Start();
     }
@@ -41,7 +43,7 @@ internal class AgentGreetingViewModel : BindableBase
         {
             return;
         }
-        if (dispatcherTimer.Interval == TimeSpan.FromSeconds(0.1))
+        if (dispatcherTimer.Interval == TimeSpan.FromSeconds(0.5))
         {
             dispatcherTimer.Stop();
             CurrentAgent = await this.spaceTradersApi.GetAgent();
