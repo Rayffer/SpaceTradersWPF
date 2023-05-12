@@ -55,5 +55,6 @@ internal class AgentGreetingViewModel : BindableBase
         dispatcherTimer.Tick -= Timer_Tick;
         this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
     }
 }
