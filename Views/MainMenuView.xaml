@@ -6,13 +6,33 @@
              mc:Ignorable="d"
              Background="{DynamicResource DialogBackgroundSolidColorBrush}"
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Orientation="Vertical"
-                Margin="2">
-        <Button Content="Dashboard" />
-        <Button Content="My Agent" />
-        <Button Content="Contracts" />
-        <Button Content="Fleet" />
-        <Button Content="Systems" />
-        <Button Content="Map" />
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Vertical"
+                    Margin="2">
+            <Button Content="Dashboard"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="My Agent"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="Contracts"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="Fleet"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="Systems"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="Map"
+                    FontSize="{DynamicResource Level2FontSize}" />
+        </StackPanel>
+        <StackPanel Orientation="Vertical"
+                    Margin="2"
+                    Grid.Row="1">
+            <Button Content="Sign out"
+                    FontSize="{DynamicResource Level2FontSize}" />
+            <Button Content="Exit"
+                    FontSize="{DynamicResource Level2FontSize}" />
+        </StackPanel>
+    </Grid>
 </UserControl>
