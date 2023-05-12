@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Windows;
+﻿using System;
+using System.IO;
 
 using Prism.Commands;
 using Prism.Mvvm;
@@ -10,34 +10,42 @@ using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
-internal class SplashScreenViewModel : BindableBase, IRegionMemberLifetime
+internal class SplashScreenViewModel : BindableBase
 {
     private DelegateCommand<object> proceedIntoApplicationCommand = null;
     private readonly IRegionManager regionManager;
-    private readonly ISpaceTradersApi spaceTradersApi;
 
     public SplashScreenViewModel(
-        IRegionManager regionManager,
-        ISpaceTradersApi spaceTradersApi)
+        IRegionManager regionManager)
     {
         this.regionManager = regionManager;
-        this.spaceTradersApi = spaceTradersApi;
-        this.KeepAlive = true;
     }
 
     public DelegateCommand<object> ProceedIntoApplicationCommand => proceedIntoApplicationCommand ??= new DelegateCommand<object>(ProceedIntoApplication);
-
-    public bool KeepAlive { get; }
 
     private void ProceedIntoApplication(object view)
     {
         regionManager.Regions[RegionNames.SplashScreenRegion].Remove(view);
         if (Directory.Exists("Data") &&
-            File.Exists("Data/AccessToken.Token") &&
-            MessageBox.Show("Do you want to proceed with the current agent?", "Continue previous session", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            File.Exists("Data/AccessToken.Token"))
         {
-            this.spaceTradersApi.SetAccessTokenHeader(File.ReadAllText("Data/AccessToken.Token"));
-            this.regionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(AgentGreetingView));
+            var navigationParameters = new NavigationParameters
+            {
+                { "Message", "Do you want to proceed with the current agent?" },
+                { "Header", "Continue previous session" },
+                { "ConfirmationAction", new Action<IRegionManager, ISpaceTradersApi>((actionRegionManager, actionSpaceTradersApi) =>
+                    {
+                        actionSpaceTradersApi.SetAccessTokenHeader(File.ReadAllText("Data/AccessToken.Token"));
+                        actionRegionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(AgentGreetingView));
+                    })
+                },
+                { "RejectionAction", new Action<IRegionManager, ISpaceTradersApi>((actionRegionManager, actionSpaceTradersApi) =>
+                    {
+                        actionRegionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(AgentSelectionView));
+                    })
+                },
+            };
+            this.regionManager.RequestNavigate(RegionNames.SplashScreenRegion, "YesNoDialogView", navigationParameters);
 
             return;
         }

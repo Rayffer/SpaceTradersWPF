@@ -6,7 +6,6 @@ using Prism.Unity;
 using RestSharp;
 
 using SpaceTradersWPF.Services;
-using SpaceTradersWPF.ViewModels;
 using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF;

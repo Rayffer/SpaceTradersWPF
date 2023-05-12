@@ -1,6 +1,8 @@
-﻿namespace SpaceTradersWPF.ViewModels;
+﻿using Prism.Mvvm;
 
-internal class MainMenuViewModel
+namespace SpaceTradersWPF.ViewModels;
+
+internal class MainMenuViewModel : BindableBase
 {
     public MainMenuViewModel()
     {
