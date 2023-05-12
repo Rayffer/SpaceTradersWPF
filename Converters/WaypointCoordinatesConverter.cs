@@ -1,0 +1,24 @@
+﻿using System;
+using System.Globalization;
+using System.Windows.Data;
+
+using SpaceTradersWPF.Models;
+
+namespace SpaceTradersWPF.Converters;
+
+internal class WaypointCoordinatesConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is Waypoint waypoint)
+        {
+            return $"X: {waypoint.x}, Y: {waypoint.y}";
+        }
+        return string.Empty;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
