@@ -13,11 +13,11 @@
     <UserControl.Resources>
         <converters:WaypointCoordinatesConverter x:Key="WaypointCoordinatesConverter" />
     </UserControl.Resources>
-    <behaviours:Interaction.Triggers>
-        <behaviours:EventTrigger EventName="Loaded">
-            <behaviours:InvokeCommandAction Command="{Binding LoadInformationCommand}" />
-        </behaviours:EventTrigger>
-    </behaviours:Interaction.Triggers>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadInformationCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -71,24 +71,26 @@
                 <TextBlock Text="{Binding Headquarters.SystemSymbol}"
                            Grid.Row="4"
                            Grid.Column="1"
-                           FontSize="{DynamicResource Level1FontSize}">
-                    <behaviours:Interaction.Triggers>
-                        <behaviours:EventTrigger EventName="MouseLeftButtonUp">
-                            <behaviours:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
-                        </behaviours:EventTrigger>
-                    </behaviours:Interaction.Triggers></TextBlock>
+                           FontSize="{DynamicResource Level1FontSize}"
+                           Cursor="Hand">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonUp">
+                            <behaviors:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers></TextBlock>
                 <TextBlock Text="Waypoint:"
                            Grid.Row="5"
                            FontSize="{DynamicResource Level1FontSize}" />
                 <TextBlock Text="{Binding Headquarters.Symbol}"
                            Grid.Row="5"
                            Grid.Column="1"
-                           FontSize="{DynamicResource Level1FontSize}">
-                    <behaviours:Interaction.Triggers>
-                        <behaviours:EventTrigger EventName="MouseLeftButtonUp">
-                            <behaviours:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
-                        </behaviours:EventTrigger>
-                    </behaviours:Interaction.Triggers></TextBlock>
+                           FontSize="{DynamicResource Level1FontSize}"
+                           Cursor="Hand">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonUp">
+                            <behaviors:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers></TextBlock>
                 <TextBlock Text="Coordinates:"
                            Grid.Row="6"
                            FontSize="{DynamicResource Level1FontSize}" />
@@ -124,10 +126,10 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:WaypointTrait">
-                            <TextBlock Text="{Binding name}" Cursor="Help">
+                            <TextBlock Text="{Binding Name}" Cursor="Help">
                                 <TextBlock.ToolTip>
                                     <ToolTip>
-                                        <TextBlock Text="{Binding description}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
                                     </ToolTip>
                                 </TextBlock.ToolTip>
                             </TextBlock>

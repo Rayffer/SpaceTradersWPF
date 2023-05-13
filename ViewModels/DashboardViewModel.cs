@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Prism.Commands;
@@ -26,7 +27,7 @@ internal class DashboardViewModel : BindableBase
 
     public ICommand OpenSystemInformation => openSystemInformation ??= new DelegateCommand(PerformOpenSystemInformation);
     public ICommand OpenWaypointInformation => openWaypointInformation ??= new DelegateCommand(PerformOpenWaypointInformation);
-    public ICommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(LoadInformation);
+    public ICommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(async () => await LoadInformation());
 
     public Agent AgentInformation
     {
@@ -50,7 +51,7 @@ internal class DashboardViewModel : BindableBase
         this.eventAggregator = eventAggregator;
     }
 
-    private async void LoadInformation()
+    private async Task LoadInformation()
     {
         this.AgentInformation = await spaceTradersApi.GetAgent();
         this.Headquarters = await spaceTradersApi.GetWaypoint(this.AgentInformation.Headquarters);
