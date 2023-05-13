@@ -11,6 +11,8 @@ namespace SpaceTradersWPF.Services;
 
 internal partial class SpaceTradersApi : ISpaceTradersApi
 {
+    private readonly string GetAgentResource = "my/agent";
+
     public AgentResponse RegisterAgent(string symbol, string faction)
     {
         var request = new RestRequest("register", Method.Post);
@@ -20,14 +22,14 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
         var response = restClient.ExecuteAsync(request).Result;
         Console.WriteLine(response.Content);
 
-        return JsonConvert.DeserializeObject<AgentResponse>(response.Content);
+        return JsonConvert.DeserializeObject<ApiResponse<AgentResponse>>(response.Content).Data;
     }
 
     public async Task<Agent> GetAgent()
     {
-        var request = new RestRequest("my/agent", Method.Get);
+        var request = new RestRequest(GetAgentResource, Method.Get);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<Agent>>(response.Content).data;
+        return JsonConvert.DeserializeObject<ApiResponse<Agent>>(response.Content).Data;
     }
 }

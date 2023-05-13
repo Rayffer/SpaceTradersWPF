@@ -25,4 +25,10 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
         restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
         restClient.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
     }
+
+    private static string ExtractSystemSymbol(string waypointSymbol)
+    {
+        var lastHyphenIndex = waypointSymbol.LastIndexOf('-');
+        return waypointSymbol.Substring(0, lastHyphenIndex);
+    }
 }
