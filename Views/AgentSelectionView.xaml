@@ -4,9 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance viewmodels:AgentSelectionViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadInformationCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
     <Grid Margin="20">
         <Border Style="{DynamicResource Border}"
                 Background="{DynamicResource DialogBackgroundSolidColorBrush}"
@@ -17,11 +23,20 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Agent Name:" Margin="2" />
                 <TextBox Grid.Row="1" x:Name="AgentNameTextBox" Margin="2" />
+                <TextBlock Grid.Row="2" Text="Affiliated Faction:" Margin="2" />
+                <ComboBox Grid.Row="3"
+                          ItemsSource="{Binding Factions}"
+                          SelectedValue="{Binding SelectedFaction}"
+                          DisplayMemberPath="Name"
+                          Style="{DynamicResource SpaceTradersComboBox}"
+                          SelectedIndex="0" />
                 <Button Content="Register"
-                        Grid.Row="2"
+                        Grid.Row="4"
                         Command="{Binding RegisterAgentCommand}"
                         CommandParameter="{Binding Text, ElementName=AgentNameTextBox}" />
             </Grid>

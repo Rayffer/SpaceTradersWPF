@@ -1,12 +1,12 @@
 ﻿using System.IO;
-
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 
+using SpaceTradersWPF.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 
@@ -18,6 +18,24 @@ internal class AgentSelectionViewModel : BindableBase
     private readonly IRegionManager regionManager;
     private readonly ISpaceTradersApi spaceTradersApi;
     private DelegateCommand<string> registerAgentCommand;
+    private DelegateCommand loadInformationCommand;
+    private Faction[] factions;
+    private Faction selectedFaction;
+
+    public DelegateCommand<string> RegisterAgentCommand => registerAgentCommand ??= new DelegateCommand<string>(RegisterAgent);
+    public DelegateCommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(async () => await LoadInformation());
+
+    public Faction SelectedFaction
+    {
+        get => selectedFaction;
+        set => SetProperty(ref selectedFaction, value);
+    }
+
+    public Faction[] Factions
+    {
+        get => factions;
+        set => SetProperty(ref factions, value);
+    }
 
     public AgentSelectionViewModel(
         IContainerExtension containerExtension,
@@ -29,13 +47,11 @@ internal class AgentSelectionViewModel : BindableBase
         this.spaceTradersApi = spaceTradersApi;
     }
 
-    public DelegateCommand<string> RegisterAgentCommand => registerAgentCommand ??= new DelegateCommand<string>(RegisterAgent);
-
     private void RegisterAgent(string symbol)
     {
         var agentInformation = symbol.Length switch
         {
-            >= 3 and <= 14 => this.spaceTradersApi.RegisterAgent(symbol, "COSMIC"),
+            >= 3 and <= 14 => this.spaceTradersApi.RegisterAgent(symbol, SelectedFaction.Symbol),
             _ => default
         };
 
@@ -49,7 +65,14 @@ internal class AgentSelectionViewModel : BindableBase
         File.WriteAllText($"Data/AccessToken.Token", agentInformation.Token);
 
         this.spaceTradersApi.SetAccessTokenHeader(agentInformation.Token);
+
+        this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
+    }
+
+    private async Task LoadInformation()
+    {
+        this.Factions = await this.spaceTradersApi.GetFactions(1, 20);
     }
 }
