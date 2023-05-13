@@ -7,6 +7,8 @@
     <SolidColorBrush x:Key="ButtonForegroundDisabledSolidColorBrush" Color="#80000000" />
     <SolidColorBrush x:Key="MainBackgroundSolidColorBrush" Color="#FF212A3B" />
     <SolidColorBrush x:Key="DialogBackgroundSolidColorBrush" Color="#FF2d394E" />
+    <SolidColorBrush x:Key="ControlBackgroundSolidColorBrush" Color="#FF364561" />
+    <SolidColorBrush x:Key="ControlLightBackgroundSolidColorBrush" Color="#FF607bad" />
     <SolidColorBrush x:Key="MainBackgroundSemiTransparentSolidColorBrush" Color="#C0212A3B" />
     <SolidColorBrush x:Key="TextFontColorSolidColorBrush" Color="#FFDBDBDB" />
 </ResourceDictionary>
