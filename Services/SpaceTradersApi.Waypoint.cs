@@ -8,7 +8,7 @@ using SpaceTradersWPF.Models;
 
 namespace SpaceTradersWPF.Services;
 
-internal partial class SpaceTradersApi : ISpaceTradersApi
+internal partial class SpaceTradersApi
 {
     private readonly string GetSystemWaypointsResource = "/systems/{systemSymbol}/waypoints?page={0}&limit={1}";
     private readonly string GetWaypointResource = "/systems/{0}/waypoints/{1}";

@@ -9,7 +9,7 @@ using SpaceTradersWPF.Models;
 
 namespace SpaceTradersWPF.Services;
 
-internal partial class SpaceTradersApi : ISpaceTradersApi
+internal partial class SpaceTradersApi
 {
     private readonly string GetAgentResource = "my/agent";
 

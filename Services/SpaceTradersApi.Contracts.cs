@@ -32,7 +32,7 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<Contract[]>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> AcceptContract(string contractId)
+    public async Task<(Contract contract, Agent agent)> PostAcceptContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostAcceptContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
@@ -40,7 +40,7 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<(Contract contract, Agent agent)>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> DeliverContract(string contractId)
+    public async Task<(Contract contract, Agent agent)> PostDeliverContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostDeliverContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
@@ -48,7 +48,7 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<(Contract contract, Agent agent)>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> FulfillContract(string contractId)
+    public async Task<(Contract contract, Agent agent)> PostFulfillContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostFulfillContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
