@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/DarkThemeColors.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/BorderStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/TooltipStyles.xaml" />
+                <ResourceDictionary Source="ResourceDictionaries/ComboboxStyles.xaml" />
                 <ResourceDictionary Source="Resources/Icons/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
