@@ -85,7 +85,7 @@
             Margin="10"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level1FontSize}"
-            Text="{Binding CurrentAgent.symbol}"
+            Text="{Binding CurrentAgent.Symbol}"
             Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
         </Grid>
     </Border>

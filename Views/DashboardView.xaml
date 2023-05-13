@@ -49,14 +49,14 @@
                 <TextBlock Text="Agent callsign:"
                            Grid.Row="1"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding AgentInformation.symbol}"
+                <TextBlock Text="{Binding AgentInformation.Symbol}"
                            Grid.Row="1"
                            Grid.Column="1"
                            FontSize="{DynamicResource Level1FontSize}" />
                 <TextBlock Text="Available credits:"
                            Grid.Row="2"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding AgentInformation.credits}"
+                <TextBlock Text="{Binding AgentInformation.Credits}"
                            Grid.Row="2"
                            Grid.Column="1"
                            FontSize="{DynamicResource Level1FontSize}" />
@@ -68,17 +68,27 @@
                 <TextBlock Text="System:"
                            Grid.Row="4"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding Headquarters.systemSymbol}"
+                <TextBlock Text="{Binding Headquarters.SystemSymbol}"
                            Grid.Row="4"
                            Grid.Column="1"
-                           FontSize="{DynamicResource Level1FontSize}" />
+                           FontSize="{DynamicResource Level1FontSize}">
+                    <behaviours:Interaction.Triggers>
+                        <behaviours:EventTrigger EventName="MouseLeftButtonUp">
+                            <behaviours:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
+                        </behaviours:EventTrigger>
+                    </behaviours:Interaction.Triggers></TextBlock>
                 <TextBlock Text="Waypoint:"
                            Grid.Row="5"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding Headquarters.symbol}"
+                <TextBlock Text="{Binding Headquarters.Symbol}"
                            Grid.Row="5"
                            Grid.Column="1"
-                           FontSize="{DynamicResource Level1FontSize}" />
+                           FontSize="{DynamicResource Level1FontSize}">
+                    <behaviours:Interaction.Triggers>
+                        <behaviours:EventTrigger EventName="MouseLeftButtonUp">
+                            <behaviours:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
+                        </behaviours:EventTrigger>
+                    </behaviours:Interaction.Triggers></TextBlock>
                 <TextBlock Text="Coordinates:"
                            Grid.Row="6"
                            FontSize="{DynamicResource Level1FontSize}" />
@@ -89,21 +99,21 @@
                 <TextBlock Text="Discovered by:"
                            Grid.Row="7"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding Headquarters.chart.submittedBy,FallbackValue='No one'}"
+                <TextBlock Text="{Binding Headquarters.Chart.SubmittedBy,FallbackValue='No one'}"
                            Grid.Row="7"
                            Grid.Column="1"
                            FontSize="{DynamicResource Level1FontSize}" />
                 <TextBlock Text="Discovered on:"
                            Grid.Row="8"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <TextBlock Text="{Binding Headquarters.chart.submittedOn, FallbackValue='N/A'}"
+                <TextBlock Text="{Binding Headquarters.Chart.SubmittedOn, FallbackValue='N/A'}"
                            Grid.Row="8"
                            Grid.Column="1"
                            FontSize="{DynamicResource Level1FontSize}" />
                 <TextBlock Text="Traits:"
                            Grid.Row="9"
                            FontSize="{DynamicResource Level1FontSize}" />
-                <ItemsControl ItemsSource="{Binding Headquarters.traits}"
+                <ItemsControl ItemsSource="{Binding Headquarters.Traits}"
                            Grid.Row="9"
                            Grid.Column="1"
                            FontSize="{DynamicResource Level1FontSize}">

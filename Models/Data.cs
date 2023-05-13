@@ -2,20 +2,8 @@
 
 namespace SpaceTradersWPF.Models;
 
-internal class Data
+public class Data
 {
-    [JsonProperty("agent")]
-    public Agent Agent { get; set; }
-
-    [JsonProperty("contract")]
-    public Contract Contract { get; set; }
-
-    [JsonProperty("faction")]
-    public Faction Faction { get; set; }
-
-    [JsonProperty("ship")]
-    public Ship Ship { get; set; }
-
-    [JsonProperty("token")]
-    public string Token { get; set; }
+    [JsonProperty("page")]
+    public string[] Page { get; set; }
 }

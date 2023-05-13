@@ -3,7 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewModels="clr-namespace:SpaceTradersWPF.ViewModels"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModels:MainMenuViewModel}"
              Background="{DynamicResource DialogBackgroundSolidColorBrush}"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,25 +16,33 @@
         <StackPanel Orientation="Vertical"
                     Margin="2">
             <Button Content="Dashboard"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenDashboardCommand}" />
             <Button Content="My Agent"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenAgentInformationCommand}" />
             <Button Content="Contracts"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenContractsInformationCommand}" />
             <Button Content="Fleet"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenFleetInformationCommand}" />
             <Button Content="Systems"
-                    FontSize="{DynamicResource Level2FontSize}" />
-            <Button Content="Map"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenSystemsInformationCommand}" />
+            <Button Content="System Map"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding OpenSystemMapCommand}" />
         </StackPanel>
         <StackPanel Orientation="Vertical"
                     Margin="2"
                     Grid.Row="1">
             <Button Content="Sign out"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding LogoutAgentCommand}" />
             <Button Content="Exit"
-                    FontSize="{DynamicResource Level2FontSize}" />
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Command="{Binding ExitApplicationCommand}" />
         </StackPanel>
     </Grid>
 </UserControl>

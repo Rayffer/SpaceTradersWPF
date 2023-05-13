@@ -12,7 +12,7 @@ internal class WaypointCoordinatesConverter : IValueConverter
     {
         if (value is Waypoint waypoint)
         {
-            return $"X: {waypoint.x}, Y: {waypoint.y}";
+            return $"X: {waypoint.X}, Y: {waypoint.Y}";
         }
         return string.Empty;
     }

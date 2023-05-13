@@ -8,6 +8,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.Services;
+using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
@@ -43,14 +44,12 @@ internal class AgentSelectionViewModel : BindableBase
             // Launch dialog that data is not valid
             return;
         }
+
         Directory.CreateDirectory("Data");
-        Directory.CreateDirectory("Data/Factions");
-        Directory.CreateDirectory("Data/Contracts");
-        Directory.CreateDirectory("Data/Ships");
-        File.WriteAllText($"Data/Agent.json", JsonConvert.SerializeObject(agentInformation.data.agent, Formatting.Indented));
-        File.WriteAllText($"Data/AccessToken.Token", agentInformation.data.token);
-        File.WriteAllText($"Data/Factions/Faction_{agentInformation.data.faction.symbol}.json", JsonConvert.SerializeObject(agentInformation.data.faction, Formatting.Indented));
-        File.WriteAllText($"Data/Contracts/Contract_{agentInformation.data.contract.id}.json", JsonConvert.SerializeObject(agentInformation.data.contract, Formatting.Indented));
-        File.WriteAllText($"Data/Ships/Ship_{agentInformation.data.ship.symbol}.json", JsonConvert.SerializeObject(agentInformation.data.ship, Formatting.Indented));
+        File.WriteAllText($"Data/AccessToken.Token", agentInformation.Token);
+
+        this.spaceTradersApi.SetAccessTokenHeader(agentInformation.Token);
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
     }
 }
