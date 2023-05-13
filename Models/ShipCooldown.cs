@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SpaceTradersWPF.Models;
 
-public class Cooldown
+public class ShipCooldown
 {
     [JsonProperty("shipSymbol")]
     public string ShipSymbol { get; set; }
