@@ -1,6 +1,9 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 internal class ApiResponse<ResponseType>
 {
-    public ResponseType data { get; set; }
+    [JsonProperty("data")]
+    public ResponseType Data { get; set; }
 }

@@ -1,9 +1,18 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ContractDeliver
 {
-    public string tradeSymbol { get; set; }
-    public string destinationSymbol { get; set; }
-    public int unitsRequired { get; set; }
-    public int unitsFulfilled { get; set; }
+    [JsonProperty("tradeSymbol")]
+    public string TradeSymbol { get; set; }
+
+    [JsonProperty("destinationSymbol")]
+    public string DestinationSymbol { get; set; }
+
+    [JsonProperty("unitsRequired")]
+    public int UnitsRequired { get; set; }
+
+    [JsonProperty("unitsFulfilled")]
+    public int UnitsFulfilled { get; set; }
 }

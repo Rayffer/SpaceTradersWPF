@@ -1,9 +1,18 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 internal class Agent
 {
-    public string accountId { get; set; }
-    public string symbol { get; set; }
-    public string headquarters { get; set; }
-    public int credits { get; set; }
+    [JsonProperty("accountId")]
+    public string AccountId { get; set; }
+
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("headquarters")]
+    public string Headquarters { get; set; }
+
+    [JsonProperty("credits")]
+    public int Credits { get; set; }
 }

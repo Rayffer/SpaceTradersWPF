@@ -1,12 +1,23 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+
 namespace SpaceTradersWPF.Models;
 
 public class Survey
 {
-    public string signature { get; set; }
-    public string symbol { get; set; }
-    public SurveyDeposit[] deposits { get; set; }
-    public DateTime expiration { get; set; }
-    public string size { get; set; }
+    [JsonProperty("signature")]
+    public string Signature { get; set; }
+
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("deposits")]
+    public SurveyDeposit[] Deposits { get; set; }
+
+    [JsonProperty("expiration")]
+    public DateTime Expiration { get; set; }
+
+    [JsonProperty("size")]
+    public string Size { get; set; }
 }

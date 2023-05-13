@@ -1,7 +1,12 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ExtractionYield
 {
-    public string symbol { get; set; }
-    public int units { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("units")]
+    public int Units { get; set; }
 }

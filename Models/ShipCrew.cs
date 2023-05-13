@@ -1,11 +1,24 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class ShipCrew
 {
-    public int current { get; set; }
-    public int required { get; set; }
-    public int capacity { get; set; }
-    public string rotation { get; set; }
-    public int morale { get; set; }
-    public int wages { get; set; }
+    [JsonProperty("current")]
+    public int Current { get; set; }
+
+    [JsonProperty("required")]
+    public int Required { get; set; }
+
+    [JsonProperty("capacity")]
+    public int Capacity { get; set; }
+
+    [JsonProperty("rotation")]
+    public string Rotation { get; set; }
+
+    [JsonProperty("morale")]
+    public int Morale { get; set; }
+
+    [JsonProperty("wages")]
+    public int Wages { get; set; }
 }

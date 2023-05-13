@@ -1,8 +1,15 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class ShipCargo
 {
-    public int capacity { get; set; }
-    public int units { get; set; }
-    public Inventory[] inventory { get; set; }
+    [JsonProperty("capacity")]
+    public int Capacity { get; set; }
+
+    [JsonProperty("units")]
+    public int Units { get; set; }
+
+    [JsonProperty("inventory")]
+    public Inventory[] Inventory { get; set; }
 }

@@ -1,11 +1,24 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ShipModule
 {
-    public string symbol { get; set; }
-    public int capacity { get; set; }
-    public int range { get; set; }
-    public string name { get; set; }
-    public string description { get; set; }
-    public Requirements requirements { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("capacity")]
+    public int Capacity { get; set; }
+
+    [JsonProperty("range")]
+    public int Range { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
+
+    [JsonProperty("requirements")]
+    public Requirements Requirements { get; set; }
 }

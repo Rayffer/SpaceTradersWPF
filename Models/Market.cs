@@ -1,11 +1,24 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Market
 {
-    public string symbol { get; set; }
-    public MarketExport[] exports { get; set; }
-    public MarketImport[] imports { get; set; }
-    public MarketExchange[] exchange { get; set; }
-    public MarketTransaction[] transactions { get; set; }
-    public MarketTradegood[] tradeGoods { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("exports")]
+    public MarketExport[] Exports { get; set; }
+
+    [JsonProperty("imports")]
+    public MarketImport[] Imports { get; set; }
+
+    [JsonProperty("exchange")]
+    public MarketExchange[] Exchange { get; set; }
+
+    [JsonProperty("transactions")]
+    public MarketTransaction[] Transactions { get; set; }
+
+    [JsonProperty("tradeGoods")]
+    public MarketTradegood[] TradeGoods { get; set; }
 }

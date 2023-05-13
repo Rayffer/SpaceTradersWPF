@@ -1,11 +1,24 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ShipMount
 {
-    public string symbol { get; set; }
-    public string name { get; set; }
-    public string description { get; set; }
-    public int strength { get; set; }
-    public string[] deposits { get; set; }
-    public Requirements requirements { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
+
+    [JsonProperty("strength")]
+    public int Strength { get; set; }
+
+    [JsonProperty("deposits")]
+    public string[] Deposits { get; set; }
+
+    [JsonProperty("requirements")]
+    public Requirements Requirements { get; set; }
 }

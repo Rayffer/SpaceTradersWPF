@@ -1,8 +1,15 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class ScannedWaypointTrait
 {
-    public string symbol { get; set; }
-    public string name { get; set; }
-    public string description { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
 }

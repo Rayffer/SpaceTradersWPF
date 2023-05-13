@@ -1,6 +1,9 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ScannedShipFrame
 {
-    public string symbol { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
 }

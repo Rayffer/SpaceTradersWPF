@@ -1,7 +1,12 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Extraction
 {
-    public string shipSymbol { get; set; }
-    public ExtractionYield yield { get; set; }
+    [JsonProperty("shipSymbol")]
+    public string ShipSymbol { get; set; }
+
+    [JsonProperty("yield")]
+    public ExtractionYield Yield { get; set; }
 }

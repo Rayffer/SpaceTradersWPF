@@ -1,10 +1,21 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class ShipNavigationInformation
 {
-    public string systemSymbol { get; set; }
-    public string waypointSymbol { get; set; }
-    public Route route { get; set; }
-    public string status { get; set; }
-    public string flightMode { get; set; }
+    [JsonProperty("systemSymbol")]
+    public string SystemSymbol { get; set; }
+
+    [JsonProperty("waypointSymbol")]
+    public string WaypointSymbol { get; set; }
+
+    [JsonProperty("route")]
+    public Route Route { get; set; }
+
+    [JsonProperty("status")]
+    public string Status { get; set; }
+
+    [JsonProperty("flightMode")]
+    public string FlightMode { get; set; }
 }

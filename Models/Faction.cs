@@ -1,10 +1,21 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Faction
 {
-    public string symbol { get; set; }
-    public string name { get; set; }
-    public string description { get; set; }
-    public string headquarters { get; set; }
-    public FactionTrait[] traits { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
+
+    [JsonProperty("headquarters")]
+    public string Headquarters { get; set; }
+
+    [JsonProperty("traits")]
+    public FactionTrait[] Traits { get; set; }
 }

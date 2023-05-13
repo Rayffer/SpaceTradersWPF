@@ -1,16 +1,39 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class Ship
 {
-    public string symbol { get; set; }
-    public ShipRegistration registration { get; set; }
-    public ScannedShipNavigationInformation nav { get; set; }
-    public ShipCrew crew { get; set; }
-    public ScannedShipFrame frame { get; set; }
-    public ScannedShipReactor reactor { get; set; }
-    public ScannedShipEngine engine { get; set; }
-    public ShipModule[] modules { get; set; }
-    public ScannedShipMount[] mounts { get; set; }
-    public ShipCargo cargo { get; set; }
-    public ShipFuel fuel { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("registration")]
+    public ShipRegistration Registration { get; set; }
+
+    [JsonProperty("nav")]
+    public ShipNavigationInformation NavigationInformation { get; set; }
+
+    [JsonProperty("crew")]
+    public ShipCrew Crew { get; set; }
+
+    [JsonProperty("frame")]
+    public ShipFrame Frame { get; set; }
+
+    [JsonProperty("reactor")]
+    public ShipReactor Reactor { get; set; }
+
+    [JsonProperty("engine")]
+    public ShipEngine Engine { get; set; }
+
+    [JsonProperty("modules")]
+    public ShipModule[] Modules { get; set; }
+
+    [JsonProperty("mounts")]
+    public ShipMount[] Mounts { get; set; }
+
+    [JsonProperty("cargo")]
+    public ShipCargo Cargo { get; set; }
+
+    [JsonProperty("fuel")]
+    public ShipFuel Fuel { get; set; }
 }

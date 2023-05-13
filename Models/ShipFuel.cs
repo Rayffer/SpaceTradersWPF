@@ -1,8 +1,15 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ShipFuel
 {
-    public int current { get; set; }
-    public int capacity { get; set; }
-    public Consumed consumed { get; set; }
+    [JsonProperty("current")]
+    public int Current { get; set; }
+
+    [JsonProperty("capacity")]
+    public int Capacity { get; set; }
+
+    [JsonProperty("consumed")]
+    public FuelConsumed Consumed { get; set; }
 }

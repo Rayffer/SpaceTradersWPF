@@ -1,8 +1,15 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Requirements
 {
-    public int power { get; set; }
-    public int crew { get; set; }
-    public int slots { get; set; }
+    [JsonProperty("power")]
+    public int Power { get; set; }
+
+    [JsonProperty("crew")]
+    public int Crew { get; set; }
+
+    [JsonProperty("slots")]
+    public int Slots { get; set; }
 }

@@ -1,6 +1,9 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 internal class AgentResponse
 {
-    public Data data { get; set; }
+    [JsonProperty("data")]
+    public Data Data { get; set; }
 }

@@ -1,8 +1,15 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class JumpGate
 {
-    public int jumpRange { get; set; }
-    public string factionSymbol { get; set; }
-    public JumpGateConnectedsystem[] connectedSystems { get; set; }
+    [JsonProperty("jumpRange")]
+    public int JumpRange { get; set; }
+
+    [JsonProperty("factionSymbol")]
+    public string FactionSymbol { get; set; }
+
+    [JsonProperty("connectedSystems")]
+    public JumpGateConnectedsystem[] ConnectedSystems { get; set; }
 }

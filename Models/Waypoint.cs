@@ -1,14 +1,33 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Waypoint
 {
-    public string symbol { get; set; }
-    public string type { get; set; }
-    public string systemSymbol { get; set; }
-    public int x { get; set; }
-    public int y { get; set; }
-    public WaypointOrbital[] orbitals { get; set; }
-    public WaypointFaction faction { get; set; }
-    public WaypointTrait[] traits { get; set; }
-    public Chart chart { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("type")]
+    public string Type { get; set; }
+
+    [JsonProperty("systemSymbol")]
+    public string SystemSymbol { get; set; }
+
+    [JsonProperty("x")]
+    public int X { get; set; }
+
+    [JsonProperty("y")]
+    public int Y { get; set; }
+
+    [JsonProperty("orbitals")]
+    public WaypointOrbital[] Orbitals { get; set; }
+
+    [JsonProperty("faction")]
+    public WaypointFaction Faction { get; set; }
+
+    [JsonProperty("traits")]
+    public WaypointTrait[] Traits { get; set; }
+
+    [JsonProperty("chart")]
+    public Chart Chart { get; set; }
 }

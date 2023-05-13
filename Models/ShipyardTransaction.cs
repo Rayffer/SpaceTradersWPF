@@ -1,12 +1,23 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+
 namespace SpaceTradersWPF.Models;
 
 public class ShipyardTransaction
 {
-    public string waypointSymbol { get; set; }
-    public string shipSymbol { get; set; }
-    public int price { get; set; }
-    public string agentSymbol { get; set; }
-    public DateTime timestamp { get; set; }
+    [JsonProperty("waypointSymbol")]
+    public string WaypointSymbol { get; set; }
+
+    [JsonProperty("shipSymbol")]
+    public string ShipSymbol { get; set; }
+
+    [JsonProperty("price")]
+    public int Price { get; set; }
+
+    [JsonProperty("agentSymbol")]
+    public string AgentSymbol { get; set; }
+
+    [JsonProperty("timestamp")]
+    public DateTime Timestamp { get; set; }
 }

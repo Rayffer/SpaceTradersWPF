@@ -1,11 +1,24 @@
 ﻿namespace SpaceTradersWPF.Models;
 
+using Newtonsoft.Json;
+
 public class ShipEngine
 {
-    public string symbol { get; set; }
-    public string name { get; set; }
-    public string description { get; set; }
-    public int condition { get; set; }
-    public int speed { get; set; }
-    public Requirements requirements { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("name")]
+    public string Name { get; set; }
+
+    [JsonProperty("description")]
+    public string Description { get; set; }
+
+    [JsonProperty("condition")]
+    public int Condition { get; set; }
+
+    [JsonProperty("speed")]
+    public int Speed { get; set; }
+
+    [JsonProperty("requirements")]
+    public Requirements Requirements { get; set; }
 }

@@ -1,9 +1,18 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class Shipyard
 {
-    public string symbol { get; set; }
-    public Shiptype[] shipTypes { get; set; }
-    public ShipyardTransaction[] transactions { get; set; }
-    public ShipyardShip[] ships { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("shipTypes")]
+    public Shiptype[] ShipTypes { get; set; }
+
+    [JsonProperty("transactions")]
+    public ShipyardTransaction[] Transactions { get; set; }
+
+    [JsonProperty("ships")]
+    public ShipyardShip[] Ships { get; set; }
 }

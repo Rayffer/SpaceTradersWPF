@@ -1,14 +1,33 @@
-﻿namespace SpaceTradersWPF.Models;
+﻿using Newtonsoft.Json;
+
+namespace SpaceTradersWPF.Models;
 
 public class ScannedWaypoint
 {
-    public string symbol { get; set; }
-    public string type { get; set; }
-    public string systemSymbol { get; set; }
-    public int x { get; set; }
-    public int y { get; set; }
-    public ScannedWaypointOrbital[] orbitals { get; set; }
-    public ScannedWaypointFaction faction { get; set; }
-    public ScannedWaypointTrait[] traits { get; set; }
-    public ScannedWaypointChart chart { get; set; }
+    [JsonProperty("symbol")]
+    public string Symbol { get; set; }
+
+    [JsonProperty("type")]
+    public string Type { get; set; }
+
+    [JsonProperty("systemSymbol")]
+    public string SystemSymbol { get; set; }
+
+    [JsonProperty("x")]
+    public int X { get; set; }
+
+    [JsonProperty("y")]
+    public int Y { get; set; }
+
+    [JsonProperty("orbitals")]
+    public ScannedWaypointOrbital[] Orbitals { get; set; }
+
+    [JsonProperty("faction")]
+    public ScannedWaypointFaction Faction { get; set; }
+
+    [JsonProperty("traits")]
+    public ScannedWaypointTrait[] Traits { get; set; }
+
+    [JsonProperty("chart")]
+    public ScannedWaypointChart Chart { get; set; }
 }

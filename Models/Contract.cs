@@ -1,14 +1,29 @@
 ﻿using System;
 
+using Newtonsoft.Json;
+
 namespace SpaceTradersWPF.Models;
 
 public class Contract
 {
-    public string id { get; set; }
-    public string factionSymbol { get; set; }
-    public string type { get; set; }
-    public ContractTerms terms { get; set; }
-    public bool accepted { get; set; }
-    public bool fulfilled { get; set; }
-    public DateTime expiration { get; set; }
+    [JsonProperty("id")]
+    public string Id { get; set; }
+
+    [JsonProperty("factionSymbol")]
+    public string FactionSymbol { get; set; }
+
+    [JsonProperty("type")]
+    public string Type { get; set; }
+
+    [JsonProperty("terms")]
+    public ContractTerms Terms { get; set; }
+
+    [JsonProperty("accepted")]
+    public bool Accepted { get; set; }
+
+    [JsonProperty("fulfilled")]
+    public bool Fulfilled { get; set; }
+
+    [JsonProperty("expiration")]
+    public DateTime Expiration { get; set; }
 }
