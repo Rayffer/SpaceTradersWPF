@@ -24,6 +24,7 @@ internal class DashboardViewModel : BindableBase
     private DelegateCommand openWaypointInformation;
     private Agent agentInformation;
     private Waypoint headquarters;
+    private Ship[] ships;
 
     public ICommand OpenSystemInformation => openSystemInformation ??= new DelegateCommand(PerformOpenSystemInformation);
     public ICommand OpenWaypointInformation => openWaypointInformation ??= new DelegateCommand(PerformOpenWaypointInformation);
@@ -41,6 +42,12 @@ internal class DashboardViewModel : BindableBase
         set => SetProperty(ref headquarters, value);
     }
 
+    public Ship[] Ships
+    {
+        get => ships;
+        set => SetProperty(ref ships, value);
+    }
+
     public DashboardViewModel(
         ISpaceTradersApi spaceTradersApi,
         IRegionManager regionManager,
@@ -55,6 +62,7 @@ internal class DashboardViewModel : BindableBase
     {
         this.AgentInformation = await spaceTradersApi.GetAgent();
         this.Headquarters = await spaceTradersApi.GetWaypoint(this.AgentInformation.Headquarters);
+        this.Ships = await spaceTradersApi.GetShips(1, 20);
     }
 
     private void PerformOpenSystemInformation()
