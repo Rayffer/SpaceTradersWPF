@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.Models;
 
-public class Shiptype
+public class ShipType
 {
     [JsonProperty("type")]
     public string Type { get; set; }

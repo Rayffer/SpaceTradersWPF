@@ -8,7 +8,7 @@ public class Shipyard
     public string Symbol { get; set; }
 
     [JsonProperty("shipTypes")]
-    public Shiptype[] ShipTypes { get; set; }
+    public ShipType[] ShipTypes { get; set; }
 
     [JsonProperty("transactions")]
     public ShipyardTransaction[] Transactions { get; set; }
