@@ -122,7 +122,7 @@ internal static class TradeSymbolsExtensions
         };
     }
 
-    public static TradeSymbols FromApiString(this TradeSymbols tradeSymbols, string apiString)
+    public static TradeSymbols TradeSymbolsFromApiString(this string apiString)
     {
         return apiString switch
         {

@@ -22,7 +22,7 @@ internal static class ShipTypesExtensions
         };
     }
 
-    public static ShipTypes FromApiString(this ShipTypes _, string apiString)
+    public static ShipTypes ShipTypesFromApiString(this string apiString)
     {
         return apiString switch
         {
