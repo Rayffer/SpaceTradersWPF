@@ -8,7 +8,7 @@ internal enum TradeSymbols
     SiliconCrystals,
     AmmoniaIce,
     LiquidHydrogen,
-    LiguidNitrogen,
+    LiquidNitrogen,
     IceWater,
     ExoticMatter,
     AdvancedCircuitry,
@@ -110,7 +110,7 @@ internal enum TradeSymbols
     MountMiningLaser1,
     MountMiningLaser2,
     MountMiningLaser3,
-    MountLaserCannon,
-    MountMissileLauncher,
-    MountTurret
+    MountLaserCannon1,
+    MountMissileLauncher1,
+    MountTurret1
 }
