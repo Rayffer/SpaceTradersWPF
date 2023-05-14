@@ -7,4 +7,11 @@
         <Setter Property="Margin" Value="10" />
         <Setter Property="Background" Value="{DynamicResource DialogBackgroundSolidColorBrush}" />
     </Style>
+    <Style TargetType="Border" x:Key="BorderBackgroundLight">
+        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBackgroundSolidColorBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="Padding" Value="10" />
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Background" Value="{DynamicResource ControlBackgroundSolidColorBrush}" />
+    </Style>
 </ResourceDictionary>

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
     <Style TargetType="TextBlock" x:Key="BasicTextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
