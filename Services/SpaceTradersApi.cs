@@ -24,6 +24,8 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
         accessToken = token;
         restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
         restClient.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
+        restClient.AddDefaultHeader("Content-Type", "application/json");
+        restClient.AddDefaultHeader("Accept", "application/json");
     }
 
     private static string ExtractSystemSymbol(string waypointSymbol)

@@ -14,7 +14,7 @@ namespace SpaceTradersWPF.Services;
 
 internal partial class SpaceTradersApi
 {
-    private readonly string GetJumpGateWaypointResource = "/systems/{0}/waypoints/{1}/market";
+    private readonly string GetJumpGateWaypointResource = "/systems/{0}/waypoints/{1}/jumpgate";
 
     public async Task<JumpGate> GetJumpGate(string waypointSymbol)
     {

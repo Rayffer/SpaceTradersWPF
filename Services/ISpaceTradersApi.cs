@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using SpaceTradersWPF.Models;
+using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 
@@ -42,11 +43,11 @@ internal interface ISpaceTradersApi
 
     Task<Ship> GetShip(string shipSymbol);
 
-    Task<(Agent agent, Ship ship, ShipyardTransaction transaction)> PostShipPurchase(string shipSymbol);
+    Task<(Agent agent, Ship ship, ShipyardTransaction transaction)> PostShipPurchase(ShipTypes shipTypes, string waypointSymbol);
 
     Task<ShipNavigationInformation> PostShipOrbit(string shipSymbol);
 
-    Task<ShipNavigationInformation> PostShipRefine(string shipSymbol);
+    Task<ShipNavigationInformation> PostShipRefine(string shipSymbol, TradeSymbols tradeSymbol);
 
     Task<ShipNavigationInformation> PostShipCreateChart(string shipSymbol);
 
