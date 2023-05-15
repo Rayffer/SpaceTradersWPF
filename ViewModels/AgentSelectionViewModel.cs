@@ -67,8 +67,7 @@ internal class AgentSelectionViewModel : BindableBase
         this.spaceTradersApi.SetAccessTokenHeader(agentInformation.Token);
 
         this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(AgentGreetingView));
     }
 
     private async Task LoadInformation()
