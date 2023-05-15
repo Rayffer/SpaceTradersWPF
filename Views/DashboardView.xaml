@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
              xmlns:models="clr-namespace:SpaceTradersWPF.Models"
              xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+             xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
              d:DataContext="{d:DesignInstance viewmodels:DashboardViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -16,6 +17,7 @@
         <converters:ShipNavigationInformationToStringConverter x:Key="ShipNavigationInformationToStringConverter" />
         <converters:ApiFlightModeToStringConverter x:Key="ApiFlightModeToStringConverter" />
         <converters:ShipCrewToStringConverter x:Key="ShipCrewToStringConverter" />
+        <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -152,6 +154,9 @@
                            Grid.ColumnSpan="2"
                            HorizontalAlignment="Center"
                            FontSize="{DynamicResource Level0FontSize}" />
+                <controls:LoadingSpinner
+                    Grid.Row="1"
+                    Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
                 <ItemsControl Grid.Row="1"
                               ScrollViewer.VerticalScrollBarVisibility="Auto"
                               ItemsSource="{Binding Ships}">
@@ -162,6 +167,11 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="models:Ship">
+                            <DataTemplate.Triggers>
+                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                                </EventTrigger>
+                            </DataTemplate.Triggers>
                             <Border Style="{DynamicResource BorderBackgroundLight}"
                                     Cursor="Hand">
                                 <Grid>

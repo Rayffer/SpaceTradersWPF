@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -24,7 +25,7 @@ internal class DashboardViewModel : BindableBase
     private DelegateCommand openWaypointInformation;
     private Agent agentInformation;
     private Waypoint headquarters;
-    private Ship[] ships;
+    private IEnumerable<Ship> ships;
 
     public ICommand OpenSystemInformation => openSystemInformation ??= new DelegateCommand(PerformOpenSystemInformation);
     public ICommand OpenWaypointInformation => openWaypointInformation ??= new DelegateCommand(PerformOpenWaypointInformation);
@@ -42,7 +43,7 @@ internal class DashboardViewModel : BindableBase
         set => SetProperty(ref headquarters, value);
     }
 
-    public Ship[] Ships
+    public IEnumerable<Ship> Ships
     {
         get => ships;
         set => SetProperty(ref ships, value);
