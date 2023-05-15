@@ -6,6 +6,7 @@
     <prism:PrismApplication.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ResourceDictionaries/Animations.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/ButtonStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/TextBlockStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/FontSizes.xaml" />
