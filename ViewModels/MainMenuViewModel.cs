@@ -59,7 +59,7 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenFleetInformation()
     {
-        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<DashboardView>().Any())
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentFleetShipsOverviewView>().Any())
         {
             return;
         }
