@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Prism.Commands;
+using System;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 using Prism.Mvvm;
@@ -7,6 +9,7 @@ using Prism.Regions;
 using SpaceTradersWPF.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
+using System.Threading.Tasks;
 
 namespace SpaceTradersWPF.ViewModels;
 
@@ -14,7 +17,8 @@ internal class AgentGreetingViewModel : BindableBase
 {
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly IRegionManager regionManager;
-    private Agent currentAgent = null;
+    private Agent currentAgent;
+    private DelegateCommand loadAgentInformationCommand;
 
     public Agent CurrentAgent
     {
@@ -28,31 +32,15 @@ internal class AgentGreetingViewModel : BindableBase
     {
         this.spaceTradersApi = spaceTradersApi;
         this.regionManager = regionManager;
-
-        DispatcherTimer dispatcherTimer = new()
-        {
-            Interval = TimeSpan.FromSeconds(0.5)
-        };
-        dispatcherTimer.Tick += Timer_Tick;
-        dispatcherTimer.Start();
     }
 
-    private async void Timer_Tick(object sender, EventArgs e)
+    public ICommand LoadAgentInformationCommand => loadAgentInformationCommand ??= new DelegateCommand(async () => await this.LoadAgentInformation());
+
+    private async Task LoadAgentInformation()
     {
-        if (sender is not DispatcherTimer dispatcherTimer)
-        {
-            return;
-        }
-        if (dispatcherTimer.Interval == TimeSpan.FromSeconds(0.5))
-        {
-            dispatcherTimer.Stop();
-            CurrentAgent = await this.spaceTradersApi.GetAgent();
-            dispatcherTimer.Interval = TimeSpan.FromSeconds(3);
-            dispatcherTimer.Start();
-            return;
-        }
-        dispatcherTimer.Stop();
-        dispatcherTimer.Tick -= Timer_Tick;
+        await Task.Delay(500);
+        this.CurrentAgent = await this.spaceTradersApi.GetAgent();
+        await Task.Delay(3000);
         this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
