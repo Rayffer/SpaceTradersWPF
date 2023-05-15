@@ -59,6 +59,13 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenFleetInformation()
     {
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<DashboardView>().Any())
+        {
+            return;
+        }
+
+        this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
     }
 
     private void OpenSystemsInformation()
