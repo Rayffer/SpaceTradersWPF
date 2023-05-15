@@ -10,7 +10,7 @@ using SpaceTradersWPF.Services;
 
 namespace SpaceTradersWPF.ViewModels;
 
-internal class AgentShipsOverviewViewModel : BindableBase
+internal class AgentFleetShipsOverviewViewModel : BindableBase
 {
     private readonly ISpaceTradersApi spaceTradersApi;
     private IEnumerable<Ship> ships;
@@ -24,7 +24,7 @@ internal class AgentShipsOverviewViewModel : BindableBase
 
     public ICommand LoadShipsCommand => loadShipsCommand ??= new DelegateCommand(async () => await LoadShips());
 
-    public AgentShipsOverviewViewModel(ISpaceTradersApi spaceTradersApi)
+    public AgentFleetShipsOverviewViewModel(ISpaceTradersApi spaceTradersApi)
     {
         this.spaceTradersApi = spaceTradersApi;
     }
