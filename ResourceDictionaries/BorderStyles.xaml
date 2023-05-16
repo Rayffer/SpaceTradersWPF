@@ -14,4 +14,9 @@
         <Setter Property="Margin" Value="10" />
         <Setter Property="Background" Value="{DynamicResource ControlBackgroundSolidColorBrush}" />
     </Style>
+    <Style TargetType="Border" x:Key="AccentBorder">
+        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBackgroundSolidColorBrush}" />
+        <Setter Property="BorderThickness" Value="0, 0, 0, 2" />
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
 </ResourceDictionary>

@@ -8,6 +8,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ResourceDictionaries/Animations.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/ButtonStyles.xaml" />
+                <ResourceDictionary Source="ResourceDictionaries/DatagridStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/TextBlockStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/FontSizes.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/DarkThemeColors.xaml" />

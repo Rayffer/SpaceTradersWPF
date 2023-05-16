@@ -9,7 +9,11 @@
     <SolidColorBrush x:Key="MainBackgroundSemiTransparentSolidColorBrush" Color="#C0212A3B" />
     <SolidColorBrush x:Key="DialogBackgroundSolidColorBrush" Color="#FF2d394E" />
     <SolidColorBrush x:Key="DialogBackgroundSemiTransparentSolidColorBrush" Color="#C02d394E" />
+    <SolidColorBrush x:Key="ControlDarkBackgroundSolidColorBrush" Color="#FF263551" />
     <SolidColorBrush x:Key="ControlBackgroundSolidColorBrush" Color="#FF364561" />
-    <SolidColorBrush x:Key="ControlLightBackgroundSolidColorBrush" Color="#FF607bad" />
+    <SolidColorBrush x:Key="ControlLightBackgroundSolidColorBrush" Color="#FF4B6087" />
+    <SolidColorBrush x:Key="ControlClearBackgroundSolidColorBrush" Color="#FF607BAD" />
+    <SolidColorBrush x:Key="ControlBrightBackgroundSolidColorBrush" Color="#FF8AB1F9" />
     <SolidColorBrush x:Key="TextFontColorSolidColorBrush" Color="#FFDBDBDB" />
+    <SolidColorBrush x:Key="TextFontComplementaryColorSolidColorBrush" Color="#FF3B3B3B" />
 </ResourceDictionary>
