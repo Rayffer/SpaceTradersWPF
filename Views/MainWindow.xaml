@@ -22,6 +22,7 @@
                       prism:RegionManager.RegionName="{x:Static local:RegionNames.MainMenuRegion}" />
         <ContentControl x:Name="MainArea"
                         prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}"
+                        Margin="5"
                         Grid.Column="1" />
         <ContentControl x:Name="SplashScreen"
                         Grid.ColumnSpan="2"
