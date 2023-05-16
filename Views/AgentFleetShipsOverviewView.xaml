@@ -4,10 +4,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
+             xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
              xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
              d:DataContext="{d:DesignInstance viewmodels:AgentFleetShipsOverviewViewModel}"
+             Background="{DynamicResource ControlBackgroundSolidColorBrush}"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:ShipCrewToStringConverter x:Key="ShipCrewToStringConverter" />
+        <converters:ShipCargoToStringConverter x:Key="ShipCargoToStringConverter" />
+        <converters:FuelToStringConverter x:Key="FuelToStringConverter" />
+        <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
+    </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadShipsCommand}" />
@@ -17,9 +26,51 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <TextBlock Text="Fleet Ships" FontSize="{DynamicResource Level0FontSize}" HorizontalAlignment="Center" />
-        <DataGrid Grid.Row="1"
-                  ItemsSource="{Binding Ships}" />
+        <TextBlock
+            Text="Fleet Ships"
+            FontSize="{DynamicResource Level0FontSize}"
+            HorizontalAlignment="Center"
+            Margin="0, 0, 0, 2" />
+        <Border Style="{DynamicResource AccentBorder}" />
+        <controls:LoadingSpinner
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+        <DataGrid
+            Margin="5,0"
+            Grid.Row="1"
+            ItemsSource="{Binding Ships}"
+            AutoGenerateColumns="False">
+            <DataGrid.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                </EventTrigger>
+            </DataGrid.Triggers>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Symbol"
+                                    Binding="{Binding Symbol}"
+                                    Width="*" />
+                <DataGridTextColumn Header="Role"
+                                    Binding="{Binding Registration.Role}"
+                                    Width="*" />
+                <DataGridTextColumn Header="Frame"
+                                    Binding="{Binding Frame.Name}"
+                                    Width="*" />
+                <DataGridTextColumn Header="Condition"
+                                    Binding="{Binding Frame.Condition}"
+                                    Width="*" />
+                <DataGridTextColumn Header="Fuel"
+                                    Binding="{Binding Fuel, Converter={StaticResource FuelToStringConverter}}"
+                                    Width="Auto" />
+                <DataGridTextColumn Header="Crew"
+                                    Binding="{Binding Crew, Converter={StaticResource ShipCrewToStringConverter}}"
+                                    Width="Auto" />
+                <DataGridTextColumn Header="Cargo"
+                                    Binding="{Binding Cargo, Converter={StaticResource ShipCargoToStringConverter}}"
+                                    Width="Auto" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>
