@@ -12,7 +12,7 @@ internal class ShipCargoToStringConverter : IValueConverter
     {
         if (value is ShipCargo shipCargo)
         {
-            return $"{shipCargo.Units}/{shipCargo.Capacity} (Max)";
+            return $"{shipCargo.Units}/{shipCargo.Capacity}";
         }
         return "";
     }

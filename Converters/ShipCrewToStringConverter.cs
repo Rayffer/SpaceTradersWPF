@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 using SpaceTradersWPF.Models;
@@ -16,7 +12,7 @@ internal class ShipCrewToStringConverter : IValueConverter
     {
         if (value is ShipCrew shipCrew)
         {
-            return $"{shipCrew.Current}/{shipCrew.Capacity} (Max)";
+            return $"{shipCrew.Current}/{shipCrew.Capacity}";
         }
         return "";
     }
