@@ -134,17 +134,28 @@ internal partial class SpaceTradersApi
 
     public async Task<ShipNavigationInformation> PostShipDock(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipDockResource, shipSymbol), Method.Post);
+        var response = await restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
 
-    public Task<(ShipCooldown cooldown, Survey survey)> PostShipCreateSurvey(string shipSymbol)
+    public async Task<(ShipCooldown cooldown, Survey survey)> PostShipCreateSurvey(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipSurveyResource, shipSymbol), Method.Post);
+        var response = await restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<(ShipCooldown cooldown, Survey survey)>>(response.Content).Data;
     }
 
-    public async Task<(ShipCooldown cooldown, Survey survey)> PostShipExtractResources(string shipSymbol)
+    public async Task<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)> PostShipExtractResources(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
+        var response = await restClient.ExecuteAsync(request);
+
+        // TODO: Add json body for survey
+
+        return JsonConvert.DeserializeObject<ApiResponse<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)>>(response.Content).Data;
     }
 
     public async Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol)
@@ -189,7 +200,10 @@ internal partial class SpaceTradersApi
 
     public async Task<(Agent agent, ShipFuel fuel)> PostShipRefuel(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipRefuelResource, shipSymbol), Method.Post);
+        var response = await restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<(Agent agent, ShipFuel fuel)>>(response.Content).Data;
     }
 
     public async Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipPurchaseCargo(string shipSymbol)

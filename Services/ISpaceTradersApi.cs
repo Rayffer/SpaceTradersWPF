@@ -55,7 +55,7 @@ internal interface ISpaceTradersApi
 
     Task<(ShipCooldown cooldown, Survey survey)> PostShipCreateSurvey(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Survey survey)> PostShipExtractResources(string shipSymbol);
+    Task<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)> PostShipExtractResources(string shipSymbol);
 
     Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol);
 
