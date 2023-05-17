@@ -39,24 +39,29 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
-            Grid.ColumnSpan="2"
             Margin="0,0,0,2"
             HorizontalAlignment="Center"
             FontSize="{DynamicResource Level0FontSize}"
             Text="Fleet Ships" />
-        <Border Grid.ColumnSpan="2" Style="{DynamicResource AccentBorder}" />
+        <Border Style="{DynamicResource AccentBorder}" />
+        <TextBlock
+            Grid.Column="1"
+            HorizontalAlignment="Center"
+            FontSize="{DynamicResource Level1FontSize}"
+            Text="Ship summary" />
+        <Border Grid.Column="1" Style="{DynamicResource AccentBorder}" />
         <controls:LoadingSpinner
             Grid.Row="1"
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
-            Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+            Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}, FallbackValue={x:Static Visibility.Collapsed}}" />
         <DataGrid
             Grid.Row="1"
             Margin="5,0"
             AutoGenerateColumns="False"
             ItemsSource="{Binding Ships}"
             SelectedIndex="0"
-            SelectedItem="{Binding SelectedShip, Mode=OneWayToSource}">
+            SelectedItem="{Binding SelectedShip, Mode=TwoWay}">
             <DataGrid.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
@@ -104,12 +109,6 @@
                 <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <TextBlock
-                Grid.ColumnSpan="4"
-                HorizontalAlignment="Center"
-                FontSize="{DynamicResource Level1FontSize}"
-                Text="Ship summary" />
-            <Border Grid.ColumnSpan="4" Style="{DynamicResource AccentBorder}" />
             <TextBlock
                 Grid.Row="1"
                 Style="{DynamicResource BasicTextBlock}"
@@ -340,8 +339,7 @@
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Name}"
-                            Header="Cargo"
-                            ToolTipService.ToolTip="{Binding Description}" />
+                            Header="Cargo" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Units}"
@@ -363,31 +361,36 @@
                 Orientation="Horizontal">
                 <Button
                     Command="{Binding PerformDockCommand}"
+                    CommandParameter="{Binding SelectedShip}"
                     Content="Dock"
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
                     Command="{Binding PerformOrbitCommand}"
+                    CommandParameter="{Binding SelectedShip}"
                     Content="Orbit"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformRefuelCommand}"
+                    CommandParameter="{Binding SelectedShip}"
+                    Content="Refuel"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformExtractionCommand}"
+                    CommandParameter="{Binding SelectedShip}"
+                    Content="Extract"
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
                     Command="{Binding PerformWarpCommand}"
                     Content="Warp"
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
-                    Command="{Binding PerformExtractionCommand}"
-                    Content="Extract"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
                     Command="{Binding PerformSurveyCommand}"
+                    CommandParameter="{Binding SelectedShip}"
                     Content="Survey"
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
                     Command="{Binding PerformNavigateCommand}"
                     Content="Navigate"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformRefuelCommand}"
-                    Content="Refuel"
                     FontSize="{DynamicResource Level5FontSize}" />
             </StackPanel>
         </Grid>
