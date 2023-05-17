@@ -1,21 +1,25 @@
-﻿<UserControl x:Class="SpaceTradersWPF.Views.AgentFleetShipsOverviewView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
-             xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
-             xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
-             d:DataContext="{d:DesignInstance viewmodels:AgentFleetShipsOverviewViewModel}"
-             Background="{DynamicResource ControlBackgroundSolidColorBrush}"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="SpaceTradersWPF.Views.AgentFleetShipsOverviewView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
+    xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+    d:DataContext="{d:DesignInstance viewmodels:AgentFleetShipsOverviewViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="{DynamicResource ControlBackgroundSolidColorBrush}"
+    mc:Ignorable="d">
     <UserControl.Resources>
         <converters:ShipCrewToStringConverter x:Key="ShipCrewToStringConverter" />
         <converters:ShipCargoToStringConverter x:Key="ShipCargoToStringConverter" />
         <converters:FuelToStringConverter x:Key="FuelToStringConverter" />
         <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
+        <converters:ShipNavigationInformationToStringConverter x:Key="ShipNavigationInformationToStringConverter" />
+        <converters:ApiFlightModeToStringConverter x:Key="ApiFlightModeToStringConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -23,66 +27,369 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*"
+                MinWidth="400"
+                MaxWidth="400" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition />
-            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock
-            Text="Fleet Ships"
-            FontSize="{DynamicResource Level0FontSize}"
+            Grid.ColumnSpan="2"
+            Margin="0,0,0,2"
             HorizontalAlignment="Center"
-            Margin="0, 0, 0, 2" />
-        <Border Style="{DynamicResource AccentBorder}" />
+            FontSize="{DynamicResource Level0FontSize}"
+            Text="Fleet Ships" />
+        <Border Grid.ColumnSpan="2" Style="{DynamicResource AccentBorder}" />
         <controls:LoadingSpinner
             Grid.Row="1"
             Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
             Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
         <DataGrid
-            Margin="5,0"
             Grid.Row="1"
+            Margin="5,0"
+            AutoGenerateColumns="False"
             ItemsSource="{Binding Ships}"
-            AutoGenerateColumns="False">
+            SelectedIndex="0"
+            SelectedItem="{Binding SelectedShip, Mode=OneWayToSource}">
             <DataGrid.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                     <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
                 </EventTrigger>
             </DataGrid.Triggers>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Symbol"
-                                    Binding="{Binding Symbol}"
-                                    Width="*" />
-                <DataGridTextColumn Header="Role"
-                                    Binding="{Binding Registration.Role}"
-                                    Width="*" />
-                <DataGridTextColumn Header="Frame"
-                                    Binding="{Binding Frame.Name}"
-                                    Width="*" />
-                <DataGridTextColumn Header="Condition"
-                                    Binding="{Binding Frame.Condition}"
-                                    Width="*" />
-                <DataGridTextColumn Header="Fuel"
-                                    Binding="{Binding Fuel, Converter={StaticResource FuelToStringConverter}}"
-                                    Width="Auto" />
-                <DataGridTextColumn Header="Crew"
-                                    Binding="{Binding Crew, Converter={StaticResource ShipCrewToStringConverter}}"
-                                    Width="Auto" />
-                <DataGridTextColumn Header="Cargo"
-                                    Binding="{Binding Cargo, Converter={StaticResource ShipCargoToStringConverter}}"
-                                    Width="Auto" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Symbol}"
+                    Header="Symbol" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Registration.Role}"
+                    Header="Role" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Frame.Name}"
+                    Header="Frame" />
             </DataGrid.Columns>
         </DataGrid>
-        <Border Style="{DynamicResource BorderBackgroundLight}"
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5"
+            Background="{DynamicResource ControlLightBackgroundSolidColorBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Grid.ColumnSpan="4"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level1FontSize}"
+                Text="Ship summary" />
+            <Border Grid.ColumnSpan="4" Style="{DynamicResource AccentBorder}" />
+            <TextBlock
+                Grid.Row="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Ship Symbol:" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Symbol}" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Role:" />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Registration.Role}" />
+            <TextBlock
                 Grid.Row="2"
-                Margin="5">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Faction:" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Registration.FactionSymbol}" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Ship Frame:" />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="3"
+                Cursor="Help"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Frame.Name}"
+                ToolTip="{Binding SelectedShip.Frame.Description}" />
+            <TextBlock
+                Grid.Row="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Fuel:" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Fuel, Converter={StaticResource FuelToStringConverter}}" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Crew:" />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
+            <TextBlock
+                Grid.Row="4"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Crew Rotation:" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Crew.Rotation}" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Required crew:" />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Crew.Required}" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Crew Morale:" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Crew.Morale}" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Crew Wages:" />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.Crew.Wages}" />
+            <TextBlock
+                Grid.Row="6"
+                Grid.ColumnSpan="4"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level1FontSize}"
+                Text="Navigation Information" />
+            <Border
+                Grid.Row="6"
+                Grid.ColumnSpan="4"
+                Style="{DynamicResource AccentBorder}" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="0"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Status:" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.NavigationInformation.Status}" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Flight mode:" />
+            <TextBlock
+                Grid.Row="7"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.NavigationInformation.FlightMode, Converter={StaticResource ApiFlightModeToStringConverter}}" />
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="0"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="System:" />
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="1"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.NavigationInformation.SystemSymbol}" />
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="2"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Waypoint:" />
+            <TextBlock
+                Grid.Row="8"
+                Grid.Column="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.NavigationInformation.WaypointSymbol}" />
+            <TextBlock
+                Grid.Row="9"
+                Grid.Column="0"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Route:" />
+            <TextBlock
+                Grid.Row="9"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="{Binding SelectedShip.NavigationInformation, Converter={StaticResource ShipNavigationInformationToStringConverter}}" />
+            <Grid Grid.Row="12" Grid.ColumnSpan="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Border
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Style="{DynamicResource AccentBorder}" />
+                <Border
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Style="{DynamicResource AccentBorder}" />
+                <Border
+                    Grid.Row="6"
+                    Grid.Column="2"
+                    Style="{DynamicResource AccentBorder}" />
+                <TextBlock
+                    Grid.Row="8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Text="Available Actions" />
+                <DataGrid
+                    Margin="2,5"
+                    AutoGenerateColumns="False"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding SelectedShip.Modules}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Module" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Capacity}"
+                            Header="Cap." />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Range}"
+                            Header="Range" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid
+                    Grid.Column="1"
+                    Margin="2,5"
+                    AutoGenerateColumns="False"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding SelectedShip.Mounts}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Mount" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Strength}"
+                            Header="Strength" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid
+                    Grid.Column="2"
+                    Margin="2,5"
+                    AutoGenerateColumns="False"
+                    HorizontalScrollBarVisibility="Disabled"
+                    ItemsSource="{Binding SelectedShip.Cargo.Inventory}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding Name}"
+                            Header="Cargo"
+                            ToolTipService.ToolTip="{Binding Description}" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding Units}"
+                            Header="Amount" />
+                    </DataGrid.Columns>
+                </DataGrid>
             </Grid>
-        </Border>
+            <TextBlock
+                Grid.Row="13"
+                VerticalAlignment="Center"
+                FontSize="{DynamicResource Level2FontSize}"
+                Style="{DynamicResource BasicTextBlock}"
+                Text="Available actions:" />
+            <StackPanel
+                Grid.Row="13"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <Button
+                    Command="{Binding PerformDockCommand}"
+                    Content="Dock"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformOrbitCommand}"
+                    Content="Orbit"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformWarpCommand}"
+                    Content="Warp"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformExtractionCommand}"
+                    Content="Extract"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformSurveyCommand}"
+                    Content="Survey"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformNavigateCommand}"
+                    Content="Navigate"
+                    FontSize="{DynamicResource Level5FontSize}" />
+                <Button
+                    Command="{Binding PerformRefuelCommand}"
+                    Content="Refuel"
+                    FontSize="{DynamicResource Level5FontSize}" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
