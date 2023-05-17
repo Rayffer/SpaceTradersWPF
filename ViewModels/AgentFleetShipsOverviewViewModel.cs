@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -16,6 +17,13 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private DelegateCommand loadShipsCommand;
+    private DelegateCommand<Ship> performExtractionCommand;
+    private DelegateCommand<Ship> performSurveyCommand;
+    private DelegateCommand<Ship> performWarpCommand;
+    private DelegateCommand<Ship> performOrbitCommand;
+    private DelegateCommand<Ship> performDockCommand;
+    private DelegateCommand<Ship> performNavigateCommand;
+    private DelegateCommand<Ship> performRefuelCommand;
 
     public Ship SelectedShip
     {
@@ -30,6 +38,13 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     }
 
     public ICommand LoadShipsCommand => loadShipsCommand ??= new DelegateCommand(async () => await LoadShips());
+    public ICommand PerformExtractionCommand => performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await PerformExtraction(ship), ship => ship != null);
+    public ICommand PerformSurveyCommand => performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await PerformSurvey(ship), ship => ship != null);
+    public ICommand PerformWarpCommand => performWarpCommand ??= new DelegateCommand<Ship>(async ship => await PerformWarp(ship), ship => ship != null);
+    public ICommand PerformOrbitCommand => performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await PerformOrbit(ship), ship => ship != null);
+    public ICommand PerformDockCommand => performDockCommand ??= new DelegateCommand<Ship>(async ship => await PerformDock(ship), ship => ship != null);
+    public ICommand PerformNavigateCommand => performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await PerformNavigate(ship), ship => ship != null);
+    public ICommand PerformRefuelCommand => performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await PerformRefuel(ship), ship => ship != null);
 
     public AgentFleetShipsOverviewViewModel(ISpaceTradersApi spaceTradersApi)
     {
@@ -41,52 +56,45 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
     }
 
-    private DelegateCommand performExtractionCommand;
-    public ICommand PerformExtractionCommand => performExtractionCommand ??= new DelegateCommand(PerformExtraction);
+    private async Task PerformExtraction(Ship ship)
+    {
+        _ = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
+        await RefreshShips(ship);
+    }
 
-    private void PerformExtraction()
+    private async Task PerformSurvey(Ship ship)
     {
     }
 
-    private DelegateCommand performSurveyCommand;
-    public ICommand PerformSurveyCommand => performSurveyCommand ??= new DelegateCommand(PerformSurvey);
-
-    private void PerformSurvey()
+    private async Task PerformWarp(Ship ship)
     {
     }
 
-    private DelegateCommand performWarpCommand;
-    public ICommand PerformWarpCommand => performWarpCommand ??= new DelegateCommand(PerformWarp);
+    private async Task PerformOrbit(Ship ship)
+    {
+        _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+        await RefreshShips(ship);
+    }
 
-    private void PerformWarp()
+    private async Task PerformDock(Ship ship)
+    {
+        _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
+        await RefreshShips(ship);
+    }
+
+    private async Task PerformNavigate(Ship ship)
     {
     }
 
-    private DelegateCommand performOrbitCommand;
-    public ICommand PerformOrbitCommand => performOrbitCommand ??= new DelegateCommand(PerformOrbit);
-
-    private void PerformOrbit()
+    private async Task PerformRefuel(Ship ship)
     {
+        _ = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
+        await RefreshShips(ship);
     }
 
-    private DelegateCommand performDockCommand;
-    public ICommand PerformDockCommand => performDockCommand ??= new DelegateCommand(PerformDock);
-
-    private void PerformDock()
+    private async Task RefreshShips(Ship ship)
     {
-    }
-
-    private DelegateCommand performNavigateCommand;
-    public ICommand PerformNavigateCommand => performNavigateCommand ??= new DelegateCommand(PerformNavigate);
-
-    private void PerformNavigate()
-    {
-    }
-
-    private DelegateCommand performRefuelCommand;
-    public ICommand PerformRefuelCommand => performRefuelCommand ??= new DelegateCommand(PerformRefuel);
-
-    private void PerformRefuel()
-    {
+        this.Ships = await this.spaceTradersApi.GetShips(1, 20);
+        this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
     }
 }
