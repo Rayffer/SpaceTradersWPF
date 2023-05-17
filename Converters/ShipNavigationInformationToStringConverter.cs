@@ -18,7 +18,7 @@ internal class ShipNavigationInformationToStringConverter : IValueConverter
             }
             else if (shipNavigationInformation.Status == "IN_TRANSIT")
             {
-                return $"Flying to {shipNavigationInformation.Route.Destination}";
+                return $"Flying to {shipNavigationInformation.Route.Destination.Symbol}";
             }
             else if (shipNavigationInformation.Status == "IN_ORBIT")
             {
