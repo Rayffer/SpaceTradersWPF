@@ -1,15 +1,13 @@
-﻿using Prism.Commands;
-using System;
+﻿using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Windows.Threading;
 
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
-using System.Threading.Tasks;
 
 namespace SpaceTradersWPF.ViewModels;
 

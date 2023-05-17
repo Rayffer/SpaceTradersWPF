@@ -1,11 +1,11 @@
-﻿using Prism.Commands;
+﻿using System.Linq;
+using System.Windows.Input;
+
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.Views;
-
-using System.Linq;
-using System.Windows.Input;
 
 namespace SpaceTradersWPF.ViewModels;
 
