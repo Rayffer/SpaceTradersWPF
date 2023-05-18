@@ -24,6 +24,10 @@
                         prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}"
                         Margin="5"
                         Grid.Column="1" />
+        <ContentControl x:Name="NotificationArea"
+                        prism:RegionManager.RegionName="{x:Static local:RegionNames.NotificationAreaRegion}"
+                        Margin="5"
+                        Grid.Column="1" />
         <ContentControl x:Name="SplashScreen"
                         Grid.ColumnSpan="2"
                         prism:RegionManager.RegionName="{x:Static local:RegionNames.SplashScreenRegion}"

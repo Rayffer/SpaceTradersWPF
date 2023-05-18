@@ -9,13 +9,19 @@ using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.Events;
+using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
+using SpaceTradersWPF.Types;
+using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
 internal class AgentFleetShipsOverviewViewModel : BindableBase
 {
     private readonly ISpaceTradersApi spaceTradersApi;
+    private readonly IRegionManager regionManager;
+    private readonly IEventAggregator eventAggregator;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private DelegateCommand loadShipsCommand;
@@ -48,9 +54,14 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     public ICommand PerformNavigateCommand => performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await PerformNavigate(ship), ship => ship != null);
     public ICommand PerformRefuelCommand => performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await PerformRefuel(ship), ship => ship != null);
 
-    public AgentFleetShipsOverviewViewModel(ISpaceTradersApi spaceTradersApi)
+    public AgentFleetShipsOverviewViewModel(
+        ISpaceTradersApi spaceTradersApi,
+        IRegionManager regionManager,
+        IEventAggregator eventAggregator)
     {
         this.spaceTradersApi = spaceTradersApi;
+        this.regionManager = regionManager;
+        this.eventAggregator = eventAggregator;
     }
 
     private async Task LoadShips()
@@ -82,6 +93,12 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
         await RefreshShips(ship);
+        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        {
+            ToastNotificationHeader = $"Ship {ship.Symbol} docked succesfully",
+            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+        });
     }
 
     private async Task PerformNavigate(Ship ship)
