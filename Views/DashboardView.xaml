@@ -188,7 +188,7 @@
                         <DataTemplate DataType="models:Ship">
                             <DataTemplate.Triggers>
                                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimationQuick}" />
+                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
                                 </EventTrigger>
                             </DataTemplate.Triggers>
                             <Border Cursor="Hand" Style="{DynamicResource BorderBackgroundLight}">
