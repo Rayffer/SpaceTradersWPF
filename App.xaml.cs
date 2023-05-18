@@ -6,6 +6,7 @@ using Prism.Unity;
 using RestSharp;
 
 using SpaceTradersWPF.Events;
+using SpaceTradersWPF.Mappers;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 
@@ -38,6 +39,7 @@ public partial class App : PrismApplication
     {
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
+        containerRegistry.Register<ISpaceTradersApiMapper, SpaceTradersApiMapper>();
     }
 
     private static void RegisterEvents(IContainerRegistry containerRegistry)
@@ -45,5 +47,6 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<WaypointInformationEvent>();
         containerRegistry.RegisterSingleton<SystemInformationEvent>();
         containerRegistry.RegisterSingleton<ToastNotificationEvent>();
+        containerRegistry.RegisterSingleton<ShipInformationEvent>();
     }
 }
