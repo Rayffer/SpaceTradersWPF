@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -24,12 +25,14 @@ internal class DashboardViewModel : BindableBase
     private DelegateCommand loadInformationCommand;
     private DelegateCommand openSystemInformation;
     private DelegateCommand openWaypointInformation;
+    private DelegateCommand<Ship> openShipInformation;
     private Agent agentInformation;
     private Waypoint headquarters;
     private IEnumerable<Ship> ships;
 
     public ICommand OpenSystemInformation => openSystemInformation ??= new DelegateCommand(PerformOpenSystemInformation);
     public ICommand OpenWaypointInformation => openWaypointInformation ??= new DelegateCommand(PerformOpenWaypointInformation);
+    public ICommand OpenShipInformation => openShipInformation ??= new DelegateCommand<Ship>(PerformOpenShipInformation);
     public ICommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(async () => await LoadInformation());
 
     public Agent AgentInformation
@@ -84,6 +87,16 @@ internal class DashboardViewModel : BindableBase
         this.eventAggregator.GetEvent<WaypointInformationEvent>().Publish(new WaypointInformationEventArguments
         {
             WaypointSymbol = this.Headquarters.Symbol
+        });
+    }
+
+    private void PerformOpenShipInformation(Ship ship)
+    {
+        RemoveCurrentView();
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
+        this.eventAggregator.GetEvent<ShipInformationEvent>().Publish(new ShipInformationEventArguments
+        {
+            Ship = ship
         });
     }
 

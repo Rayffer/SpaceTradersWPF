@@ -92,8 +92,7 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                </TextBlock>
+                    </behaviors:Interaction.Triggers></TextBlock>
                 <TextBlock
                     Grid.Row="5"
                     FontSize="{DynamicResource Level1FontSize}"
@@ -108,8 +107,7 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                </TextBlock>
+                    </behaviors:Interaction.Triggers></TextBlock>
                 <TextBlock
                     Grid.Row="6"
                     FontSize="{DynamicResource Level1FontSize}"
@@ -193,7 +191,7 @@
                                     <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
                                 </EventTrigger>
                             </DataTemplate.Triggers>
-                            <Border Cursor="Hand" Style="{DynamicResource BorderBackgroundLight}">
+                            <Border Cursor="Hand" Style="{DynamicResource BorderBackgroundLight}" MouseUp="Border_MouseUp">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />

@@ -32,6 +32,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private DelegateCommand<Ship> performDockCommand;
     private DelegateCommand<Ship> performNavigateCommand;
     private DelegateCommand<Ship> performRefuelCommand;
+    private bool alreadyLoaded;
 
     public Ship SelectedShip
     {
@@ -62,10 +63,27 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         this.spaceTradersApi = spaceTradersApi;
         this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
+        this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
+    }
+
+    ~AgentFleetShipsOverviewViewModel()
+    {
+        this.eventAggregator.GetEvent<ShipInformationEvent>().Unsubscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
+    }
+
+    private async Task LoadSelectedShipInformation(ShipInformationEventArguments arguments)
+    {
+        alreadyLoaded = true;
+        await this.RefreshShips(arguments.Ship);
     }
 
     private async Task LoadShips()
     {
+        if (alreadyLoaded)
+        {
+            alreadyLoaded = false;
+            return;
+        }
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
     }
 
