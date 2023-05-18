@@ -8,7 +8,7 @@ using RestSharp;
 using SpaceTradersWPF.Extensions;
 using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.ApiModels.Requests;
-using SpaceTradersWPF.ApiTypes;
+using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using SpaceTradersWPF.ApiModels;
-using SpaceTradersWPF.ApiTypes;
+using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 

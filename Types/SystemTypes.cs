@@ -1,4 +1,4 @@
-﻿namespace SpaceTradersWPF.ApiTypes;
+﻿namespace SpaceTradersWPF.Types;
 
 internal enum SystemTypes
 {

@@ -1,4 +1,4 @@
-﻿using SpaceTradersWPF.ApiTypes;
+﻿using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Extensions;
 
