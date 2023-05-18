@@ -9,7 +9,7 @@ internal interface ISpaceTradersApi
 {
     void SetAccessTokenHeader(string token);
 
-    AgentResponse RegisterAgent(string symbol, string faction);
+    Task<AgentResponse> RegisterAgent(string symbol, string faction);
 
     Task<Agent> GetAgent();
 

@@ -13,13 +13,13 @@ internal partial class SpaceTradersApi
 {
     private readonly string GetAgentResource = "my/agent";
 
-    public AgentResponse RegisterAgent(string symbol, string faction)
+    public async Task<AgentResponse> RegisterAgent(string symbol, string faction)
     {
         var request = new RestRequest("register", Method.Post);
         request.AddHeader("Content-Type", "application/json");
         var body = JsonConvert.SerializeObject(new { symbol, faction });
         request.AddParameter("application/json", body, ParameterType.RequestBody);
-        var response = restClient.ExecuteAsync(request).Result;
+        var response = await restClient.ExecuteAsync(request);
         Console.WriteLine(response.Content);
 
         return JsonConvert.DeserializeObject<ApiResponse<AgentResponse>>(response.Content).Data;

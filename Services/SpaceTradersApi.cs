@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Newtonsoft.Json;
-
 using RestSharp;
 
-using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.Mappers;
 
 namespace SpaceTradersWPF.Services;
 
 internal partial class SpaceTradersApi : ISpaceTradersApi
 {
     private readonly IRestClient restClient;
+    private readonly ISpaceTradersApiMapper spaceTradersMapper;
     private string accessToken;
 
-    public SpaceTradersApi(IRestClient restClient)
+    public SpaceTradersApi(IRestClient restClient,
+        ISpaceTradersApiMapper spaceTradersMapper)
     {
         this.restClient = restClient;
+        this.spaceTradersMapper = spaceTradersMapper;
     }
 
     public void SetAccessTokenHeader(string token)
@@ -32,5 +33,18 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
     {
         var lastHyphenIndex = waypointSymbol.LastIndexOf('-');
         return waypointSymbol.Substring(0, lastHyphenIndex);
+    }
+
+    private async Task<RestResponse> PerformRequest(RestRequest request)
+    {
+        var response = default(RestResponse);
+        try
+        {
+            return await restClient.ExecuteAsync(request);
+        }
+        catch (Exception e)
+        {
+        }
+        return response;
     }
 }
