@@ -32,6 +32,11 @@ internal class WaypointInformationViewModel : BindableBase
         this.eventAggregator.GetEvent<WaypointInformationEvent>().Subscribe(async waypointInformation => await GetWaypointInformation(waypointInformation));
     }
 
+    ~WaypointInformationViewModel()
+    {
+        this.eventAggregator.GetEvent<WaypointInformationEvent>().Unsubscribe(async waypointInformation => await GetWaypointInformation(waypointInformation));
+    }
+
     private async Task GetWaypointInformation(WaypointInformationEventArguments eventInformation)
     {
         var waypointInformation = await this.spaceTradersApi.GetWaypoint(eventInformation.WaypointSymbol);

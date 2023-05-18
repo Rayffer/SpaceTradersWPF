@@ -48,6 +48,11 @@ internal class ToastNotificationViewModel : BindableBase
         this.eventAggregator.GetEvent<ToastNotificationEvent>().Subscribe(SetInformation);
     }
 
+    ~ToastNotificationViewModel()
+    {
+        this.eventAggregator.GetEvent<ToastNotificationEvent>().Unsubscribe(SetInformation);
+    }
+
     private void SetInformation(ToastNotificationEventArguments eventArguments)
     {
         this.ToastNotificationType = eventArguments.ToastNotificationTypes;

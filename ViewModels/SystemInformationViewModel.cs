@@ -18,6 +18,11 @@ internal class SystemInformationViewModel : BindableBase
         this.eventAggregator.GetEvent<SystemInformationEvent>().Subscribe(GetSystemInformationInformation);
     }
 
+    ~SystemInformationViewModel()
+    {
+        this.eventAggregator.GetEvent<SystemInformationEvent>().Unsubscribe(GetSystemInformationInformation);
+    }
+
     private void GetSystemInformationInformation(SystemInformationEventArguments eventInformation)
     {
         throw new NotImplementedException();
