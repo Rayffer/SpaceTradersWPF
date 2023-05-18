@@ -24,6 +24,11 @@
             Grid.Column="1"
             Margin="5"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}" />
+        <ItemsControl
+            x:Name="DialogArea"
+            Grid.Column="1"
+            Margin="5"
+            prism:RegionManager.RegionName="{x:Static local:RegionNames.DialogAreaRegion}" />
         <ContentControl
             x:Name="NotificationArea"
             Grid.Column="1"
