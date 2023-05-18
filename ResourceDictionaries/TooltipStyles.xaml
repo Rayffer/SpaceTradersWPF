@@ -1,10 +1,9 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="{x:Type ToolTip}">
         <Setter Property="Margin" Value="10" />
         <Setter Property="FontSize" Value="{DynamicResource Level3FontSize}" />
-        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush }" />
-        <Setter Property="Background" Value="{DynamicResource MainBackgroundSemiTransparentSolidColorBrush }" />
+        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+        <Setter Property="Background" Value="{DynamicResource MainBackgroundSemiTransparentSolidColorBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource ButtonBackgroundSolidColorBrush}" />
         <Setter Property="MaxWidth" Value="300" />
     </Style>

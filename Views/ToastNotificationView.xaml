@@ -1,8 +1,8 @@
 ﻿<UserControl
     x:Class="SpaceTradersWPF.Views.ToastNotificationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:types="clr-namespace:SpaceTradersWPF.Types"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
@@ -47,9 +47,7 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <Border
-        BorderBrush="#40FFFFFF"
-        BorderThickness="2">
+        <Border BorderBrush="#40FFFFFF" BorderThickness="2">
             <Border.Triggers>
                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                     <BeginStoryboard Storyboard="{DynamicResource FadeInAnimation}" />
@@ -61,10 +59,10 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock
-                FontSize="{DynamicResource Level1FontSize}"
-                Style="{DynamicResource BasicTextBlock}"
-                Text="{Binding Header}"
-                Padding="5" />
+                    Padding="5"
+                    FontSize="{DynamicResource Level1FontSize}"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding Header}" />
                 <TextBlock Style="{DynamicResource BasicTextBlock}" Text="{Binding Message}" />
             </Grid>
         </Border>

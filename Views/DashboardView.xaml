@@ -2,12 +2,12 @@
     x:Class="SpaceTradersWPF.Views.DashboardView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:apiModels="clr-namespace:SpaceTradersWPF.ApiModels"
     xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
     xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:apiModels="clr-namespace:SpaceTradersWPF.ApiModels"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
     d:DataContext="{d:DesignInstance viewmodels:DashboardViewModel}"
     d:DesignHeight="450"
@@ -92,7 +92,8 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers></TextBlock>
+                    </behaviors:Interaction.Triggers>
+                </TextBlock>
                 <TextBlock
                     Grid.Row="5"
                     FontSize="{DynamicResource Level1FontSize}"
@@ -107,7 +108,8 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers></TextBlock>
+                    </behaviors:Interaction.Triggers>
+                </TextBlock>
                 <TextBlock
                     Grid.Row="6"
                     FontSize="{DynamicResource Level1FontSize}"
