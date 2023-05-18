@@ -24,16 +24,21 @@
             Grid.Column="1"
             Margin="5"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}" />
-        <ItemsControl
+        <ContentControl
             x:Name="DialogArea"
             Grid.Column="1"
             Margin="5"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.DialogAreaRegion}" />
         <ContentControl
-            x:Name="NotificationArea"
+            x:Name="ToastNotificationArea"
             Grid.Column="1"
             Margin="5"
-            prism:RegionManager.RegionName="{x:Static local:RegionNames.NotificationAreaRegion}" />
+            prism:RegionManager.RegionName="{x:Static local:RegionNames.ToastNotificationArea}" />
+        <ItemsControl
+            x:Name="FlyoutNotificationArea"
+            Grid.Column="1"
+            Margin="5"
+            prism:RegionManager.RegionName="{x:Static local:RegionNames.FlyoutNotificationArea}" />
         <ContentControl
             x:Name="SplashScreen"
             Grid.ColumnSpan="2"
