@@ -62,6 +62,6 @@ internal class ToastNotificationViewModel : BindableBase
 
     internal void AnimationCompleted(ToastNotificationView view)
     {
-        this.regionManager.Regions[RegionNames.NotificationAreaRegion].Remove(view);
+        this.regionManager.Regions[RegionNames.ToastNotificationArea].Remove(view);
     }
 }

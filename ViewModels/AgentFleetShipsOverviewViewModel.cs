@@ -91,7 +91,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
 
-        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
         this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
         {
             ToastNotificationHeader = $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
@@ -113,7 +113,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
         await RefreshShips(ship);
-        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
         this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
         {
             ToastNotificationHeader = $"Ship {ship.Symbol} entered orbit succesfully",
@@ -125,7 +125,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
         await RefreshShips(ship);
-        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
         this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
         {
             ToastNotificationHeader = $"Ship {ship.Symbol} docked succesfully",
