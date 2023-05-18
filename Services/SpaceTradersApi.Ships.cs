@@ -48,7 +48,7 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<Ship>>(response.Content).Data;
     }
 
-    public async Task<(Agent agent, Ship ship, ShipyardTransaction transaction)> PostShipPurchase(ShipTypes shipTypes, string waypointSymbol)
+    public async Task<ShipPurchaseResponse> PostShipPurchase(ShipTypes shipTypes, string waypointSymbol)
     {
         var request = new RestRequest(string.Format(PostPurchaseShipResource), Method.Post);
         request.AddBody(new ShipPurchaseRequestModel
@@ -58,7 +58,7 @@ internal partial class SpaceTradersApi
         });
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(Agent agent, Ship ship, ShipyardTransaction transaction)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<ShipPurchaseResponse>>(response.Content).Data;
     }
 
     public async Task<ShipCargo> GetShipCargo(string shipSymbol)
