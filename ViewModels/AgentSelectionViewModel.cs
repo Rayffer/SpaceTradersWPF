@@ -22,7 +22,7 @@ internal class AgentSelectionViewModel : BindableBase
     private Faction[] factions;
     private Faction selectedFaction;
 
-    public DelegateCommand<string> RegisterAgentCommand => registerAgentCommand ??= new DelegateCommand<string>(RegisterAgent);
+    public DelegateCommand<string> RegisterAgentCommand => registerAgentCommand ??= new DelegateCommand<string>(async (symbol) => await RegisterAgent(symbol));
     public DelegateCommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(async () => await LoadInformation());
 
     public Faction SelectedFaction
@@ -47,11 +47,11 @@ internal class AgentSelectionViewModel : BindableBase
         this.spaceTradersApi = spaceTradersApi;
     }
 
-    private void RegisterAgent(string symbol)
+    private async Task RegisterAgent(string symbol)
     {
         var agentInformation = symbol.Length switch
         {
-            >= 3 and <= 14 => this.spaceTradersApi.RegisterAgent(symbol, SelectedFaction.Symbol),
+            >= 3 and <= 14 => await this.spaceTradersApi.RegisterAgent(symbol, SelectedFaction.Symbol),
             _ => default
         };
 
