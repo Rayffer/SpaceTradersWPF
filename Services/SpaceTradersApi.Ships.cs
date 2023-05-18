@@ -5,39 +5,40 @@ using Newtonsoft.Json;
 
 using RestSharp;
 
-using SpaceTradersWPF.Extensions;
 using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.ApiModels.Requests;
+using SpaceTradersWPF.ApiModels.Responses;
+using SpaceTradersWPF.Extensions;
 using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 
 internal partial class SpaceTradersApi
 {
-    private readonly string GetShipsResource = "/my/ships?page={0}&limit={1}";
-    private readonly string GetShipResource = "/my/ships/{0}";
-    private readonly string GetShipCargoResource = "/my/ships/{0}/cargo";
-    private readonly string GetShipCooldownResource = "/my/ships/{0}/cooldown";
-    private readonly string GetShipNavigationResource = "/my/ships/{0}/nav";
-    private readonly string PostPurchaseShipResource = "/my/ships";
-    private readonly string PostShipOrbitResource = "/my/ships/{0}/orbit";
-    private readonly string PostShipRefineResource = "/my/ships/{0}/refine";
-    private readonly string PostShipChartResource = "/my/ships/{0}/chart";
-    private readonly string PostShipDockResource = "/my/ships/{0}/dock";
-    private readonly string PostShipSurveyResource = "/my/ships/{0}/survey";
-    private readonly string PostShipExtractResource = "/my/ships/{0}/extract";
-    private readonly string PostShipJettisonResource = "/my/ships/{0}/jettison";
-    private readonly string PostShipJumpResource = "/my/ships/{0}/jump";
-    private readonly string PostShipNavigateResource = "/my/ships/{0}/navigate";
-    private readonly string PostShipWarpResource = "/my/ships/{0}/warp";
-    private readonly string PostShipSellCargoResource = "/my/ships/{0}/sell";
-    private readonly string PostShipScanSystemsResource = "/my/ships/{0}/scan/systems";
-    private readonly string PostShipScanWaypointsResource = "/my/ships/{0}/scan/waypoints";
-    private readonly string PostShipScanShipsResource = "/my/ships/{0}/scan/ships";
-    private readonly string PostShipRefuelResource = "/my/ships/{0}/refuel";
-    private readonly string PostShipPurchaseCargoResource = "/my/ships/{0}/purchase";
-    private readonly string PostShipTransferCargoResource = "/my/ships/{0}/transfer";
-    private readonly string PatchShipNavigationInformationResource = "/my/ships/{0}/nav";
+    private const string GetShipsResource = "/my/ships?page={0}&limit={1}";
+    private const string GetShipResource = "/my/ships/{0}";
+    private const string GetShipCargoResource = "/my/ships/{0}/cargo";
+    private const string GetShipCooldownResource = "/my/ships/{0}/cooldown";
+    private const string GetShipNavigationResource = "/my/ships/{0}/nav";
+    private const string PostPurchaseShipResource = "/my/ships";
+    private const string PostShipOrbitResource = "/my/ships/{0}/orbit";
+    private const string PostShipRefineResource = "/my/ships/{0}/refine";
+    private const string PostShipChartResource = "/my/ships/{0}/chart";
+    private const string PostShipDockResource = "/my/ships/{0}/dock";
+    private const string PostShipSurveyResource = "/my/ships/{0}/survey";
+    private const string PostShipExtractResource = "/my/ships/{0}/extract";
+    private const string PostShipJettisonResource = "/my/ships/{0}/jettison";
+    private const string PostShipJumpResource = "/my/ships/{0}/jump";
+    private const string PostShipNavigateResource = "/my/ships/{0}/navigate";
+    private const string PostShipWarpResource = "/my/ships/{0}/warp";
+    private const string PostShipSellCargoResource = "/my/ships/{0}/sell";
+    private const string PostShipScanSystemsResource = "/my/ships/{0}/scan/systems";
+    private const string PostShipScanWaypointsResource = "/my/ships/{0}/scan/waypoints";
+    private const string PostShipScanShipsResource = "/my/ships/{0}/scan/ships";
+    private const string PostShipRefuelResource = "/my/ships/{0}/refuel";
+    private const string PostShipPurchaseCargoResource = "/my/ships/{0}/purchase";
+    private const string PostShipTransferCargoResource = "/my/ships/{0}/transfer";
+    private const string PatchShipNavigationInformationResource = "/my/ships/{0}/nav";
 
     public async Task<Ship> GetShip(string shipSymbol)
     {
@@ -140,22 +141,22 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
 
-    public async Task<(ShipCooldown cooldown, Survey survey)> PostShipCreateSurvey(string shipSymbol)
+    public async Task<SurveyResponse> PostShipCreateSurvey(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipSurveyResource, shipSymbol), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(ShipCooldown cooldown, Survey survey)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<SurveyResponse>>(response.Content).Data;
     }
 
-    public async Task<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)> PostShipExtractResources(string shipSymbol)
+    public async Task<ExtractionResponse> PostShipExtractResources(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
         // TODO: Add json body for survey
 
-        return JsonConvert.DeserializeObject<ApiResponse<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(response.Content).Data;
     }
 
     public async Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol)
@@ -163,50 +164,50 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipCooldown cooldown, ShipNavigationInformation navigationInformation)> PostShipJump(string shipSymbol)
+    public async Task<JumpResponse> PostShipJump(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipFuel fuel, ShipNavigationInformation navigationInformation)> PostShipNavigate(string shipSymbol)
+    public async Task<NavigationResponse> PostShipNavigate(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipFuel fuel, ShipNavigationInformation navigationInformation)> PostShipWarp(string shipSymbol)
+    public async Task<NavigationResponse> PostShipWarp(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipSellCargo(string shipSymbol)
+    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipCooldown cooldown, ApiModels.System[] systems)> PostShipScanSystems(string shipSymbol)
+    public async Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipCooldown cooldown, Waypoint[] waypoints)> PostShipScanWaypoints(string shipSymbol)
+    public async Task<ScanWaypointsResponse> PostShipScanWaypoints(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipCooldown cooldown, Ship[] ships)> PostShipScanShips(string shipSymbol)
+    public async Task<ScanShipsResponse> PostShipScanShips(string shipSymbol)
     {
         throw new NotImplementedException();
     }
 
-    public async Task<(Agent agent, ShipFuel fuel)> PostShipRefuel(string shipSymbol)
+    public async Task<RefuelResponse> PostShipRefuel(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipRefuelResource, shipSymbol), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(Agent agent, ShipFuel fuel)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<RefuelResponse>>(response.Content).Data;
     }
 
-    public async Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipPurchaseCargo(string shipSymbol)
+    public async Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol)
     {
         throw new NotImplementedException();
     }

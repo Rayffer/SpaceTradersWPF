@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Responses;
 
 namespace SpaceTradersWPF.Services;
 

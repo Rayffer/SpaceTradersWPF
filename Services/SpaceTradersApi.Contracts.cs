@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Responses;
 
 namespace SpaceTradersWPF.Services;
 
@@ -32,27 +33,27 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<Contract[]>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> PostAcceptContract(string contractId)
+    public async Task<ContractResponse> PostAcceptContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostAcceptContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(Contract contract, Agent agent)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<ContractResponse>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> PostDeliverContract(string contractId)
+    public async Task<DeliverContractResponse> PostDeliverContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostDeliverContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(Contract contract, Agent agent)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<DeliverContractResponse>>(response.Content).Data;
     }
 
-    public async Task<(Contract contract, Agent agent)> PostFulfillContract(string contractId)
+    public async Task<ContractResponse> PostFulfillContract(string contractId)
     {
         var request = new RestRequest(string.Format(PostFulfillContractResource, contractId), Method.Post);
         var response = await restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<(Contract contract, Agent agent)>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<ContractResponse>>(response.Content).Data;
     }
 }

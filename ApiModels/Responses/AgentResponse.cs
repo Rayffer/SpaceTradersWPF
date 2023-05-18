@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpaceTradersWPF.ApiModels;
+namespace SpaceTradersWPF.ApiModels.Responses;
 
 internal class AgentResponse
 {

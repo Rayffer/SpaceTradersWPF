@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Responses;
 using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
@@ -17,11 +18,11 @@ internal interface ISpaceTradersApi
 
     Task<Contract[]> GetContracts();
 
-    Task<(Contract contract, Agent agent)> PostAcceptContract(string contractId);
+    Task<ContractResponse> PostAcceptContract(string contractId);
 
-    Task<(Contract contract, Agent agent)> PostDeliverContract(string contractId);
+    Task<DeliverContractResponse> PostDeliverContract(string contractId);
 
-    Task<(Contract contract, Agent agent)> PostFulfillContract(string contractId);
+    Task<ContractResponse> PostFulfillContract(string contractId);
 
     Task<JumpGate> GetJumpGate(string waypointSymbol);
 
@@ -43,7 +44,7 @@ internal interface ISpaceTradersApi
 
     Task<Ship> GetShip(string shipSymbol);
 
-    Task<(Agent agent, Ship ship, ShipyardTransaction transaction)> PostShipPurchase(ShipTypes shipTypes, string waypointSymbol);
+    Task<ShipPurchaseResponse> PostShipPurchase(ShipTypes shipTypes, string waypointSymbol);
 
     Task<ShipNavigationInformation> PostShipOrbit(string shipSymbol);
 
@@ -53,31 +54,31 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PostShipDock(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Survey survey)> PostShipCreateSurvey(string shipSymbol);
+    Task<SurveyResponse> PostShipCreateSurvey(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Extraction extraction, ShipCargo cargo)> PostShipExtractResources(string shipSymbol);
+    Task<ExtractionResponse> PostShipExtractResources(string shipSymbol);
 
     Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, ShipNavigationInformation navigationInformation)> PostShipJump(string shipSymbol);
+    Task<JumpResponse> PostShipJump(string shipSymbol);
 
-    Task<(ShipFuel fuel, ShipNavigationInformation navigationInformation)> PostShipNavigate(string shipSymbol);
+    Task<NavigationResponse> PostShipNavigate(string shipSymbol);
 
     Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol);
 
-    Task<(ShipFuel fuel, ShipNavigationInformation navigationInformation)> PostShipWarp(string shipSymbol);
+    Task<NavigationResponse> PostShipWarp(string shipSymbol);
 
-    Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipSellCargo(string shipSymbol);
+    Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, ApiModels.System[] systems)> PostShipScanSystems(string shipSymbol);
+    Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Waypoint[] waypoints)> PostShipScanWaypoints(string shipSymbol);
+    Task<ScanWaypointsResponse> PostShipScanWaypoints(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Ship[] ships)> PostShipScanShips(string shipSymbol);
+    Task<ScanShipsResponse> PostShipScanShips(string shipSymbol);
 
-    Task<(Agent agent, ShipFuel fuel)> PostShipRefuel(string shipSymbol);
+    Task<RefuelResponse> PostShipRefuel(string shipSymbol);
 
-    Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipPurchaseCargo(string shipSymbol);
+    Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol);
 
     Task<ShipCargo> PostShipTransferCargo(string shipSymbol);
 

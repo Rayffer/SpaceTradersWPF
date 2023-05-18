@@ -89,7 +89,15 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformExtraction(Ship ship)
     {
-        _ = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
+        var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
+
+        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        {
+            ToastNotificationHeader = $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
+            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+        });
+
         await RefreshShips(ship);
     }
 
@@ -105,6 +113,12 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
         await RefreshShips(ship);
+        this.regionManager.RegisterViewWithRegion(RegionNames.NotificationAreaRegion, typeof(ToastNotificationView));
+        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        {
+            ToastNotificationHeader = $"Ship {ship.Symbol} entered orbit succesfully",
+            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+        });
     }
 
     private async Task PerformDock(Ship ship)
