@@ -1,12 +1,9 @@
 ﻿using Prism.Events;
 
+using SpaceTradersWPF.Events.Models;
+
 namespace SpaceTradersWPF.Events;
 
-internal class SystemInformation
-{
-    public string SystemSymbol { get; internal set; }
-}
-
-internal class SystemInformationEvent : PubSubEvent<SystemInformation>
+internal class SystemInformationEvent : PubSubEvent<SystemInformationEventArguments>
 {
 }

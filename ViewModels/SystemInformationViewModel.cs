@@ -4,6 +4,7 @@ using Prism.Events;
 using Prism.Mvvm;
 
 using SpaceTradersWPF.Events;
+using SpaceTradersWPF.Events.Models;
 
 namespace SpaceTradersWPF.ViewModels;
 
@@ -17,7 +18,7 @@ internal class SystemInformationViewModel : BindableBase
         this.eventAggregator.GetEvent<SystemInformationEvent>().Subscribe(GetSystemInformationInformation);
     }
 
-    private void GetSystemInformationInformation(SystemInformation eventInformation)
+    private void GetSystemInformationInformation(SystemInformationEventArguments eventInformation)
     {
         throw new NotImplementedException();
     }

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 
-using SpaceTradersWPF.Models;
-using SpaceTradersWPF.Types;
+using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiTypes;
 
 namespace SpaceTradersWPF.Services;
 
@@ -33,9 +33,9 @@ internal interface ISpaceTradersApi
 
     Task<Waypoint> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize);
 
-    Task<Models.System> GetSystem(string waypointSymbol);
+    Task<ApiModels.System> GetSystem(string waypointSymbol);
 
-    Task<Models.System[]> GetSystems(int pageNumber, int PageSize);
+    Task<ApiModels.System[]> GetSystems(int pageNumber, int PageSize);
 
     Task<Faction> GetFaction(string factionSymbol);
 
@@ -69,7 +69,7 @@ internal interface ISpaceTradersApi
 
     Task<(Agent agent, ShipCargo cargo, MarketTransaction transaction)> PostShipSellCargo(string shipSymbol);
 
-    Task<(ShipCooldown cooldown, Models.System[] systems)> PostShipScanSystems(string shipSymbol);
+    Task<(ShipCooldown cooldown, ApiModels.System[] systems)> PostShipScanSystems(string shipSymbol);
 
     Task<(ShipCooldown cooldown, Waypoint[] waypoints)> PostShipScanWaypoints(string shipSymbol);
 

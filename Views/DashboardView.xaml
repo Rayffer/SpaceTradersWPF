@@ -7,7 +7,7 @@
     xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:models="clr-namespace:SpaceTradersWPF.Models"
+    xmlns:apiModels="clr-namespace:SpaceTradersWPF.ApiModels"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
     d:DataContext="{d:DesignInstance viewmodels:DashboardViewModel}"
     d:DesignHeight="450"
@@ -188,7 +188,7 @@
                         <DataTemplate DataType="models:Ship">
                             <DataTemplate.Triggers>
                                 <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimationQuick}" />
                                 </EventTrigger>
                             </DataTemplate.Triggers>
                             <Border Cursor="Hand" Style="{DynamicResource BorderBackgroundLight}">

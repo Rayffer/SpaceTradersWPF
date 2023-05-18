@@ -6,7 +6,7 @@ using Prism.Ioc;
 using Prism.Mvvm;
 using Prism.Regions;
 
-using SpaceTradersWPF.Models;
+using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 

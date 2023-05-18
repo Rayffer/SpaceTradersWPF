@@ -1,12 +1,9 @@
 ﻿using Prism.Events;
 
+using SpaceTradersWPF.Events.Models;
+
 namespace SpaceTradersWPF.Events;
 
-internal class WaypointInformation
-{
-    public string WaypointSymbol { get; internal set; }
-}
-
-internal class WaypointInformationEvent : PubSubEvent<WaypointInformation>
+internal class WaypointInformationEvent : PubSubEvent<WaypointInformationEventArguments>
 {
 }

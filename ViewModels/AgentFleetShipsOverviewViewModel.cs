@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 
-using SpaceTradersWPF.Models;
+using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Services;
 
 namespace SpaceTradersWPF.ViewModels;

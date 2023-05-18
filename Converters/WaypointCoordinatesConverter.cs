@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-using SpaceTradersWPF.Models;
+using SpaceTradersWPF.ApiModels;
 
 namespace SpaceTradersWPF.Converters;
 

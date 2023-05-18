@@ -8,8 +8,9 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 
+using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Events;
-using SpaceTradersWPF.Models;
+using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 
@@ -70,7 +71,7 @@ internal class DashboardViewModel : BindableBase
     {
         RemoveCurrentView();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(SystemInformationView));
-        this.eventAggregator.GetEvent<SystemInformationEvent>().Publish(new SystemInformation
+        this.eventAggregator.GetEvent<SystemInformationEvent>().Publish(new SystemInformationEventArguments
         {
             SystemSymbol = this.Headquarters.SystemSymbol
         });
@@ -80,7 +81,7 @@ internal class DashboardViewModel : BindableBase
     {
         RemoveCurrentView();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(WaypointInformationView));
-        this.eventAggregator.GetEvent<WaypointInformationEvent>().Publish(new WaypointInformation
+        this.eventAggregator.GetEvent<WaypointInformationEvent>().Publish(new WaypointInformationEventArguments
         {
             WaypointSymbol = this.Headquarters.Symbol
         });

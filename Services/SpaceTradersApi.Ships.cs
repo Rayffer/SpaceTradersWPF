@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 using RestSharp;
 
 using SpaceTradersWPF.Extensions;
-using SpaceTradersWPF.Models;
-using SpaceTradersWPF.Models.Requests;
-using SpaceTradersWPF.Types;
+using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Requests;
+using SpaceTradersWPF.ApiTypes;
 
 namespace SpaceTradersWPF.Services;
 
@@ -183,7 +183,7 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<(ShipCooldown cooldown, Models.System[] systems)> PostShipScanSystems(string shipSymbol)
+    public async Task<(ShipCooldown cooldown, ApiModels.System[] systems)> PostShipScanSystems(string shipSymbol)
     {
         throw new NotImplementedException();
     }
