@@ -22,7 +22,7 @@ internal class ToastNotificationViewModel : BindableBase
     private string header;
     private string message;
 
-    public NotificationTypes ToastNotificationType
+    public NotificationTypes NotificationType
     {
         get => toastNotificationType;
         set => SetProperty(ref toastNotificationType, value);
@@ -56,7 +56,7 @@ internal class ToastNotificationViewModel : BindableBase
     private void SetInformation(NotificationEventArguments eventArguments)
     {
         this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
-        this.ToastNotificationType = eventArguments.ToastNotificationTypes;
+        this.NotificationType = eventArguments.ToastNotificationTypes;
         this.Header = eventArguments.ToastNotificationHeader;
         this.Message = eventArguments.ToastNotificationMessage;
     }

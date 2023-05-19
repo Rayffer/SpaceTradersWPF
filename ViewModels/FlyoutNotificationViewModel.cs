@@ -1,11 +1,9 @@
-﻿using System;
-
-using Prism.Events;
+﻿using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 
-using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Events;
+using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Types;
 using SpaceTradersWPF.Views;
 
@@ -19,7 +17,7 @@ internal class FlyoutNotificationViewModel : BindableBase
     private string header;
     private string message;
 
-    public NotificationTypes ToastNotificationType
+    public NotificationTypes NotificationType
     {
         get => toastNotificationType;
         set => SetProperty(ref toastNotificationType, value);
@@ -53,16 +51,18 @@ internal class FlyoutNotificationViewModel : BindableBase
     private void SetInformation(NotificationEventArguments eventArguments)
     {
         this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
-        this.ToastNotificationType = eventArguments.ToastNotificationTypes;
+        this.NotificationType = eventArguments.ToastNotificationTypes;
         this.Header = eventArguments.ToastNotificationHeader;
         this.Message = eventArguments.ToastNotificationMessage;
     }
 
     internal void AnimationCompleted(FlyoutNotificationView view)
     {
-        if (this.regionManager.Regions[RegionNames.FlyoutNotificationArea].Views.Contains(view))
+        if (!this.regionManager.Regions[RegionNames.FlyoutNotificationArea].Views.Contains(view))
         {
-            this.regionManager.Regions[RegionNames.FlyoutNotificationArea].Remove(view);
+            return;
         }
+
+        this.regionManager.Regions[RegionNames.FlyoutNotificationArea].Remove(view);
     }
 }

@@ -43,18 +43,18 @@
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.NotDefined}">
+                    <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.NotDefined}">
                         <DataTrigger.ExitActions>
                             <BeginStoryboard Storyboard="{DynamicResource FadeInAnimation}" />
                         </DataTrigger.ExitActions>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.PositiveFeedback}">
+                    <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.PositiveFeedback}">
                         <Setter Property="Background" Value="{DynamicResource PositiveFeedbackNotificationSolidColorBrush}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
+                    <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                         <Setter Property="Background" Value="{DynamicResource WarningFeedbackNotificationSolidColorBrush}" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.NegativeFeedback}">
+                    <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.NegativeFeedback}">
                         <Setter Property="Background" Value="{DynamicResource NegativeFeedbackNotificationSolidColorBrush}" />
                     </DataTrigger>
                 </Style.Triggers>
