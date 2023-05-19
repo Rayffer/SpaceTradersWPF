@@ -13,15 +13,14 @@ using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Types;
-using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
 internal class AgentFleetShipsOverviewViewModel : BindableBase
 {
     private readonly ISpaceTradersApi spaceTradersApi;
-    private readonly IRegionManager regionManager;
     private readonly IEventAggregator eventAggregator;
+    private readonly INotificationService notificationService;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private DelegateCommand loadShipsCommand;
@@ -57,11 +56,11 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     public AgentFleetShipsOverviewViewModel(
         ISpaceTradersApi spaceTradersApi,
-        IRegionManager regionManager,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        INotificationService notificationService)
     {
         this.spaceTradersApi = spaceTradersApi;
-        this.regionManager = regionManager;
+        this.notificationService = notificationService;
         this.eventAggregator = eventAggregator;
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
     }
@@ -90,14 +89,11 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task PerformExtraction(Ship ship)
     {
         var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
-
-        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
-        {
-            ToastNotificationHeader = $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
-            ToastNotificationTypes = NotificationTypes.PositiveFeedback
-        });
-
+        this.notificationService.ShowToastNotification(
+            $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
+            null,
+            NotificationTypes.PositiveFeedback,
+            true);
         await RefreshShips(ship);
     }
 
@@ -113,24 +109,22 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     {
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
         await RefreshShips(ship);
-        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
-        {
-            ToastNotificationHeader = $"Ship {ship.Symbol} entered orbit succesfully",
-            ToastNotificationTypes = NotificationTypes.PositiveFeedback
-        });
+        this.notificationService.ShowToastNotification(
+            $"Ship {ship.Symbol} entered orbit succesfully",
+            null,
+            NotificationTypes.PositiveFeedback,
+            true);
     }
 
     private async Task PerformDock(Ship ship)
     {
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
         await RefreshShips(ship);
-        this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
-        {
-            ToastNotificationHeader = $"Ship {ship.Symbol} docked succesfully",
-            ToastNotificationTypes = NotificationTypes.PositiveFeedback
-        });
+        this.notificationService.ShowToastNotification(
+            $"Ship {ship.Symbol} docked succesfully",
+            null,
+            NotificationTypes.PositiveFeedback,
+            true);
     }
 
     private async Task PerformNavigate(Ship ship)
@@ -139,8 +133,13 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformRefuel(Ship ship)
     {
-        _ = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
+        var refuelResponse = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
         await RefreshShips(ship);
+        this.notificationService.ShowToastNotification(
+            $"Ship {ship.Symbol} docked succesfully",
+            null,
+            NotificationTypes.PositiveFeedback,
+            true);
     }
 
     private async Task RefreshShips(Ship ship)

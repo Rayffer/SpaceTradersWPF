@@ -24,10 +24,10 @@ public partial class App : PrismApplication
 
     protected override void RegisterTypes(IContainerRegistry containerRegistry)
     {
-        var client = new RestClient("https://api.spacetraders.io/v2/");
-        RegisterServices(containerRegistry, client);
         RegisterDialogs(containerRegistry);
         RegisterEvents(containerRegistry);
+        RegisterMappers(containerRegistry);
+        RegisterServices(containerRegistry);
     }
 
     private static void RegisterDialogs(IContainerRegistry containerRegistry)
@@ -35,8 +35,14 @@ public partial class App : PrismApplication
         containerRegistry.RegisterForNavigation<YesNoDialogView>();
     }
 
-    private static void RegisterServices(IContainerRegistry containerRegistry, RestClient client)
+    private static void RegisterMappers(IContainerRegistry containerRegistry)
     {
+        containerRegistry.Register<INotificationService, NotificationService>();
+    }
+
+    private static void RegisterServices(IContainerRegistry containerRegistry)
+    {
+        var client = new RestClient("https://api.spacetraders.io/v2/");
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
         containerRegistry.Register<ISpaceTradersApiMapper, SpaceTradersApiMapper>();
