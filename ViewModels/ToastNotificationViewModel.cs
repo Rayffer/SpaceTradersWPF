@@ -18,11 +18,11 @@ internal class ToastNotificationViewModel : BindableBase
 {
     private readonly IEventAggregator eventAggregator;
     private readonly IRegionManager regionManager;
-    private ToastNotificationTypes toastNotificationType;
+    private NotificationTypes toastNotificationType;
     private string header;
     private string message;
 
-    public ToastNotificationTypes ToastNotificationType
+    public NotificationTypes ToastNotificationType
     {
         get => toastNotificationType;
         set => SetProperty(ref toastNotificationType, value);
@@ -45,16 +45,17 @@ internal class ToastNotificationViewModel : BindableBase
     {
         this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
-        this.eventAggregator.GetEvent<ToastNotificationEvent>().Subscribe(SetInformation);
+        this.eventAggregator.GetEvent<NotificationEvent>().Subscribe(SetInformation);
     }
 
     ~ToastNotificationViewModel()
     {
-        this.eventAggregator.GetEvent<ToastNotificationEvent>().Unsubscribe(SetInformation);
+        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
     }
 
-    private void SetInformation(ToastNotificationEventArguments eventArguments)
+    private void SetInformation(NotificationEventArguments eventArguments)
     {
+        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
         this.ToastNotificationType = eventArguments.ToastNotificationTypes;
         this.Header = eventArguments.ToastNotificationHeader;
         this.Message = eventArguments.ToastNotificationMessage;
