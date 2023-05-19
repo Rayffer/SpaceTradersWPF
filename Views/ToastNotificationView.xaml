@@ -35,13 +35,13 @@
         <Grid.Style>
             <Style TargetType="Grid">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:ToastNotificationTypes.PositiveFeedback}">
+                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.PositiveFeedback}">
                         <Setter Property="Background" Value="DarkGreen" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:ToastNotificationTypes.WarningFeedback}">
+                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                         <Setter Property="Background" Value="Goldenrod" />
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:ToastNotificationTypes.NegativeFeedback}">
+                    <DataTrigger Binding="{Binding ToastNotificationType}" Value="{x:Static types:NotificationTypes.NegativeFeedback}">
                         <Setter Property="Background" Value="Firebrick" />
                     </DataTrigger>
                 </Style.Triggers>
@@ -63,7 +63,10 @@
                     FontSize="{DynamicResource Level1FontSize}"
                     Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding Header}" />
-                <TextBlock Style="{DynamicResource BasicTextBlock}" Text="{Binding Message}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding Message}" />
             </Grid>
         </Border>
     </Grid>

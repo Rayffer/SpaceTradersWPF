@@ -1,6 +1,6 @@
 ﻿namespace SpaceTradersWPF.Types;
 
-internal enum ToastNotificationTypes
+internal enum NotificationTypes
 {
     NotDefined = 0,
     PositiveFeedback,

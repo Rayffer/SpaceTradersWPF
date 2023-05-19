@@ -4,6 +4,6 @@ using SpaceTradersWPF.Events.Models;
 
 namespace SpaceTradersWPF.Events;
 
-internal class ToastNotificationEvent : PubSubEvent<ToastNotificationEventArguments>
+internal class NotificationEvent : PubSubEvent<NotificationEventArguments>
 {
 }

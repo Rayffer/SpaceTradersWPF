@@ -92,10 +92,10 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
 
         this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
         {
             ToastNotificationHeader = $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
-            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+            ToastNotificationTypes = NotificationTypes.PositiveFeedback
         });
 
         await RefreshShips(ship);
@@ -114,10 +114,10 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
         await RefreshShips(ship);
         this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
         {
             ToastNotificationHeader = $"Ship {ship.Symbol} entered orbit succesfully",
-            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+            ToastNotificationTypes = NotificationTypes.PositiveFeedback
         });
     }
 
@@ -126,10 +126,10 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
         await RefreshShips(ship);
         this.regionManager.RegisterViewWithRegion(RegionNames.ToastNotificationArea, typeof(ToastNotificationView));
-        this.eventAggregator.GetEvent<ToastNotificationEvent>().Publish(new ToastNotificationEventArguments
+        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
         {
             ToastNotificationHeader = $"Ship {ship.Symbol} docked succesfully",
-            ToastNotificationTypes = ToastNotificationTypes.PositiveFeedback
+            ToastNotificationTypes = NotificationTypes.PositiveFeedback
         });
     }
 

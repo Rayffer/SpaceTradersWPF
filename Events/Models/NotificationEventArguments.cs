@@ -2,9 +2,9 @@
 
 namespace SpaceTradersWPF.Events.Models;
 
-internal class ToastNotificationEventArguments
+internal class NotificationEventArguments
 {
-    public ToastNotificationTypes ToastNotificationTypes { get; internal set; }
+    public NotificationTypes ToastNotificationTypes { get; internal set; }
     public string ToastNotificationHeader { get; internal set; }
     public string ToastNotificationMessage { get; internal set; }
 }
