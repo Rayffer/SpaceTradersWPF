@@ -15,4 +15,7 @@
     <SolidColorBrush x:Key="ControlBrightBackgroundSolidColorBrush" Color="#FF8AB1F9" />
     <SolidColorBrush x:Key="TextFontColorSolidColorBrush" Color="#FFDBDBDB" />
     <SolidColorBrush x:Key="TextFontComplementaryColorSolidColorBrush" Color="#FF3B3B3B" />
+    <SolidColorBrush x:Key="PositiveFeedbackNotificationSolidColorBrush" Color="DarkGreen" />
+    <SolidColorBrush x:Key="WarningFeedbackNotificationSolidColorBrush" Color="Goldenrod" />
+    <SolidColorBrush x:Key="NegativeFeedbackNotificationSolidColorBrush" Color="Firebrick" />
 </ResourceDictionary>
