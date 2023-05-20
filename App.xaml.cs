@@ -37,7 +37,7 @@ public partial class App : PrismApplication
 
     private static void RegisterMappers(IContainerRegistry containerRegistry)
     {
-        containerRegistry.Register<INotificationService, NotificationService>();
+        containerRegistry.Register<ISpaceTradersApiMapper, SpaceTradersApiMapper>();
     }
 
     private static void RegisterServices(IContainerRegistry containerRegistry)
@@ -45,7 +45,7 @@ public partial class App : PrismApplication
         var client = new RestClient("https://api.spacetraders.io/v2/");
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
-        containerRegistry.Register<ISpaceTradersApiMapper, SpaceTradersApiMapper>();
+        containerRegistry.Register<INotificationService, NotificationService>();
     }
 
     private static void RegisterEvents(IContainerRegistry containerRegistry)
