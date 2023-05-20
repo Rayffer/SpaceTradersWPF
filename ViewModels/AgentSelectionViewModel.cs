@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
+using Newtonsoft.Json;
+
 using Prism.Commands;
 using Prism.Ioc;
 using Prism.Mvvm;
@@ -63,6 +65,7 @@ internal class AgentSelectionViewModel : BindableBase
 
         Directory.CreateDirectory("Data");
         File.WriteAllText($"Data/AccessToken.Token", agentInformation.Token);
+        File.WriteAllText($"Data/AgentInformation.json", JsonConvert.SerializeObject(agentInformation.Agent));
 
         this.spaceTradersApi.SetAccessTokenHeader(agentInformation.Token);
 
