@@ -13,6 +13,7 @@ using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Types;
+using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
@@ -21,6 +22,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly IEventAggregator eventAggregator;
     private readonly INotificationService notificationService;
+    private readonly IRegionManager regionManager;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private DelegateCommand loadShipsCommand;
@@ -57,10 +59,12 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     public AgentFleetShipsOverviewViewModel(
         ISpaceTradersApi spaceTradersApi,
         IEventAggregator eventAggregator,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        IRegionManager regionManager)
     {
         this.spaceTradersApi = spaceTradersApi;
         this.notificationService = notificationService;
+        this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
     }
@@ -129,6 +133,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformNavigate(Ship ship)
     {
+        this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipNavigationView));
     }
 
     private async Task PerformRefuel(Ship ship)

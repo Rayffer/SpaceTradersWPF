@@ -381,6 +381,7 @@
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
                     Command="{Binding PerformWarpCommand}"
+                    CommandParameter="{Binding SelectedShip}"
                     Content="Warp"
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
@@ -390,6 +391,7 @@
                     FontSize="{DynamicResource Level5FontSize}" />
                 <Button
                     Command="{Binding PerformNavigateCommand}"
+                    CommandParameter="{Binding SelectedShip}"
                     Content="Navigate"
                     FontSize="{DynamicResource Level5FontSize}" />
             </StackPanel>
