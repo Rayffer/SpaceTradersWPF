@@ -20,8 +20,10 @@ internal class MainMenuViewModel : BindableBase
     private DelegateCommand openSystemMapCommand;
     private DelegateCommand logoutAgentCommand;
     private DelegateCommand exitApplicationCommand;
+    private DelegateCommand openShipInformationCommand;
     private readonly IRegionManager regionManager;
 
+    public ICommand OpenShipInformationCommand => openShipInformationCommand ??= new DelegateCommand(OpenShipInformation);
     public ICommand ExitApplicationCommand => exitApplicationCommand ??= new DelegateCommand(ExitApplication);
     public ICommand LogoutAgentCommand => logoutAgentCommand ??= new DelegateCommand(LogoutAgent);
     public ICommand OpenSystemMapCommand => openSystemMapCommand ??= new DelegateCommand(OpenSystemMap);
@@ -59,13 +61,6 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenFleetInformation()
     {
-        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentFleetShipsOverviewView>().Any())
-        {
-            return;
-        }
-
-        this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
     }
 
     private void OpenSystemsInformation()
@@ -86,5 +81,16 @@ internal class MainMenuViewModel : BindableBase
 
     private void ExitApplication()
     {
+    }
+
+    private void OpenShipInformation()
+    {
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentFleetShipsOverviewView>().Any())
+        {
+            return;
+        }
+
+        this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
     }
 }

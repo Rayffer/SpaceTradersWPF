@@ -29,8 +29,8 @@
                 Content="Contracts"
                 FontSize="{DynamicResource Level2FontSize}" />
             <Button
-                Command="{Binding OpenFleetInformationCommand}"
-                Content="Fleet"
+                Command="{Binding OpenShipInformationCommand}"
+                Content="Ships"
                 FontSize="{DynamicResource Level2FontSize}" />
             <Button
                 Command="{Binding OpenSystemsInformationCommand}"
