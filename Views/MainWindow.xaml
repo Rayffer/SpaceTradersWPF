@@ -34,6 +34,8 @@
             x:Name="ToastNotificationArea"
             Grid.Column="1"
             Margin="5"
+            Width="300"
+            VerticalAlignment="Bottom"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.ToastNotificationArea}" />
         <ItemsControl
             x:Name="FlyoutNotificationArea"
