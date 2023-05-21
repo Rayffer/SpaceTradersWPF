@@ -21,10 +21,6 @@
                 Content="Dashboard"
                 FontSize="{DynamicResource Level2FontSize}" />
             <Button
-                Command="{Binding OpenAgentInformationCommand}"
-                Content="My Agent"
-                FontSize="{DynamicResource Level2FontSize}" />
-            <Button
                 Command="{Binding OpenContractsInformationCommand}"
                 Content="Contracts"
                 FontSize="{DynamicResource Level2FontSize}" />
