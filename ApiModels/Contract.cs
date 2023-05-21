@@ -24,6 +24,6 @@ public class Contract
     [JsonProperty("fulfilled")]
     public bool Fulfilled { get; set; }
 
-    [JsonProperty("expiration")]
-    public DateTime Expiration { get; set; }
+    [JsonProperty("deadlineToAccept")]
+    public DateTime DeadlineToAccept { get; set; }
 }
