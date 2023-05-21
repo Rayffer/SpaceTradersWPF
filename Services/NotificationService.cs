@@ -39,6 +39,7 @@ internal class NotificationService : INotificationService
         this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
         {
             ToastNotificationHeader = headerMessage,
+            ToastNotificationMessage = bodyMessage,
             ToastNotificationTypes = NotificationTypes.PositiveFeedback
         });
     }

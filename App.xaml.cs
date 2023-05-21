@@ -1,14 +1,20 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading;
+using System.Windows;
 
 using Prism.Ioc;
 using Prism.Unity;
 
 using RestSharp;
 
+using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Mappers;
+using SpaceTradersWPF.Repositories;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
+
+using Unity;
 
 namespace SpaceTradersWPF;
 
@@ -28,6 +34,12 @@ public partial class App : PrismApplication
         RegisterEvents(containerRegistry);
         RegisterMappers(containerRegistry);
         RegisterServices(containerRegistry);
+        RegisterRepositories(containerRegistry);
+    }
+
+    private static void RegisterRepositories(IContainerRegistry containerRegistry)
+    {
+        containerRegistry.Register<IInformationRepository<Survey>, JsonFileRepository<Survey>>();
     }
 
     private static void RegisterDialogs(IContainerRegistry containerRegistry)
@@ -46,6 +58,7 @@ public partial class App : PrismApplication
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
         containerRegistry.Register<INotificationService, NotificationService>();
+        containerRegistry.RegisterSingleton<IWaypointSurveyService, WaypointSurveyService>();
     }
 
     private static void RegisterEvents(IContainerRegistry containerRegistry)
