@@ -56,7 +56,7 @@ internal interface ISpaceTradersApi
 
     Task<SurveyResponse> PostShipCreateSurvey(string shipSymbol);
 
-    Task<ExtractionResponse> PostShipExtractResources(string shipSymbol);
+    Task<ExtractionResponse> PostShipExtractResources(string shipSymbol, string waypointSymbol);
 
     Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol);
 
@@ -66,7 +66,7 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol);
 
-    Task<NavigationResponse> PostShipWarp(string shipSymbol);
+    Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol);
 
     Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol);
 

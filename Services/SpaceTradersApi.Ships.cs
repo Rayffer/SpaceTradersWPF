@@ -149,13 +149,19 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<SurveyResponse>>(response.Content).Data;
     }
 
-    public async Task<ExtractionResponse> PostShipExtractResources(string shipSymbol)
+    public async Task<ExtractionResponse> PostShipExtractResources(string shipSymbol, string waypointSymbol)
     {
         var request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
+        var survey = this.waypointSurveyService.GetSurvey(waypointSymbol);
+        if (survey is not null)
+        {
+            request.AddBody(new ShipExtractRequestModel
+            {
+                Survey = survey
+            });
+        }
+
         var response = await this.restClient.ExecuteAsync(request);
-
-        // TODO: Add json body for survey
-
         return JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(response.Content).Data;
     }
 
@@ -181,7 +187,7 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<NavigationResponse>>(response.Content).Data;
     }
 
-    public async Task<NavigationResponse> PostShipWarp(string shipSymbol)
+    public async Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol)
     {
         throw new NotImplementedException();
     }

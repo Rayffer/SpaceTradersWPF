@@ -11,13 +11,16 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
 {
     private readonly IRestClient restClient;
     private readonly ISpaceTradersApiMapper spaceTradersMapper;
+    private readonly IWaypointSurveyService waypointSurveyService;
     private string accessToken;
 
     public SpaceTradersApi(IRestClient restClient,
-        ISpaceTradersApiMapper spaceTradersMapper)
+        ISpaceTradersApiMapper spaceTradersMapper,
+        IWaypointSurveyService waypointSurveyService)
     {
         this.restClient = restClient;
         this.spaceTradersMapper = spaceTradersMapper;
+        this.waypointSurveyService = waypointSurveyService;
     }
 
     public void SetAccessTokenHeader(string token)
