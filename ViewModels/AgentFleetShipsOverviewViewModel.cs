@@ -134,6 +134,12 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task PerformNavigate(Ship ship)
     {
         this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipNavigationView));
+        this.eventAggregator
+            .GetEvent<ShipNavigationRequestEvent>()
+            .Publish(new ShipNavigationRequestEventArguments
+            {
+                Ship = ship
+            });
     }
 
     private async Task PerformRefuel(Ship ship)
@@ -141,7 +147,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         var refuelResponse = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
         await RefreshShips(ship);
         this.notificationService.ShowToastNotification(
-            $"Ship {ship.Symbol} docked succesfully",
+            $"Ship {ship.Symbol} refueled succesfully",
             null,
             NotificationTypes.PositiveFeedback,
             true);

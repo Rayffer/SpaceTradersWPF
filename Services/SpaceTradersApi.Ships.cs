@@ -169,9 +169,16 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<NavigationResponse> PostShipNavigate(string shipSymbol)
+    public async Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipNavigateResource, shipSymbol), Method.Post);
+        request.AddBody(new ShipNavigationRequestModel
+        {
+            WaypointSymbol = waypointSymbol
+        });
+        var response = await restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<NavigationResponse>>(response.Content).Data;
     }
 
     public async Task<NavigationResponse> PostShipWarp(string shipSymbol)

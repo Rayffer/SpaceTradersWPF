@@ -2,6 +2,7 @@
     x:Class="SpaceTradersWPF.Views.ShipNavigationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
@@ -20,7 +21,7 @@
                 Duration="0:0:1" />
         </Storyboard>
     </UserControl.Resources>
-    <Grid>
+    <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.Triggers>
             <EventTrigger RoutedEvent="FrameworkElement.Loaded">
                 <BeginStoryboard Storyboard="{DynamicResource FadeInAnimation}" />
@@ -36,7 +37,65 @@
             </Style>
         </Grid.Style>
         <Border Style="{DynamicResource BorderBackgroundLight}">
-            <Grid />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Style="{DynamicResource BasicTextBlock}" Text="Ship:" />
+                <TextBlock
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding Ship.Symbol}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Waypoint to navigate:" />
+                <ComboBox
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    DisplayMemberPath="Symbol"
+                    ItemsSource="{Binding Waypoints}"
+                    SelectedIndex="0"
+                    SelectedValue="{Binding SelectedWaypoint}"
+                    Style="{DynamicResource SpaceTradersComboBox}">
+                    <behavior:Interaction.Triggers>
+                        <behavior:EventTrigger EventName="SelectionChanged">
+                            <behavior:InvokeCommandAction Command="{Binding UpdateFuelCommand}" CommandParameter="{Binding SelectedWaypoint}" />
+                        </behavior:EventTrigger>
+                    </behavior:Interaction.Triggers>
+                </ComboBox>
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Estimated fuel cost:" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding EstimatedFuelCost}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Waypoint to navigate:" />
+                <Button
+                    Grid.Row="3"
+                    Command="{Binding PerformNavigationCommand}"
+                    Content="Navigate to waypoint" />
+                <Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Command="{Binding CancelNavigationCommand}"
+                    Content="Cancel Navigation" />
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

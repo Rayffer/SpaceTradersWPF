@@ -32,7 +32,7 @@ internal interface ISpaceTradersApi
 
     Task<Waypoint> GetWaypoint(string symbol);
 
-    Task<Waypoint> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize);
+    Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize);
 
     Task<ApiModels.System> GetSystem(string waypointSymbol);
 
@@ -62,7 +62,7 @@ internal interface ISpaceTradersApi
 
     Task<JumpResponse> PostShipJump(string shipSymbol);
 
-    Task<NavigationResponse> PostShipNavigate(string shipSymbol);
+    Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol);
 
     Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol);
 

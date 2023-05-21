@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.Events.Models;
 
-internal class ShipInformationEventArguments
+internal class ShipNavigationRequestEventArguments
 {
     public Ship Ship { get; internal set; }
 }
