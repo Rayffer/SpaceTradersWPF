@@ -7,6 +7,6 @@ internal class SurveyResponse
     [JsonProperty("cooldown")]
     public ShipCooldown Cooldown { get; set; }
 
-    [JsonProperty("survey")]
-    public Survey Survey { get; set; }
+    [JsonProperty("surveys")]
+    public Survey[] Surveys { get; set; }
 }
