@@ -32,7 +32,7 @@ internal class ShipNavigationViewModel : BindableBase
     private DelegateCommand<Waypoint> updateFuelCommand;
 
     public ICommand CancelNavigationCommand => this.cancelNavigationCommand ??= new DelegateCommand(this.CancelNavigation);
-    public ICommand PerformNavigationCommand => this.performNavigationCommand ??= new DelegateCommand(async () => await PerformNavigation());
+    public ICommand PerformNavigationCommand => this.performNavigationCommand ??= new DelegateCommand(async () => await this.PerformNavigation());
     public ICommand UpdateFuelCommand => this.updateFuelCommand ??= new DelegateCommand<Waypoint>(this.UpdateFuel);
 
     public double EstimatedFuelCost
@@ -84,7 +84,7 @@ internal class ShipNavigationViewModel : BindableBase
     {
         this.eventAggregator
             .GetEvent<ShipNavigationRequestEvent>()
-            .Unsubscribe(subscriptionToken);
+            .Unsubscribe(this.subscriptionToken);
 
         this.Ship = eventInformation.Ship;
         this.currentShipWaypoint = await this.spaceTradersApi.GetWaypoint(this.Ship.NavigationInformation.WaypointSymbol);

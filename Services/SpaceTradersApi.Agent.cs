@@ -20,7 +20,7 @@ internal partial class SpaceTradersApi
         request.AddHeader("Content-Type", "application/json");
         var body = JsonConvert.SerializeObject(new { symbol, faction });
         request.AddParameter("application/json", body, ParameterType.RequestBody);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
         Console.WriteLine(response.Content);
 
         return JsonConvert.DeserializeObject<ApiResponse<AgentResponse>>(response.Content).Data;
@@ -28,8 +28,8 @@ internal partial class SpaceTradersApi
 
     public async Task<Agent> GetAgent()
     {
-        var request = new RestRequest(GetAgentResource, Method.Get);
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(this.GetAgentResource, Method.Get);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Agent>>(response.Content).Data;
     }

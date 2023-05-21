@@ -21,6 +21,6 @@ public partial class WaypointInformationView : UserControl
 {
     public WaypointInformationView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

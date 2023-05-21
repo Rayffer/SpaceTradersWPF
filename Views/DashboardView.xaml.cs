@@ -14,7 +14,7 @@ public partial class DashboardView : UserControl
 {
     public DashboardView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
     private void Border_MouseUp(object sender, MouseButtonEventArgs e)

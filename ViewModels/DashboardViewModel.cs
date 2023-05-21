@@ -30,27 +30,27 @@ internal class DashboardViewModel : BindableBase
     private Waypoint headquarters;
     private IEnumerable<Ship> ships;
 
-    public ICommand OpenSystemInformation => openSystemInformation ??= new DelegateCommand(PerformOpenSystemInformation);
-    public ICommand OpenWaypointInformation => openWaypointInformation ??= new DelegateCommand(PerformOpenWaypointInformation);
-    public ICommand OpenShipInformation => openShipInformation ??= new DelegateCommand<Ship>(PerformOpenShipInformation);
-    public ICommand LoadInformationCommand => loadInformationCommand ??= new DelegateCommand(async () => await LoadInformation());
+    public ICommand OpenSystemInformation => this.openSystemInformation ??= new DelegateCommand(this.PerformOpenSystemInformation);
+    public ICommand OpenWaypointInformation => this.openWaypointInformation ??= new DelegateCommand(this.PerformOpenWaypointInformation);
+    public ICommand OpenShipInformation => this.openShipInformation ??= new DelegateCommand<Ship>(this.PerformOpenShipInformation);
+    public ICommand LoadInformationCommand => this.loadInformationCommand ??= new DelegateCommand(async () => await this.LoadInformation());
 
     public Agent AgentInformation
     {
-        get => agentInformation;
-        set => SetProperty(ref agentInformation, value);
+        get => this.agentInformation;
+        set => this.SetProperty(ref this.agentInformation, value);
     }
 
     public Waypoint Headquarters
     {
-        get => headquarters;
-        set => SetProperty(ref headquarters, value);
+        get => this.headquarters;
+        set => this.SetProperty(ref this.headquarters, value);
     }
 
     public IEnumerable<Ship> Ships
     {
-        get => ships;
-        set => SetProperty(ref ships, value);
+        get => this.ships;
+        set => this.SetProperty(ref this.ships, value);
     }
 
     public DashboardViewModel(
@@ -65,14 +65,14 @@ internal class DashboardViewModel : BindableBase
 
     private async Task LoadInformation()
     {
-        this.AgentInformation = await spaceTradersApi.GetAgent();
-        this.Headquarters = await spaceTradersApi.GetWaypoint(this.AgentInformation.Headquarters);
-        this.Ships = await spaceTradersApi.GetShips(1, 20);
+        this.AgentInformation = await this.spaceTradersApi.GetAgent();
+        this.Headquarters = await this.spaceTradersApi.GetWaypoint(this.AgentInformation.Headquarters);
+        this.Ships = await this.spaceTradersApi.GetShips(1, 20);
     }
 
     private void PerformOpenSystemInformation()
     {
-        RemoveCurrentView();
+        this.RemoveCurrentView();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(SystemInformationView));
         this.eventAggregator.GetEvent<SystemInformationEvent>().Publish(new SystemInformationEventArguments
         {
@@ -82,7 +82,7 @@ internal class DashboardViewModel : BindableBase
 
     private void PerformOpenWaypointInformation()
     {
-        RemoveCurrentView();
+        this.RemoveCurrentView();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(WaypointInformationView));
         this.eventAggregator.GetEvent<WaypointInformationEvent>().Publish(new WaypointInformationEventArguments
         {
@@ -92,7 +92,7 @@ internal class DashboardViewModel : BindableBase
 
     private void PerformOpenShipInformation(Ship ship)
     {
-        RemoveCurrentView();
+        this.RemoveCurrentView();
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
         this.eventAggregator.GetEvent<ShipInformationEvent>().Publish(new ShipInformationEventArguments
         {

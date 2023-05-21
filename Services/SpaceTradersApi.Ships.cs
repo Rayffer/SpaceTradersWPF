@@ -43,7 +43,7 @@ internal partial class SpaceTradersApi
     public async Task<Ship> GetShip(string shipSymbol)
     {
         var request = new RestRequest(string.Format(GetShipResource, shipSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Ship>>(response.Content).Data;
     }
@@ -56,7 +56,7 @@ internal partial class SpaceTradersApi
             ShipType = shipTypes.ToApiString(),
             WaypointSymbol = waypointSymbol
         });
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipPurchaseResponse>>(response.Content).Data;
     }
@@ -64,7 +64,7 @@ internal partial class SpaceTradersApi
     public async Task<ShipCargo> GetShipCargo(string shipSymbol)
     {
         var request = new RestRequest(string.Format(GetShipCargoResource, shipSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipCargo>>(response.Content).Data;
     }
@@ -72,7 +72,7 @@ internal partial class SpaceTradersApi
     public async Task<ShipCooldown> GetShipCooldown(string shipSymbol)
     {
         var request = new RestRequest(string.Format(GetShipCooldownResource, shipSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipCooldown>>(response.Content).Data;
     }
@@ -80,7 +80,7 @@ internal partial class SpaceTradersApi
     public async Task<ShipNavigationInformation> GetShipNavigationInformation(string shipSymbol)
     {
         var request = new RestRequest(string.Format(GetShipNavigationResource, shipSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
@@ -88,7 +88,7 @@ internal partial class SpaceTradersApi
     public async Task<Ship[]> GetShips(int pageNumber, int PageSize)
     {
         var request = new RestRequest(string.Format(GetShipsResource, pageNumber, PageSize));
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Ship[]>>(response.Content).Data;
     }
@@ -96,7 +96,7 @@ internal partial class SpaceTradersApi
     public async Task<ShipNavigationInformation> PostShipOrbit(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipOrbitResource, shipSymbol), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
@@ -123,7 +123,7 @@ internal partial class SpaceTradersApi
         {
             Produce = tradeSymbol.ToApiString()
         });
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
@@ -136,7 +136,7 @@ internal partial class SpaceTradersApi
     public async Task<ShipNavigationInformation> PostShipDock(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipDockResource, shipSymbol), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
@@ -144,7 +144,7 @@ internal partial class SpaceTradersApi
     public async Task<SurveyResponse> PostShipCreateSurvey(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipSurveyResource, shipSymbol), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<SurveyResponse>>(response.Content).Data;
     }
@@ -152,7 +152,7 @@ internal partial class SpaceTradersApi
     public async Task<ExtractionResponse> PostShipExtractResources(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         // TODO: Add json body for survey
 
@@ -176,7 +176,7 @@ internal partial class SpaceTradersApi
         {
             WaypointSymbol = waypointSymbol
         });
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<NavigationResponse>>(response.Content).Data;
     }
@@ -209,7 +209,7 @@ internal partial class SpaceTradersApi
     public async Task<RefuelResponse> PostShipRefuel(string shipSymbol)
     {
         var request = new RestRequest(string.Format(PostShipRefuelResource, shipSymbol), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<RefuelResponse>>(response.Content).Data;
     }

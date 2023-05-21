@@ -23,17 +23,17 @@ internal class MainMenuViewModel : BindableBase
     private DelegateCommand openShipInformationCommand;
     private readonly IRegionManager regionManager;
 
-    public ICommand OpenShipInformationCommand => openShipInformationCommand ??= new DelegateCommand(OpenShipInformation);
-    public ICommand ExitApplicationCommand => exitApplicationCommand ??= new DelegateCommand(ExitApplication);
-    public ICommand LogoutAgentCommand => logoutAgentCommand ??= new DelegateCommand(LogoutAgent);
-    public ICommand OpenSystemMapCommand => openSystemMapCommand ??= new DelegateCommand(OpenSystemMap);
-    public ICommand OpenMapCommand => openMapCommand ??= new DelegateCommand(OpenMap);
-    public ICommand OpenSystemsInformationCommand => openSystemsInformationCommand ??= new DelegateCommand(OpenSystemsInformation);
-    public ICommand OpenFleetInformationCommand => openFleetInformationCommand ??= new DelegateCommand(OpenFleetInformation);
-    public ICommand OpenContractsInformationCommand => openContractsInformationCommand ??= new DelegateCommand(OpenContractsInformation);
-    public ICommand OpenAgentInformationCommand => openAgentInformationCommand ??= new DelegateCommand(OpenAgentInformation);
+    public ICommand OpenShipInformationCommand => this.openShipInformationCommand ??= new DelegateCommand(this.OpenShipInformation);
+    public ICommand ExitApplicationCommand => this.exitApplicationCommand ??= new DelegateCommand(this.ExitApplication);
+    public ICommand LogoutAgentCommand => this.logoutAgentCommand ??= new DelegateCommand(this.LogoutAgent);
+    public ICommand OpenSystemMapCommand => this.openSystemMapCommand ??= new DelegateCommand(this.OpenSystemMap);
+    public ICommand OpenMapCommand => this.openMapCommand ??= new DelegateCommand(this.OpenMap);
+    public ICommand OpenSystemsInformationCommand => this.openSystemsInformationCommand ??= new DelegateCommand(this.OpenSystemsInformation);
+    public ICommand OpenFleetInformationCommand => this.openFleetInformationCommand ??= new DelegateCommand(this.OpenFleetInformation);
+    public ICommand OpenContractsInformationCommand => this.openContractsInformationCommand ??= new DelegateCommand(this.OpenContractsInformation);
+    public ICommand OpenAgentInformationCommand => this.openAgentInformationCommand ??= new DelegateCommand(this.OpenAgentInformation);
 
-    public ICommand OpenDashboardCommand => openDashboardCommand ??= new DelegateCommand(OpenDashboard);
+    public ICommand OpenDashboardCommand => this.openDashboardCommand ??= new DelegateCommand(this.OpenDashboard);
 
     public MainMenuViewModel(IRegionManager regionManager)
     {

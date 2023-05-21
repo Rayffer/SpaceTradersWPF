@@ -22,11 +22,11 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
 
     public void SetAccessTokenHeader(string token)
     {
-        accessToken = token;
-        restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
-        restClient.AddDefaultHeader("Authorization", $"Bearer {accessToken}");
-        restClient.AddDefaultHeader("Content-Type", "application/json");
-        restClient.AddDefaultHeader("Accept", "application/json");
+        this.accessToken = token;
+        this.restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
+        this.restClient.AddDefaultHeader("Authorization", $"Bearer {this.accessToken}");
+        this.restClient.AddDefaultHeader("Content-Type", "application/json");
+        this.restClient.AddDefaultHeader("Accept", "application/json");
     }
 
     private static string ExtractSystemSymbol(string waypointSymbol)
@@ -40,7 +40,7 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
         var response = default(RestResponse);
         try
         {
-            return await restClient.ExecuteAsync(request);
+            return await this.restClient.ExecuteAsync(request);
         }
         catch (Exception e)
         {

@@ -19,40 +19,40 @@ internal partial class SpaceTradersApi
 
     public async Task<Contract> GetContract(string contractId)
     {
-        var request = new RestRequest(string.Format(GetContractResource, contractId));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetContractResource, contractId));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Contract>>(response.Content).Data;
     }
 
     public async Task<Contract[]> GetContracts()
     {
-        var request = new RestRequest(GetContractsResource);
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(this.GetContractsResource);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Contract[]>>(response.Content).Data;
     }
 
     public async Task<ContractResponse> PostAcceptContract(string contractId)
     {
-        var request = new RestRequest(string.Format(PostAcceptContractResource, contractId), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.PostAcceptContractResource, contractId), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ContractResponse>>(response.Content).Data;
     }
 
     public async Task<DeliverContractResponse> PostDeliverContract(string contractId)
     {
-        var request = new RestRequest(string.Format(PostDeliverContractResource, contractId), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.PostDeliverContractResource, contractId), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<DeliverContractResponse>>(response.Content).Data;
     }
 
     public async Task<ContractResponse> PostFulfillContract(string contractId)
     {
-        var request = new RestRequest(string.Format(PostFulfillContractResource, contractId), Method.Post);
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.PostFulfillContractResource, contractId), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ContractResponse>>(response.Content).Data;
     }

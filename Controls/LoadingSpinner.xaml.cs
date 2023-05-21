@@ -9,6 +9,6 @@ public partial class LoadingSpinner : UserControl
 {
     public LoadingSpinner()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

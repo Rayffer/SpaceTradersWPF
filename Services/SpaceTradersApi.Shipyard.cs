@@ -16,8 +16,8 @@ internal partial class SpaceTradersApi
     public async Task<Shipyard> GetShipyard(string waypointSymbol)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetShipyardWaypointResource, systemSymbol, waypointSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetShipyardWaypointResource, systemSymbol, waypointSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Shipyard>>(response.Content).Data;
     }

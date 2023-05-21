@@ -9,7 +9,7 @@ namespace SpaceTradersWPF.Views
     {
         public AgentFleetShipsOverviewView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

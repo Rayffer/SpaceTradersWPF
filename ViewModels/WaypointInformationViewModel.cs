@@ -18,8 +18,8 @@ internal class WaypointInformationViewModel : BindableBase
 
     public Waypoint WaypointInformation
     {
-        get => waypointInformation;
-        set => SetProperty(ref waypointInformation, value);
+        get => this.waypointInformation;
+        set => this.SetProperty(ref this.waypointInformation, value);
     }
 
     public WaypointInformationViewModel(
@@ -29,12 +29,12 @@ internal class WaypointInformationViewModel : BindableBase
         this.eventAggregator = eventAggregator;
         this.spaceTradersApi = spaceTradersApi;
 
-        this.eventAggregator.GetEvent<WaypointInformationEvent>().Subscribe(async waypointInformation => await GetWaypointInformation(waypointInformation));
+        this.eventAggregator.GetEvent<WaypointInformationEvent>().Subscribe(async waypointInformation => await this.GetWaypointInformation(waypointInformation));
     }
 
     ~WaypointInformationViewModel()
     {
-        this.eventAggregator.GetEvent<WaypointInformationEvent>().Unsubscribe(async waypointInformation => await GetWaypointInformation(waypointInformation));
+        this.eventAggregator.GetEvent<WaypointInformationEvent>().Unsubscribe(async waypointInformation => await this.GetWaypointInformation(waypointInformation));
     }
 
     private async Task GetWaypointInformation(WaypointInformationEventArguments eventInformation)

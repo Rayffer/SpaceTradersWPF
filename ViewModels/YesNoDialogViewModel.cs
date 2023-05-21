@@ -23,18 +23,18 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
 
     public string Header
     {
-        get => header;
-        set => SetProperty(ref header, value);
+        get => this.header;
+        set => this.SetProperty(ref this.header, value);
     }
 
     public string Message
     {
-        get => message;
-        set => SetProperty(ref message, value);
+        get => this.message;
+        set => this.SetProperty(ref this.message, value);
     }
 
-    public DelegateCommand RejectDialogCommand => rejectDialogCommand ??= new DelegateCommand(RejectDialog);
-    public DelegateCommand ConfirmDialogCommand => confirmDialogCommand ??= new DelegateCommand(ConfirmDialog);
+    public DelegateCommand RejectDialogCommand => this.rejectDialogCommand ??= new DelegateCommand(this.RejectDialog);
+    public DelegateCommand ConfirmDialogCommand => this.confirmDialogCommand ??= new DelegateCommand(this.ConfirmDialog);
 
     public YesNoDialogViewModel(
         IRegionManager regionManager,
@@ -46,21 +46,21 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
 
     private void ConfirmDialog()
     {
-        regionManager.Regions[RegionNames.SplashScreenRegion].Remove(regionManager.Regions[RegionNames.SplashScreenRegion].Views.OfType<YesNoDialogView>().Single());
-        confirmationAction(regionManager, spaceTradersApi);
+        this.regionManager.Regions[RegionNames.SplashScreenRegion].Remove(this.regionManager.Regions[RegionNames.SplashScreenRegion].Views.OfType<YesNoDialogView>().Single());
+        this.confirmationAction(this.regionManager, this.spaceTradersApi);
     }
 
     private void RejectDialog()
     {
-        regionManager.Regions[RegionNames.SplashScreenRegion].Remove(regionManager.Regions[RegionNames.SplashScreenRegion].Views.OfType<YesNoDialogView>().Single());
-        rejectionAction(regionManager, spaceTradersApi);
+        this.regionManager.Regions[RegionNames.SplashScreenRegion].Remove(this.regionManager.Regions[RegionNames.SplashScreenRegion].Views.OfType<YesNoDialogView>().Single());
+        this.rejectionAction(this.regionManager, this.spaceTradersApi);
     }
 
     public void OnNavigatedTo(NavigationContext navigationContext)
     {
         if (navigationContext.Parameters.TryGetValue<string>("Message", out var messageString))
         {
-            Message = messageString;
+            this.Message = messageString;
         }
         else
         {
@@ -68,7 +68,7 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
         }
         if (navigationContext.Parameters.TryGetValue<string>("Header", out var headerString))
         {
-            Header = headerString;
+            this.Header = headerString;
         }
         else
         {
@@ -76,7 +76,7 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
         }
         if (navigationContext.Parameters.TryGetValue<Action<IRegionManager, ISpaceTradersApi>>("ConfirmationAction", out var navigationConfirmationAction))
         {
-            confirmationAction = navigationConfirmationAction;
+            this.confirmationAction = navigationConfirmationAction;
         }
         else
         {
@@ -84,7 +84,7 @@ internal class YesNoDialogViewModel : BindableBase, INavigationAware
         }
         if (navigationContext.Parameters.TryGetValue<Action<IRegionManager, ISpaceTradersApi>>("RejectionAction", out var navigationRejectionAction))
         {
-            rejectionAction = navigationRejectionAction;
+            this.rejectionAction = navigationRejectionAction;
         }
         else
         {

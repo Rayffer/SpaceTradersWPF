@@ -20,8 +20,8 @@ internal class AgentGreetingViewModel : BindableBase
 
     public Agent CurrentAgent
     {
-        get => currentAgent;
-        set => SetProperty(ref currentAgent, value);
+        get => this.currentAgent;
+        set => this.SetProperty(ref this.currentAgent, value);
     }
 
     public AgentGreetingViewModel(
@@ -32,7 +32,7 @@ internal class AgentGreetingViewModel : BindableBase
         this.regionManager = regionManager;
     }
 
-    public ICommand LoadAgentInformationCommand => loadAgentInformationCommand ??= new DelegateCommand(async () => await this.LoadAgentInformation());
+    public ICommand LoadAgentInformationCommand => this.loadAgentInformationCommand ??= new DelegateCommand(async () => await this.LoadAgentInformation());
 
     private async Task LoadAgentInformation()
     {

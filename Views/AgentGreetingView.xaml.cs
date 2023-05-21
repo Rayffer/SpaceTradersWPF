@@ -9,7 +9,7 @@ namespace SpaceTradersWPF.Views
     {
         public AgentGreetingView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

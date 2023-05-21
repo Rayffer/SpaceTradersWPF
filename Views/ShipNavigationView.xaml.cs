@@ -22,7 +22,7 @@ namespace SpaceTradersWPF.Views
     {
         public ShipNavigationView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void DoubleAnimation_Completed(object sender, EventArgs e)

@@ -24,7 +24,7 @@ namespace SpaceTradersWPF.Views
     {
         public FlyoutNotificationView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         private void DoubleAnimation_Completed(object sender, EventArgs e)

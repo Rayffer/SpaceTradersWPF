@@ -21,6 +21,6 @@ public partial class SystemInformationView : UserControl
 {
     public SystemInformationView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

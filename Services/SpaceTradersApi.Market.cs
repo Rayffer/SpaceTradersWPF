@@ -16,8 +16,8 @@ internal partial class SpaceTradersApi
     public async Task<Market> GetMarket(string waypointSymbol)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetMarketWaypointResource, systemSymbol, waypointSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetMarketWaypointResource, systemSymbol, waypointSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Market>>(response.Content).Data;
     }

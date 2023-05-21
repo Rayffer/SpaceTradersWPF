@@ -16,16 +16,16 @@ internal partial class SpaceTradersApi
 
     public async Task<Faction> GetFaction(string factionSymbol)
     {
-        var request = new RestRequest(string.Format(GetFactionResource, factionSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetFactionResource, factionSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Faction>>(response.Content).Data;
     }
 
     public async Task<Faction[]> GetFactions(int pageNumber, int PageSize)
     {
-        var request = new RestRequest(string.Format(GetFactionsResource, pageNumber, PageSize));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetFactionsResource, pageNumber, PageSize));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Faction[]>>(response.Content).Data;
     }

@@ -37,24 +37,24 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     public Ship SelectedShip
     {
-        get => selectedShip;
-        set => SetProperty(ref selectedShip, value);
+        get => this.selectedShip;
+        set => this.SetProperty(ref this.selectedShip, value);
     }
 
     public IEnumerable<Ship> Ships
     {
-        get => ships;
-        set => SetProperty(ref ships, value);
+        get => this.ships;
+        set => this.SetProperty(ref this.ships, value);
     }
 
-    public ICommand LoadShipsCommand => loadShipsCommand ??= new DelegateCommand(async () => await LoadShips());
-    public ICommand PerformExtractionCommand => performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await PerformExtraction(ship), ship => ship != null);
-    public ICommand PerformSurveyCommand => performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await PerformSurvey(ship), ship => ship != null);
-    public ICommand PerformWarpCommand => performWarpCommand ??= new DelegateCommand<Ship>(async ship => await PerformWarp(ship), ship => ship != null);
-    public ICommand PerformOrbitCommand => performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await PerformOrbit(ship), ship => ship != null);
-    public ICommand PerformDockCommand => performDockCommand ??= new DelegateCommand<Ship>(async ship => await PerformDock(ship), ship => ship != null);
-    public ICommand PerformNavigateCommand => performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await PerformNavigate(ship), ship => ship != null);
-    public ICommand PerformRefuelCommand => performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await PerformRefuel(ship), ship => ship != null);
+    public ICommand LoadShipsCommand => this.loadShipsCommand ??= new DelegateCommand(async () => await this.LoadShips());
+    public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), ship => ship != null);
+    public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), ship => ship != null);
+    public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), ship => ship != null);
+    public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), ship => ship != null);
+    public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => ship != null);
+    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformNavigate(ship), ship => ship != null);
+    public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => ship != null);
 
     public AgentFleetShipsOverviewViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -66,25 +66,25 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         this.notificationService = notificationService;
         this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
-        this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
+        this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
 
     ~AgentFleetShipsOverviewViewModel()
     {
-        this.eventAggregator.GetEvent<ShipInformationEvent>().Unsubscribe(async (eventInformation) => await LoadSelectedShipInformation(eventInformation));
+        this.eventAggregator.GetEvent<ShipInformationEvent>().Unsubscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
 
     private async Task LoadSelectedShipInformation(ShipInformationEventArguments arguments)
     {
-        alreadyLoaded = true;
+        this.alreadyLoaded = true;
         await this.RefreshShips(arguments.Ship);
     }
 
     private async Task LoadShips()
     {
-        if (alreadyLoaded)
+        if (this.alreadyLoaded)
         {
-            alreadyLoaded = false;
+            this.alreadyLoaded = false;
             return;
         }
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
@@ -98,7 +98,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
             null,
             NotificationTypes.PositiveFeedback,
             true);
-        await RefreshShips(ship);
+        await this.RefreshShips(ship);
     }
 
     private async Task PerformSurvey(Ship ship)
@@ -112,7 +112,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task PerformOrbit(Ship ship)
     {
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
-        await RefreshShips(ship);
+        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} entered orbit succesfully",
             null,
@@ -123,7 +123,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task PerformDock(Ship ship)
     {
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
-        await RefreshShips(ship);
+        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} docked succesfully",
             null,
@@ -145,7 +145,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task PerformRefuel(Ship ship)
     {
         var refuelResponse = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
-        await RefreshShips(ship);
+        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} refueled succesfully",
             null,

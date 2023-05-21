@@ -21,11 +21,11 @@ internal class SplashScreenViewModel : BindableBase
         this.regionManager = regionManager;
     }
 
-    public DelegateCommand<object> ProceedIntoApplicationCommand => proceedIntoApplicationCommand ??= new DelegateCommand<object>(ProceedIntoApplication);
+    public DelegateCommand<object> ProceedIntoApplicationCommand => this.proceedIntoApplicationCommand ??= new DelegateCommand<object>(this.ProceedIntoApplication);
 
     private void ProceedIntoApplication(object view)
     {
-        regionManager.Regions[RegionNames.SplashScreenRegion].Remove(view);
+        this.regionManager.Regions[RegionNames.SplashScreenRegion].Remove(view);
         if (Directory.Exists("Data") &&
             File.Exists("Data/AccessToken.Token"))
         {

@@ -17,8 +17,8 @@ internal partial class SpaceTradersApi
     public async Task<Waypoint> GetWaypoint(string waypointSymbol)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetWaypointResource, systemSymbol, waypointSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetWaypointResource, systemSymbol, waypointSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Waypoint>>(response.Content).Data;
     }
@@ -26,8 +26,8 @@ internal partial class SpaceTradersApi
     public async Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetSystemWaypointsResource, systemSymbol, pageNumber, pageSize));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetSystemWaypointsResource, systemSymbol, pageNumber, pageSize));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Waypoint[]>>(response.Content).Data;
     }

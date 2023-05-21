@@ -9,6 +9,6 @@ public partial class AgentSelectionView : UserControl
 {
     public AgentSelectionView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

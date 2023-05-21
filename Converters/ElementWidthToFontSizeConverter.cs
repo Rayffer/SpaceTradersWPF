@@ -26,9 +26,9 @@ namespace SpaceTradersWPF.Converters
             {
                 return elementWidth switch
                 {
-                    < 500 => SmallWidthFontSize,
-                    < 900 => NormalWidthFontSize,
-                    _ => LargeWidthFontSize
+                    < 500 => this.SmallWidthFontSize,
+                    < 900 => this.NormalWidthFontSize,
+                    _ => this.LargeWidthFontSize
                 };
             }
             return 10;

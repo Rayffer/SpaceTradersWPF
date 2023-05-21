@@ -16,16 +16,16 @@ internal partial class SpaceTradersApi
     public async Task<ApiModels.System> GetSystem(string waypointSymbol)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetSystemResource, systemSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetSystemResource, systemSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ApiModels.System>>(response.Content).Data;
     }
 
     public async Task<ApiModels.System[]> GetSystems(int pageNumber, int PageSize)
     {
-        var request = new RestRequest(string.Format(GetSystemsResource, pageNumber, PageSize));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetSystemsResource, pageNumber, PageSize));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ApiModels.System[]>>(response.Content).Data;
     }

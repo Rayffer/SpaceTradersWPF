@@ -19,20 +19,20 @@ internal class FlyoutNotificationViewModel : BindableBase
 
     public NotificationTypes NotificationType
     {
-        get => toastNotificationType;
-        set => SetProperty(ref toastNotificationType, value);
+        get => this.toastNotificationType;
+        set => this.SetProperty(ref this.toastNotificationType, value);
     }
 
     public string Header
     {
-        get => header;
-        set => SetProperty(ref header, value);
+        get => this.header;
+        set => this.SetProperty(ref this.header, value);
     }
 
     public string Message
     {
-        get => message;
-        set => SetProperty(ref message, value);
+        get => this.message;
+        set => this.SetProperty(ref this.message, value);
     }
 
     public FlyoutNotificationViewModel(IEventAggregator eventAggregator,
@@ -40,17 +40,17 @@ internal class FlyoutNotificationViewModel : BindableBase
     {
         this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
-        this.eventAggregator.GetEvent<NotificationEvent>().Subscribe(SetInformation);
+        this.eventAggregator.GetEvent<NotificationEvent>().Subscribe(this.SetInformation);
     }
 
     ~FlyoutNotificationViewModel()
     {
-        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
+        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(this.SetInformation);
     }
 
     private void SetInformation(NotificationEventArguments eventArguments)
     {
-        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(SetInformation);
+        this.eventAggregator.GetEvent<NotificationEvent>().Unsubscribe(this.SetInformation);
         this.NotificationType = eventArguments.ToastNotificationTypes;
         this.Header = eventArguments.ToastNotificationHeader;
         this.Message = eventArguments.ToastNotificationMessage;

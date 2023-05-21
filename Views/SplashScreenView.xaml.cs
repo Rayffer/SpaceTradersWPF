@@ -9,6 +9,6 @@ public partial class SplashScreenView : UserControl
 {
     public SplashScreenView()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 }

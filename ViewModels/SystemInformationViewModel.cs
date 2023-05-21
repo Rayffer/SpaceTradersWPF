@@ -15,12 +15,12 @@ internal class SystemInformationViewModel : BindableBase
     public SystemInformationViewModel(IEventAggregator eventAggregator)
     {
         this.eventAggregator = eventAggregator;
-        this.eventAggregator.GetEvent<SystemInformationEvent>().Subscribe(GetSystemInformationInformation);
+        this.eventAggregator.GetEvent<SystemInformationEvent>().Subscribe(this.GetSystemInformationInformation);
     }
 
     ~SystemInformationViewModel()
     {
-        this.eventAggregator.GetEvent<SystemInformationEvent>().Unsubscribe(GetSystemInformationInformation);
+        this.eventAggregator.GetEvent<SystemInformationEvent>().Unsubscribe(this.GetSystemInformationInformation);
     }
 
     private void GetSystemInformationInformation(SystemInformationEventArguments eventInformation)

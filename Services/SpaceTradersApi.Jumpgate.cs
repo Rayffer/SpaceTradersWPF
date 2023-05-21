@@ -16,8 +16,8 @@ internal partial class SpaceTradersApi
     public async Task<JumpGate> GetJumpGate(string waypointSymbol)
     {
         var systemSymbol = ExtractSystemSymbol(waypointSymbol);
-        var request = new RestRequest(string.Format(GetJumpGateWaypointResource, systemSymbol, waypointSymbol));
-        var response = await restClient.ExecuteAsync(request);
+        var request = new RestRequest(string.Format(this.GetJumpGateWaypointResource, systemSymbol, waypointSymbol));
+        var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<JumpGate>>(response.Content).Data;
     }
