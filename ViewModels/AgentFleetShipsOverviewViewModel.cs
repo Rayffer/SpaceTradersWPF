@@ -23,6 +23,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private readonly IEventAggregator eventAggregator;
     private readonly INotificationService notificationService;
     private readonly IRegionManager regionManager;
+    private readonly IWaypointSurveyService waypointSurveyService;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private DelegateCommand loadShipsCommand;
@@ -60,11 +61,13 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         ISpaceTradersApi spaceTradersApi,
         IEventAggregator eventAggregator,
         INotificationService notificationService,
-        IRegionManager regionManager)
+        IRegionManager regionManager,
+        IWaypointSurveyService waypointSurveyService)
     {
         this.spaceTradersApi = spaceTradersApi;
         this.notificationService = notificationService;
         this.regionManager = regionManager;
+        this.waypointSurveyService = waypointSurveyService;
         this.eventAggregator = eventAggregator;
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
@@ -92,7 +95,8 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformExtraction(Ship ship)
     {
-        var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol);
+        var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol, ship.NavigationInformation.WaypointSymbol);
+
         this.notificationService.ShowToastNotification(
             $"Ship extracted {result.Extraction.Yield.Units} unit{(result.Extraction.Yield.Units > 1 ? "s" : string.Empty)} of {result.Extraction.Yield.Symbol}",
             null,
@@ -103,6 +107,14 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformSurvey(Ship ship)
     {
+        var surveyInformation = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
+        this.waypointSurveyService.SaveSurveyDetails(surveyInformation.Surveys);
+
+        this.notificationService.ShowToastNotification(
+            $"Ship {ship.Symbol} surveyed waypoint {ship.NavigationInformation.WaypointSymbol}",
+            $"Found fields: {string.Join(", ", surveyInformation.Surveys.SelectMany(survey => survey.Deposits.Select(deposit => deposit.Symbol)))}",
+            NotificationTypes.PositiveFeedback,
+            true);
     }
 
     private async Task PerformWarp(Ship ship)
