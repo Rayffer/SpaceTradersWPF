@@ -32,7 +32,7 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
     private static string ExtractSystemSymbol(string waypointSymbol)
     {
         var lastHyphenIndex = waypointSymbol.LastIndexOf('-');
-        return waypointSymbol.Substring(0, lastHyphenIndex);
+        return waypointSymbol[..lastHyphenIndex];
     }
 
     private async Task<RestResponse> PerformRequest(RestRequest request)

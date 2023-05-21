@@ -25,9 +25,8 @@ internal partial class SpaceTradersApi
 
     public async Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize)
     {
-        var lastHyphenIndex = waypointSymbol.LastIndexOf('-');
-        var symbols = new string[] { waypointSymbol.Substring(0, lastHyphenIndex), waypointSymbol.Substring(lastHyphenIndex + 1) };
-        var request = new RestRequest(string.Format(GetSystemWaypointsResource, symbols[0], pageNumber, pageSize));
+        var systemSymbol = ExtractSystemSymbol(waypointSymbol);
+        var request = new RestRequest(string.Format(GetSystemWaypointsResource, systemSymbol, pageNumber, pageSize));
         var response = await restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<Waypoint[]>>(response.Content).Data;
