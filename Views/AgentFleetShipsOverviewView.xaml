@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+    x:Name="AgentFleetShipsView"
     d:DataContext="{d:DesignInstance viewmodels:AgentFleetShipsOverviewViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -15,11 +16,13 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:ShipCrewToStringConverter x:Key="ShipCrewToStringConverter" />
-        <converters:ShipCargoToStringConverter x:Key="ShipCargoToStringConverter" />
         <converters:FuelToStringConverter x:Key="FuelToStringConverter" />
         <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
         <converters:ShipNavigationInformationToStringConverter x:Key="ShipNavigationInformationToStringConverter" />
         <converters:ApiFlightModeToStringConverter x:Key="ApiFlightModeToStringConverter" />
+        <converters:ShipModuleCapacityToStringConverter x:Key="ShipModuleCapacityToStringConverter" />
+        <converters:ShipMountsCapacityToStringConverter x:Key="ShipMountsCapacityToStringConverter" />
+        <converters:ShipCargoCapacityToStringConverter x:Key="ShipCargoCapacityToStringConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -293,15 +296,13 @@
                     FontSize="{DynamicResource Level2FontSize}"
                     Text="Available Actions" />
                 <DataGrid
+                    x:Name="ModuleDatagrid"
                     Margin="2,5"
                     AutoGenerateColumns="False"
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding SelectedShip.Modules}">
                     <DataGrid.Columns>
-                        <DataGridTextColumn
-                            Width="*"
-                            Binding="{Binding Name}"
-                            Header="Module" />
+                        <DataGridTextColumn Width="*" Binding="{Binding Name}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Capacity}"
@@ -312,6 +313,10 @@
                             Header="Range" />
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock
+                    Margin="0,4,0,0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
                 <DataGrid
                     Grid.Column="1"
                     Margin="2,5"
@@ -322,13 +327,18 @@
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Name}"
-                            Header="Mount" />
+                            Header="{Binding DataContext.SelectedShip, ElementName=AgentFleetShipsView, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Strength}"
                             Header="Strength" />
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="0,4,0,0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
                 <DataGrid
                     Grid.Column="2"
                     Margin="2,5"
@@ -339,26 +349,30 @@
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Name}"
-                            Header="Cargo" />
+                            Header="" />
                         <DataGridTextColumn
                             Width="Auto"
                             Binding="{Binding Units}"
                             Header="Amount" />
                     </DataGrid.Columns>
                 </DataGrid>
+                <TextBlock
+                    Grid.Column="2"
+                    Margin="0,4,0,0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedShip, Converter={StaticResource ShipCargoCapacityToStringConverter}}" />
             </Grid>
-            <TextBlock
-                Grid.Row="13"
-                VerticalAlignment="Center"
-                FontSize="{DynamicResource Level2FontSize}"
-                Style="{DynamicResource BasicTextBlock}"
-                Text="Available actions:" />
             <StackPanel
                 Grid.Row="13"
-                Grid.Column="1"
-                Grid.ColumnSpan="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
                 VerticalAlignment="Center"
                 Orientation="Horizontal">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Available actions:" />
                 <Button
                     Command="{Binding PerformDockCommand}"
                     CommandParameter="{Binding SelectedShip}"
