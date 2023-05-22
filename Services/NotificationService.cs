@@ -40,7 +40,7 @@ internal class NotificationService : INotificationService
         {
             ToastNotificationHeader = headerMessage,
             ToastNotificationMessage = bodyMessage,
-            ToastNotificationTypes = NotificationTypes.PositiveFeedback
+            ToastNotificationTypes = notificationType
         });
     }
 }
