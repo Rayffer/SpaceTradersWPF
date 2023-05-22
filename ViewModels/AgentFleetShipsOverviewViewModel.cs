@@ -95,6 +95,16 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformExtraction(Ship ship)
     {
+        var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+        if (cooldown != null)
+        {
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} is cooling down",
+                $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
+                NotificationTypes.WarningFeedback,
+                true);
+            return;
+        }
         var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol, ship.NavigationInformation.WaypointSymbol);
 
         this.notificationService.ShowToastNotification(
@@ -107,6 +117,16 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformSurvey(Ship ship)
     {
+        var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+        if (cooldown != null)
+        {
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} is cooling down",
+                $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
+                NotificationTypes.WarningFeedback,
+                true);
+            return;
+        }
         var surveyInformation = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
         this.waypointSurveyService.SaveSurveyDetails(surveyInformation.Surveys);
 
@@ -119,6 +139,16 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
 
     private async Task PerformWarp(Ship ship)
     {
+        var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+        if (cooldown != null)
+        {
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} is cooling down",
+                $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
+                NotificationTypes.WarningFeedback,
+                true);
+            return;
+        }
     }
 
     private async Task PerformOrbit(Ship ship)
