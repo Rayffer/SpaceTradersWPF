@@ -74,6 +74,10 @@ internal partial class SpaceTradersApi
         var request = new RestRequest(string.Format(GetShipCooldownResource, shipSymbol));
         var response = await this.restClient.ExecuteAsync(request);
 
+        if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
+        {
+            return null;
+        }
         return JsonConvert.DeserializeObject<ApiResponse<ShipCooldown>>(response.Content).Data;
     }
 
