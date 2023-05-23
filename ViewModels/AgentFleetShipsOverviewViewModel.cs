@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
@@ -26,6 +28,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private readonly IWaypointSurveyService waypointSurveyService;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
+    private Inventory selectedInventory;
     private DelegateCommand loadShipsCommand;
     private DelegateCommand<Ship> performExtractionCommand;
     private DelegateCommand<Ship> performSurveyCommand;
@@ -34,7 +37,15 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private DelegateCommand<Ship> performDockCommand;
     private DelegateCommand<Ship> performNavigateCommand;
     private DelegateCommand<Ship> performRefuelCommand;
+    private DelegateCommand<Ship> performInventorySellCommand;
     private bool alreadyLoaded;
+    private string cargoToSell;
+
+    public string CargoToSell
+    {
+        get => this.cargoToSell;
+        set => this.SetProperty(ref this.cargoToSell, value);
+    }
 
     public Ship SelectedShip
     {
@@ -48,6 +59,12 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         set => this.SetProperty(ref this.ships, value);
     }
 
+    public Inventory SelectedInventory
+    {
+        get => this.selectedInventory;
+        set => this.SetProperty(ref this.selectedInventory, value);
+    }
+
     public ICommand LoadShipsCommand => this.loadShipsCommand ??= new DelegateCommand(async () => await this.LoadShips());
     public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), ship => ship != null);
     public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), ship => ship != null);
@@ -56,6 +73,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => ship != null);
     public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformNavigate(ship), ship => ship != null);
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => ship != null);
+    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship));
 
     public AgentFleetShipsOverviewViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -198,6 +216,18 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     private async Task RefreshShips(Ship ship)
     {
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
-        this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
+        if (ship != null)
+        {
+            this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
+        }
+    }
+
+    private async Task PerformInventorySell(Ship ship)
+    {
+        await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
+        {
+            Symbol = this.SelectedInventory.Symbol,
+            Units = int.Parse(this.CargoToSell)
+        });
     }
 }
