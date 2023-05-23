@@ -1,0 +1,304 @@
+﻿<UserControl
+    x:Class="SpaceTradersWPF.Views.AgentContractsOverviewView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:apiModels="clr-namespace:SpaceTradersWPF.ApiModels"
+    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
+    xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
+    d:DataContext="{d:DesignInstance Type=viewmodels:AgentContractsOverviewViewModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
+    </UserControl.Resources>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadInformationCommand}" />
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition
+                Width="*"
+                MinWidth="400"
+                MaxWidth="400" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Margin="0,0,0,2"
+            HorizontalAlignment="Center"
+            FontSize="{DynamicResource Level0FontSize}"
+            Text="Contracts" />
+        <Border Style="{DynamicResource AccentBorder}" />
+        <TextBlock
+            Grid.Column="1"
+            Margin="0,0,0,2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="{DynamicResource Level1FontSize}"
+            Text="Contract Summary" />
+        <Border Grid.Column="1" Style="{DynamicResource AccentBorder}" />
+        <controls:LoadingSpinner
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Visibility="{Binding Contracts, Converter={StaticResource ObjectIsNullVisibilityConverter}, FallbackValue={x:Static Visibility.Collapsed}}" />
+        <DataGrid
+            Grid.Row="1"
+            Margin="5,0"
+            AutoGenerateColumns="False"
+            ItemsSource="{Binding Contracts}"
+            SelectedIndex="0"
+            SelectedItem="{Binding SelectedContract}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Type}"
+                    Header="Contract type" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding FactionSymbol}"
+                    Header="Faction" />
+                <DataGridCheckBoxColumn
+                    Width="Auto"
+                    Binding="{Binding Accepted}"
+                    Header="Accepted" />
+                <DataGridCheckBoxColumn
+                    Width="Auto"
+                    Binding="{Binding Fulfilled}"
+                    Header="Fulfilled" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5"
+            Background="{DynamicResource ControlLightBackgroundSolidColorBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Contract type:" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.Type}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Promoting faction:" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.FactionSymbol}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Accept deadline:" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.DeadlineToAccept}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Accepted:" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    Cursor="Help"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.Accepted}" />
+                <TextBlock
+                    Grid.Row="3"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Fulfilled:" />
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.Fulfilled}" />
+                <TextBlock
+                    Grid.Row="5"
+                    Grid.ColumnSpan="4"
+                    HorizontalAlignment="Center"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Text="Contract tems" />
+                <Border
+                    Grid.Row="5"
+                    Grid.ColumnSpan="4"
+                    Style="{DynamicResource AccentBorder}" />
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Contract deadline:" />
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.Terms.Deadline}" />
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="2"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Accept Bonus:" />
+                <TextBlock
+                    Grid.Row="6"
+                    Grid.Column="3"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedContract.Terms.Payment.OnAccepted}" />
+                <TextBlock
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Fulfillment bonus:" />
+                <TextBlock
+                    Grid.Row="7"
+                    Grid.Column="1"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="{Binding SelectedShip.NavigationInformation.SystemSymbol}" />
+                <Grid Grid.Row="8" Grid.ColumnSpan="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Style="{DynamicResource AccentBorder}" />
+                    <Border
+                        Grid.Row="6"
+                        Grid.Column="1"
+                        Style="{DynamicResource AccentBorder}" />
+                    <DataGrid
+                        x:Name="ModuleDatagrid"
+                        Margin="2,5"
+                        AutoGenerateColumns="False"
+                        HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding SelectedContract.Terms.Deliver}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding TradeSymbol}"
+                                Header="Good" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding DestinationSymbol}"
+                                Header="Deliver at" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding UnitsRequired}"
+                                Header="Required" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding UnitsFulfilled}"
+                                Header="Delivered" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <DataGrid
+                        Grid.Column="1"
+                        Margin="2,5"
+                        AutoGenerateColumns="False"
+                        HorizontalScrollBarVisibility="Disabled"
+                        ItemsSource="{Binding Ships}"
+                        RowDetailsVisibilityMode="Visible"
+                        SelectedItem="{Binding SelectedShip}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding Symbol}"
+                                Header="Ship Symbol" />
+                            <DataGridTextColumn
+                                Width="Auto"
+                                Binding="{Binding NavigationInformation.WaypointSymbol}"
+                                Header="Current Waypoint" />
+                        </DataGrid.Columns>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate DataType="apiModels:Ship">
+                                <ItemsControl ItemsSource="{Binding Cargo.Inventory}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Vertical" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate DataType="apiModels:Inventory">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}" />
+                                                <TextBlock Text="{Binding Units}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                </Grid>
+            </Grid>
+            <StackPanel
+                Grid.Row="1"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Style="{DynamicResource BasicTextBlock}"
+                    Text="Available actions:" />
+                <Button
+                    Command="{Binding AcceptContractCommand}"
+                    CommandParameter="{Binding SelectedContract}"
+                    Content="Accept contract"
+                    FontSize="{DynamicResource Level5FontSize}"
+                    IsEnabled="{Binding CanAcceptContract}" />
+                <Button
+                    Command="{Binding DeliverContractCommand}"
+                    CommandParameter="{Binding SelectedContract}"
+                    Content="Deliver contract cargo"
+                    FontSize="{DynamicResource Level5FontSize}"
+                    IsEnabled="{Binding SelectedShipCanDeliverSelectedContract}" />
+                <Button
+                    Command="{Binding FulfillContractCommand}"
+                    CommandParameter="{Binding SelectedContract}"
+                    Content="Fulfill contract"
+                    FontSize="{DynamicResource Level5FontSize}"
+                    IsEnabled="{Binding IsSelectedContractFulfilled}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
