@@ -57,6 +57,13 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenContractsInformation()
     {
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentContractsOverviewView>().Any())
+        {
+            return;
+        }
+
+        this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentContractsOverviewView));
     }
 
     private void OpenFleetInformation()
