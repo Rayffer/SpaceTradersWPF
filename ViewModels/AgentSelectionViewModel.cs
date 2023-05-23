@@ -75,6 +75,7 @@ internal class AgentSelectionViewModel : BindableBase
 
     private async Task LoadInformation()
     {
+        this.spaceTradersApi.ClearAccessToken();
         this.Factions = await this.spaceTradersApi.GetFactions(1, 20);
     }
 }

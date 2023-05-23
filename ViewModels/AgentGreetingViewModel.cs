@@ -38,8 +38,14 @@ internal class AgentGreetingViewModel : BindableBase
     {
         await Task.Delay(500);
         this.CurrentAgent = await this.spaceTradersApi.GetAgent();
+
         await Task.Delay(3000);
         this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
+        if (this.CurrentAgent == null)
+        {
+            this.regionManager.RegisterViewWithRegion(RegionNames.SplashScreenRegion, typeof(AgentSelectionView));
+            return;
+        }
         this.regionManager.RegisterViewWithRegion(RegionNames.MainMenuRegion, typeof(MainMenuView));
         this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(DashboardView));
     }

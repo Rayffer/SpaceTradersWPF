@@ -8,6 +8,8 @@ namespace SpaceTradersWPF.Services;
 
 internal interface ISpaceTradersApi
 {
+    void ClearAccessToken();
+
     void SetAccessTokenHeader(string token);
 
     Task<AgentResponse> RegisterAgent(string symbol, string faction);

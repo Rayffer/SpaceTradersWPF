@@ -23,10 +23,20 @@ internal partial class SpaceTradersApi : ISpaceTradersApi
         this.waypointSurveyService = waypointSurveyService;
     }
 
+    public void ClearAccessToken()
+    {
+        this.accessToken = null;
+        this.restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
+        this.restClient.DefaultParameters.RemoveParameter("Content-Type", ParameterType.HttpHeader);
+        this.restClient.DefaultParameters.RemoveParameter("Accept", ParameterType.HttpHeader);
+    }
+
     public void SetAccessTokenHeader(string token)
     {
         this.accessToken = token;
         this.restClient.DefaultParameters.RemoveParameter("Authorization", ParameterType.HttpHeader);
+        this.restClient.DefaultParameters.RemoveParameter("Content-Type", ParameterType.HttpHeader);
+        this.restClient.DefaultParameters.RemoveParameter("Accept", ParameterType.HttpHeader);
         this.restClient.AddDefaultHeader("Authorization", $"Bearer {this.accessToken}");
         this.restClient.AddDefaultHeader("Content-Type", "application/json");
         this.restClient.AddDefaultHeader("Accept", "application/json");
