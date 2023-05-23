@@ -196,9 +196,13 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol)
+    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, ShipSellCargoRequest shipSellCargoRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipSellCargoResource, shipSymbol), Method.Post);
+        request.AddBody(shipSellCargoRequest);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<CargoTransactionResponse>>(response.Content).Data;
     }
 
     public async Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol)

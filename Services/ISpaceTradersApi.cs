@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.ApiModels.Responses;
 using SpaceTradersWPF.Types;
 
@@ -70,7 +71,7 @@ internal interface ISpaceTradersApi
 
     Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol);
 
-    Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol);
+    Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, ShipSellCargoRequest shipSellCargoRequest);
 
     Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol);
 
