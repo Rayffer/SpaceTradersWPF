@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpaceTradersWPF.Mappers
+namespace SpaceTradersWPF.Mappers;
+
+internal interface ISpaceTradersApiMapper
 {
-    internal interface ISpaceTradersApiMapper
-    {
-    }
 }
