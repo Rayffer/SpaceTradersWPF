@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:behavior="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
@@ -20,6 +21,7 @@
                 To="0"
                 Duration="0:0:1" />
         </Storyboard>
+        <converters:WaypointToComboboxItemStringConverter x:Key="WaypointToComboboxItemStringConverter" />
     </UserControl.Resources>
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.Triggers>
@@ -61,11 +63,28 @@
                 <ComboBox
                     Grid.Row="1"
                     Grid.Column="1"
-                    DisplayMemberPath="Symbol"
+                    VerticalContentAlignment="Center"
                     ItemsSource="{Binding Waypoints}"
                     SelectedIndex="0"
                     SelectedValue="{Binding SelectedWaypoint}"
                     Style="{DynamicResource SpaceTradersComboBox}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} ({1})">
+                                        <Binding Path="Symbol" />
+                                        <Binding Path="Type" />
+                                    </MultiBinding>
+                                </TextBlock.Text></TextBlock>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <!--<ComboBox.DisplayMemberPath>
+                        <MultiBinding StringFormat="{}{0} ({1})">
+                            <Binding Path="Waypoints.Symbol" />
+                            <Binding Path="Type" />
+                        </MultiBinding>
+                    </ComboBox.DisplayMemberPath>-->
                     <behavior:Interaction.Triggers>
                         <behavior:EventTrigger EventName="SelectionChanged">
                             <behavior:InvokeCommandAction Command="{Binding UpdateFuelCommand}" CommandParameter="{Binding SelectedWaypoint}" />
@@ -86,15 +105,20 @@
                     Grid.Row="1"
                     Style="{DynamicResource BasicTextBlock}"
                     Text="Waypoint to navigate:" />
-                <Button
-                    Grid.Row="3"
-                    Command="{Binding PerformNavigationCommand}"
-                    Content="Navigate to waypoint" />
-                <Button
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Command="{Binding CancelNavigationCommand}"
-                    Content="Cancel Navigation" />
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="3"
+                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="2">
+                    <Button
+                        Grid.Row="3"
+                        Command="{Binding PerformNavigationCommand}"
+                        Content="Navigate to waypoint" />
+                    <Button
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Command="{Binding CancelNavigationCommand}"
+                        Content="Cancel Navigation" />
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>
