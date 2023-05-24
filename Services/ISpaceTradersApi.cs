@@ -23,7 +23,7 @@ internal interface ISpaceTradersApi
 
     Task<ContractResponse> PostAcceptContract(string contractId);
 
-    Task<DeliverContractResponse> PostDeliverContract(string contractId);
+    Task<DeliverContractResponse> PostDeliverContract(string contractId, ContractDeliverRequest contractDeliverRequest);
 
     Task<ContractResponse> PostFulfillContract(string contractId);
 

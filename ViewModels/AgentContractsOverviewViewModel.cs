@@ -8,6 +8,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Types;
 
@@ -121,7 +122,24 @@ internal class AgentContractsOverviewViewModel : BindableBase
 
     private async Task DeliverContract(Contract contract)
     {
-        throw new NotImplementedException();
+        var cargoSymbolToDeliver =
+            this.SelectedShip.Cargo.Inventory
+            .FirstOrDefault(inventory =>
+                contract.Terms.Deliver.Any(delivery =>
+                    this.SelectedShip.NavigationInformation.WaypointSymbol == delivery.DestinationSymbol &&
+                    inventory.Symbol == delivery.TradeSymbol));
+        var termsToDeliver = contract.Terms.Deliver.FirstOrDefault(delivery =>
+                    this.SelectedShip.NavigationInformation.WaypointSymbol == delivery.DestinationSymbol &&
+                    cargoSymbolToDeliver.Symbol == delivery.TradeSymbol);
+
+        var remainingUnits = termsToDeliver.UnitsRequired - termsToDeliver.UnitsFulfilled;
+        var amountToDeliver = Math.Min(cargoSymbolToDeliver.Units, remainingUnits);
+        _ = await this.spaceTradersApi.PostDeliverContract(contract.Id, new ContractDeliverRequest
+        {
+            ShipSymbol = this.SelectedShip.Symbol,
+            TradeSymbol = cargoSymbolToDeliver.Symbol,
+            Units = amountToDeliver
+        });
     }
 
     private async Task FulfillContract(Contract contract)

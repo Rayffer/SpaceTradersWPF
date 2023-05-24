@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.ApiModels.Responses;
 
 namespace SpaceTradersWPF.Services;
@@ -41,9 +42,11 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<ContractResponse>>(response.Content).Data;
     }
 
-    public async Task<DeliverContractResponse> PostDeliverContract(string contractId)
+    public async Task<DeliverContractResponse> PostDeliverContract(string contractId, ContractDeliverRequest contractDeliverRequest)
     {
         var request = new RestRequest(string.Format(this.PostDeliverContractResource, contractId), Method.Post);
+        request.AddJsonBody(contractDeliverRequest);
+
         var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<DeliverContractResponse>>(response.Content).Data;
