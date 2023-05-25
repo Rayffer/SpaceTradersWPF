@@ -39,11 +39,11 @@ internal interface ISpaceTradersApi
 
     Task<ApiModels.System> GetSystem(string waypointSymbol);
 
-    Task<ApiModels.System[]> GetSystems(int pageNumber, int PageSize);
+    Task<ApiModels.System[]> GetSystems(int pageNumber, int pageSize);
 
     Task<Faction> GetFaction(string factionSymbol);
 
-    Task<Faction[]> GetFactions(int pageNumber, int PageSize);
+    Task<Faction[]> GetFactions(int pageNumber, int pageSize);
 
     Task<Ship> GetShip(string shipSymbol);
 
@@ -91,5 +91,5 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> GetShipNavigationInformation(string shipSymbol);
 
-    Task<Ship[]> GetShips(int pageNumber, int PageSize);
+    Task<Ship[]> GetShips(int pageNumber, int pageSize);
 }

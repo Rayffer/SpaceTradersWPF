@@ -56,7 +56,8 @@ public partial class App : PrismApplication
     {
         var client = new RestClient("https://api.spacetraders.io/v2/");
         containerRegistry.RegisterInstance(typeof(IRestClient), client);
-        containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>();
+        containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>("SpaceTradersApi");
+        containerRegistry.Register<ISpaceTradersApi, SpaceTradersApiRateLimitedProxy>();
         containerRegistry.Register<INotificationService, NotificationService>();
         containerRegistry.RegisterSingleton<IWaypointSurveyService, WaypointSurveyService>();
     }
