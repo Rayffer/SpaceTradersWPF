@@ -3,10 +3,10 @@
 using Prism.Events;
 using Prism.Mvvm;
 
-using SpaceTradersWPF.Events;
 using SpaceTradersWPF.ApiModels;
-using SpaceTradersWPF.Services;
+using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
+using SpaceTradersWPF.Services;
 
 namespace SpaceTradersWPF.ViewModels;
 

@@ -1,9 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System;
-
-using SpaceTradersWPF.Types;
+﻿using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Extensions;
 

@@ -9,8 +9,6 @@ using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.ApiModels.Responses;
 using SpaceTradersWPF.Types;
 
-using Unity;
-
 namespace SpaceTradersWPF.Services;
 
 internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi

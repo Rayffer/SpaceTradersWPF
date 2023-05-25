@@ -1,15 +1,10 @@
-﻿using Prism.Commands;
-using System;
-
-using Prism.Events;
+﻿using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 
 using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Types;
-using System.Windows.Input;
-using Prism.Regions;
-using System.Linq;
 using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;

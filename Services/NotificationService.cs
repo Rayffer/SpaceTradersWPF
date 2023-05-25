@@ -3,8 +3,8 @@
 using Prism.Events;
 using Prism.Regions;
 
-using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Events;
+using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Types;
 using SpaceTradersWPF.Views;
 
