@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -49,7 +50,18 @@ internal class AgentShipsViewModel : BindableBase
     public Ship SelectedShip
     {
         get => this.selectedShip;
-        set => this.SetProperty(ref this.selectedShip, value);
+        set
+        {
+            this.SetProperty(ref this.selectedShip, value);
+            this.RaisePropertyChanged(nameof(CanDock));
+            this.RaisePropertyChanged(nameof(CanExtract));
+            this.RaisePropertyChanged(nameof(CanNavigate));
+            this.RaisePropertyChanged(nameof(CanOrbit));
+            this.RaisePropertyChanged(nameof(CanRefuel));
+            this.RaisePropertyChanged(nameof(CanSell));
+            this.RaisePropertyChanged(nameof(CanSurvey));
+            this.RaisePropertyChanged(nameof(CanWarp));
+        }
     }
 
     public IEnumerable<Ship> Ships
@@ -65,14 +77,14 @@ internal class AgentShipsViewModel : BindableBase
     }
 
     public ICommand LoadShipsCommand => this.loadShipsCommand ??= new DelegateCommand(async () => await this.LoadShips());
-    public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), ship => ship != null);
-    public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), ship => ship != null);
-    public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), ship => ship != null);
-    public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), ship => ship != null);
-    public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => ship != null);
-    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformNavigate(ship), ship => ship != null);
-    public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => ship != null);
-    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship));
+    public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), ship => this.CanExtract(ship));
+    public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), ship => this.CanSurvey(ship));
+    public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), ship => this.CanWarp(ship));
+    public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), ship => this.CanOrbit(ship));
+    public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => this.CanDock(ship));
+    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformNavigate(ship), ship => this.CanNavigate(ship));
+    public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => this.CanRefuel(ship));
+    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship), ship => this.CanSell(ship));
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -228,5 +240,45 @@ internal class AgentShipsViewModel : BindableBase
             Symbol = this.SelectedInventory.Symbol,
             Units = int.Parse(this.CargoToSell)
         });
+    }
+
+    private bool CanExtract(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
+    }
+
+    private bool CanSurvey(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
+    }
+
+    private bool CanWarp(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+    }
+
+    private bool CanOrbit(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "DOCKED";
+    }
+
+    private bool CanDock(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+    }
+
+    private bool CanNavigate(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+    }
+
+    private bool CanRefuel(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "DOCKED";
+    }
+
+    private bool CanSell(Ship ship)
+    {
+        return ship != null && ship.NavigationInformation.Status == "DOCKED";
     }
 }
