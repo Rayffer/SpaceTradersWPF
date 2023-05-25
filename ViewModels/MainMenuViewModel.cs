@@ -57,13 +57,13 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenContractsInformation()
     {
-        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentContractsOverviewView>().Any())
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentContractsView>().Any())
         {
             return;
         }
 
         this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentContractsOverviewView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentContractsView));
     }
 
     private void OpenFleetInformation()
@@ -92,12 +92,12 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenShipInformation()
     {
-        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentFleetShipsOverviewView>().Any())
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<AgentShipsView>().Any())
         {
             return;
         }
 
         this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentShipsView));
     }
 }

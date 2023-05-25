@@ -16,13 +16,13 @@ using System.Windows.Shapes;
 namespace SpaceTradersWPF.Views
 {
     /// <summary>
-    /// Interaction logic for AgentContractsOverviewView.xaml
+    /// Interaction logic for AgentContractsView.xaml
     /// </summary>
-    public partial class AgentContractsOverviewView : UserControl
+    public partial class AgentContractsView : UserControl
     {
-        public AgentContractsOverviewView()
+        public AgentContractsView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

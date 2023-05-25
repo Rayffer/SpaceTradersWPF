@@ -1,19 +1,15 @@
-﻿<UserControl
-    x:Class="SpaceTradersWPF.Views.AgentFleetShipsOverviewView"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
-    xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
-    x:Name="AgentFleetShipsView"
-    d:DataContext="{d:DesignInstance viewmodels:AgentFleetShipsOverviewViewModel}"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
-    Background="{DynamicResource ControlBackgroundSolidColorBrush}"
-    mc:Ignorable="d">
+﻿<UserControl x:Class="SpaceTradersWPF.Views.AgentShipsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpaceTradersWPF.Views" 
+             xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels" 
+             xmlns:converters="clr-namespace:SpaceTradersWPF.Converters" 
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors" xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
+             d:DataContext="{d:DesignInstance Type=viewmodels:AgentShipsViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converters:ShipCrewToStringConverter x:Key="ShipCrewToStringConverter" />
         <converters:FuelToStringConverter x:Key="FuelToStringConverter" />

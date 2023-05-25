@@ -93,7 +93,7 @@ internal class DashboardViewModel : BindableBase
     private void PerformOpenShipInformation(Ship ship)
     {
         this.RemoveCurrentView();
-        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentFleetShipsOverviewView));
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(AgentShipsView));
         this.eventAggregator.GetEvent<ShipInformationEvent>().Publish(new ShipInformationEventArguments
         {
             Ship = ship

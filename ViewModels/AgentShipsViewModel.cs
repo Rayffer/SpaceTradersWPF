@@ -19,7 +19,7 @@ using SpaceTradersWPF.Views;
 
 namespace SpaceTradersWPF.ViewModels;
 
-internal class AgentFleetShipsOverviewViewModel : BindableBase
+internal class AgentShipsViewModel : BindableBase
 {
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly IEventAggregator eventAggregator;
@@ -75,7 +75,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => ship != null);
     public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship));
 
-    public AgentFleetShipsOverviewViewModel(
+    public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
         IEventAggregator eventAggregator,
         INotificationService notificationService,
@@ -90,7 +90,7 @@ internal class AgentFleetShipsOverviewViewModel : BindableBase
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
 
-    ~AgentFleetShipsOverviewViewModel()
+    ~AgentShipsViewModel()
     {
         this.eventAggregator.GetEvent<ShipInformationEvent>().Unsubscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
