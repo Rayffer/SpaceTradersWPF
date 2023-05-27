@@ -1,8 +1,8 @@
 ﻿<UserControl
     x:Class="SpaceTradersWPF.Views.FlyoutNotificationView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:types="clr-namespace:SpaceTradersWPF.Types"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
@@ -74,12 +74,38 @@
                 <TextBlock
                     Padding="5"
                     FontSize="{DynamicResource Level1FontSize}"
-                    Style="{DynamicResource BasicTextBlock}"
-                    Text="{Binding Header}" />
-                <TextBlock
-                    Grid.Row="1"
-                    Style="{DynamicResource BasicTextBlock}"
-                    Text="{Binding Message}" />
+                    Text="{Binding Header}">
+                    <TextBlock.Style>
+                        <Style BasedOn="{StaticResource BasicTextBlock}"  TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.NegativeFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.PositiveFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style></TextBlock>
+                <TextBlock Grid.Row="1" Text="{Binding Message}">
+                    <TextBlock.Style>
+                        <Style BasedOn="{StaticResource BasicTextBlock}" TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.NegativeFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.PositiveFeedback}">
+                                    <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style></TextBlock>
             </Grid>
         </Border>
     </Grid>
