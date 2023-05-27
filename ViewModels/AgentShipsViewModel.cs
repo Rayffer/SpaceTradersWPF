@@ -82,7 +82,7 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), ship => this.CanWarp(ship));
     public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), ship => this.CanOrbit(ship));
     public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => this.CanDock(ship));
-    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformNavigate(ship), ship => this.CanNavigate(ship));
+    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), ship => this.CanNavigate(ship));
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => this.CanRefuel(ship));
     public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship), ship => this.CanSell(ship));
 
@@ -202,7 +202,7 @@ internal class AgentShipsViewModel : BindableBase
             true);
     }
 
-    private async Task PerformNavigate(Ship ship)
+    private void PerformNavigate(Ship ship)
     {
         this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipNavigationView));
         this.eventAggregator
@@ -244,41 +244,51 @@ internal class AgentShipsViewModel : BindableBase
 
     private bool CanExtract(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
+        return ship != null
+               && ship.NavigationInformation.Status == "IN_ORBIT"
+               && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
 
     private bool CanSurvey(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
+        return ship != null
+            && ship.NavigationInformation.Status == "IN_ORBIT"
+            && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
 
     private bool CanWarp(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+        return ship != null
+               && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanOrbit(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "DOCKED";
+        return ship != null
+               && ship.NavigationInformation.Status == "DOCKED";
     }
 
     private bool CanDock(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+        return ship != null
+               && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanNavigate(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "IN_ORBIT";
+        return ship != null
+               && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanRefuel(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "DOCKED";
+        return ship != null
+               && ship.NavigationInformation.Status == "DOCKED";
     }
 
     private bool CanSell(Ship ship)
     {
-        return ship != null && ship.NavigationInformation.Status == "DOCKED";
+        return ship != null
+               && ship.NavigationInformation.Status == "DOCKED";
     }
 }

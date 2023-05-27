@@ -88,7 +88,7 @@ internal class ShipNavigationViewModel : BindableBase
 
         this.Ship = eventInformation.Ship;
         this.currentShipWaypoint = await this.spaceTradersApi.GetWaypoint(this.Ship.NavigationInformation.WaypointSymbol);
-        this.Waypoints = await this.spaceTradersApi.GetWaypoints(this.Ship.NavigationInformation.WaypointSymbol, 1, 20);
+        this.Waypoints = await this.spaceTradersApi.GetWaypoints(this.Ship.NavigationInformation.SystemSymbol, 1, 20);
     }
 
     internal void RemoveElementAnimationCompleted(FlyoutNotificationView view)

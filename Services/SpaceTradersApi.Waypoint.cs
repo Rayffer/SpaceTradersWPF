@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
@@ -25,7 +26,11 @@ internal partial class SpaceTradersApi
 
     public async Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize)
     {
-        var systemSymbol = ExtractSystemSymbol(waypointSymbol);
+        var systemSymbol = waypointSymbol;
+        if (waypointSymbol.Count(x => x.Equals("-")) > 1)
+        {
+            systemSymbol = ExtractSystemSymbol(waypointSymbol);
+        }
         var request = new RestRequest(string.Format(this.GetSystemWaypointsResource, systemSymbol, pageNumber, pageSize));
         var response = await this.restClient.ExecuteAsync(request);
 
