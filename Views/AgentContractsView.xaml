@@ -192,7 +192,7 @@
                     Grid.Row="7"
                     Grid.Column="1"
                     Style="{DynamicResource BasicTextBlock}"
-                    Text="{Binding SelectedShip.NavigationInformation.SystemSymbol}" />
+                    Text="{Binding SelectedContract.Terms.Payment.OnFulfilled}" />
                 <Grid Grid.Row="8" Grid.ColumnSpan="4">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
