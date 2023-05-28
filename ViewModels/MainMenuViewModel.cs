@@ -72,6 +72,13 @@ internal class MainMenuViewModel : BindableBase
 
     private void OpenSystemsInformation()
     {
+        if (this.regionManager.Regions[RegionNames.MainAreaRegion].Views.OfType<SystemInformationView>().Any())
+        {
+            return;
+        }
+
+        this.regionManager.Regions[RegionNames.MainAreaRegion].RemoveAll();
+        this.regionManager.RegisterViewWithRegion(RegionNames.MainAreaRegion, typeof(SystemInformationView));
     }
 
     private void OpenMap()
