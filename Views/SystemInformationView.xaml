@@ -14,8 +14,10 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
         <converters:SystemFactionCollectionToStringConverter x:Key="SystemFactionCollectionToStringConverter" />
+        <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
+        <converters:CollectionIsNullOrEmptyConverter x:Key="CollectionIsNullOrEmptyConverter" />
+        <converters:CollectionIsNotNullOrEmptyConverter x:Key="CollectionIsNotNullOrEmptyConverter" />
         <converters:ObjectIsNotNullVisibilityConverter x:Key="ObjectIsNotNullVisibilityConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
@@ -90,8 +92,8 @@
                 VerticalAlignment="Center"
                 Style="{DynamicResource BasicTextBlock}"
                 Text="No System Selected"
-                Visibility="{Binding Systems, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-            <Grid>
+                Visibility="{Binding SelectedSystem, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+            <Grid Visibility="{Binding SelectedSystem, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="Auto" />
@@ -163,17 +165,27 @@
                         Grid.ColumnSpan="4"
                         HorizontalAlignment="Center"
                         FontSize="{DynamicResource Level2FontSize}"
-                        Text="System waypoints:" />
-                    <ScrollViewer
+                        Text="System waypoints" />
+                    <TextBlock
                         Grid.Row="3"
                         Grid.ColumnSpan="4"
-                        CanContentScroll="True"
-                        HorizontalScrollBarVisibility="Visible"
-                        VerticalScrollBarVisibility="Disabled"
-                        Visibility="{Binding SelectedSystem.Waypoints, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}">
-                        <ItemsControl ItemsSource="{Binding SelectedSystem.Waypoints}">
-                            <ItemsControl.ItemTemplate>
-                                <ItemContainerTemplate DataType="apiModels:SystemWaypoint">
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{DynamicResource BasicTextBlock}"
+                        Text="No waypoints in this system"
+                        Visibility="{Binding SelectedSystem.Waypoints, Converter={StaticResource CollectionIsNullOrEmptyConverter}}" />
+                    <ItemsControl
+                        Grid.Row="3"
+                        Grid.ColumnSpan="4"
+                        ItemsSource="{Binding SelectedSystem.Waypoints}"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        Visibility="{Binding SelectedSystem.Waypoints, Converter={StaticResource CollectionIsNotNullOrEmptyConverter}}">
+                        <ItemsControl.ItemTemplate>
+                            <ItemContainerTemplate DataType="apiModels:SystemWaypoint">
+                                <Border
+                                    MinWidth="130"
+                                    Margin="5,10"
+                                    Style="{DynamicResource BorderBackgroundLight}">
                                     <Grid Margin="5,2">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -186,7 +198,13 @@
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-                                            <TextBlock Text="{Binding Symbol}" />
+                                            <TextBlock
+                                                Margin="0,0,0,2"
+                                                VerticalAlignment="Center"
+                                                FontSize="{DynamicResource Level5FontSize}"
+                                                Style="{DynamicResource BasicTextBlock}"
+                                                Text="{Binding Symbol}" />
+                                            <Border Style="{DynamicResource AccentFitBorder}" />
                                             <TextBlock Grid.Row="1" Text="{Binding Type}" />
                                             <TextBlock Grid.Row="2" Text="Coordinates:" />
                                             <StackPanel Grid.Row="3" Orientation="Horizontal">
@@ -197,15 +215,15 @@
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
-                                </ItemContainerTemplate>
-                            </ItemsControl.ItemTemplate>
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </ScrollViewer>
+                                </Border>
+                            </ItemContainerTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
                 </Grid>
             </Grid>
         </Grid>
