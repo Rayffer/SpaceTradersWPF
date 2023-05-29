@@ -9,15 +9,61 @@
     d:DesignWidth="800"
     Background="{DynamicResource DialogBackgroundSemiTransparentSolidColorBrush}"
     mc:Ignorable="d">
-    <Image
-        Width="50"
-        Height="50"
-        Margin="10"
-        Source="{DynamicResource SpinnerSvgIcon}">
-        <Image.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <BeginStoryboard Storyboard="{StaticResource BlinkAnimation}" />
+    <Grid Width="50" Height="50">
+        <Canvas>
+            <Path Stroke="{DynamicResource ButtonBackgroundSolidColorBrush}" StrokeThickness="4">
+                <Path.Data>
+                    <PathGeometry>
+                        <PathFigure>
+                            <PathFigure.StartPoint>
+                                <Point X="25" Y="0" />
+                            </PathFigure.StartPoint>
+                            <ArcSegment SweepDirection="Clockwise">
+                                <ArcSegment.Point>
+                                    <Point X="50" Y="25" />
+                                </ArcSegment.Point>
+                                <ArcSegment.Size>
+                                    <Size Width="25" Height="25" />
+                                </ArcSegment.Size>
+                            </ArcSegment>
+                            <ArcSegment IsStroked="False" SweepDirection="Clockwise">
+                                <ArcSegment.Point>
+                                    <Point X="25" Y="50" />
+                                </ArcSegment.Point>
+                                <ArcSegment.Size>
+                                    <Size Width="25" Height="25" />
+                                </ArcSegment.Size>
+                            </ArcSegment>
+                            <ArcSegment SweepDirection="Clockwise">
+                                <ArcSegment.Point>
+                                    <Point X="0" Y="25" />
+                                </ArcSegment.Point>
+                                <ArcSegment.Size>
+                                    <Size Width="25" Height="25" />
+                                </ArcSegment.Size>
+                            </ArcSegment>
+                        </PathFigure>
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
+            <Canvas.RenderTransform>
+                <RotateTransform x:Name="RotateTransform" Angle="45" CenterX="25" CenterY="25" />
+            </Canvas.RenderTransform>
+        </Canvas>
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="Grid.Loaded">
+                <BeginStoryboard>
+                    <Storyboard x:Name="Animation">
+                        <DoubleAnimation
+                            RepeatBehavior="Forever"
+                            Storyboard.TargetName="RotateTransform"
+                            Storyboard.TargetProperty="Angle"
+                            From="0"
+                            To="360"
+                            Duration="0:0:1" />
+                    </Storyboard>
+                </BeginStoryboard>
             </EventTrigger>
-        </Image.Triggers>
-    </Image>
+        </Grid.Triggers>
+    </Grid>
 </UserControl>
