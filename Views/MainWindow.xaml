@@ -2,7 +2,7 @@
     x:Class="SpaceTradersWPF.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:SpaceTradersWPF"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,6 +14,11 @@
     d:DataContext="{d:DesignInstance viewmodels:MainWindowViewModel}"
     Background="{DynamicResource MainBackgroundSolidColorBrush}"
     mc:Ignorable="d">
+    <Window.Resources>
+        <converters:BooleanToMinWidthConverter x:Key="BooleanToMinWidthConverter" />
+        <converters:ListAndDetailContentToButtonVisibilityConverter x:Key="ListAndDetailContentToButtonVisibilityConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -25,6 +30,44 @@
             Grid.Column="1"
             Margin="5"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.MainAreaRegion}" />
+        <Grid Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition
+                    Width="Auto"
+                    MinWidth="{Binding ElementName=ListArea, Path=HasContent, Converter={StaticResource BooleanToMinWidthConverter}}"
+                    MaxWidth="600" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <ContentControl
+                x:Name="ListArea"
+                Grid.Column="0"
+                prism:RegionManager.RegionName="{x:Static local:RegionNames.ListViewAreaRegion}" />
+            <GridSplitter
+                Grid.Column="1"
+                Width="5"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ResizeBehavior="PreviousAndNext"
+                Visibility="{Binding ElementName=ListArea, Path=HasContent, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ContentControl
+                x:Name="DetailArea"
+                Grid.Column="2"
+                prism:RegionManager.RegionName="{x:Static local:RegionNames.DetailViewAreaRegion}" />
+            <Button
+                Grid.Column="2"
+                Margin="11"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Content="Close">
+                <Button.Visibility>
+                    <MultiBinding Converter="{StaticResource ListAndDetailContentToButtonVisibilityConverter}">
+                        <Binding Path="HasContent" ElementName="ListArea" />
+                        <Binding Path="HasContent" ElementName="DetailArea" />
+                    </MultiBinding>
+                </Button.Visibility>
+            </Button>
+        </Grid>
         <ContentControl
             x:Name="DialogArea"
             Grid.Column="1"
@@ -33,8 +76,8 @@
         <ContentControl
             x:Name="ToastNotificationArea"
             Grid.Column="1"
-            Margin="5"
             Width="300"
+            Margin="5"
             VerticalAlignment="Bottom"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.ToastNotificationArea}" />
         <ItemsControl
@@ -47,7 +90,6 @@
         <ContentControl
             x:Name="SplashScreen"
             Grid.ColumnSpan="2"
-            VerticalAlignment="Center"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.SplashScreenRegion}" />
     </Grid>
 </Window>
