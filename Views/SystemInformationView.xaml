@@ -177,14 +177,16 @@
                     <ItemsControl
                         Grid.Row="3"
                         Grid.ColumnSpan="4"
-                        ItemsSource="{Binding SelectedSystem.Waypoints}"
+                        ItemsSource="{Binding SystemWaypoints}"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        Visibility="{Binding SelectedSystem.Waypoints, Converter={StaticResource CollectionIsNotNullOrEmptyConverter}}">
+                        Visibility="{Binding SystemWaypoints, Converter={StaticResource CollectionIsNotNullOrEmptyConverter}}">
                         <ItemsControl.ItemTemplate>
-                            <ItemContainerTemplate DataType="apiModels:SystemWaypoint">
+                            <ItemContainerTemplate DataType="apiModels:Waypoint">
                                 <Border
+                                    Cursor="Hand"
                                     MinWidth="130"
                                     Margin="5,10"
+                                    MouseUp="Border_MouseUp"
                                     Style="{DynamicResource BorderBackgroundLight}">
                                     <Grid Margin="5,2">
                                         <Grid.RowDefinitions>
