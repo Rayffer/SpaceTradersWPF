@@ -22,53 +22,51 @@
             <behaviors:InvokeCommandAction Command="{Binding LoadAgentInformationCommand}" />
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
-    <Grid>
-        <Grid.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
-            </EventTrigger>
-        </Grid.Triggers>
-        <Border
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Style="{DynamicResource Border}">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" MaxHeight="70" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock
-                    Margin="10"
-                    HorizontalAlignment="Center"
-                    FontSize="{DynamicResource Level0FontSize}"
-                    Text="Connecting to the system"
-                    Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-                <TextBlock
-                    Grid.Row="1"
-                    Margin="10"
-                    HorizontalAlignment="Center"
-                    FontSize="{DynamicResource Level0FontSize}"
-                    Text="Please, wait"
-                    Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-                <controls:LoadingSpinner Grid.Row="2" Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-                <TextBlock
-                    Grid.Row="3"
-                    Margin="10"
-                    HorizontalAlignment="Center"
-                    FontSize="{DynamicResource Level0FontSize}"
-                    Text="Greetings, Agent"
-                    Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
-                <TextBlock
-                    Grid.Row="4"
-                    Margin="10"
-                    HorizontalAlignment="Center"
-                    FontSize="{DynamicResource Level1FontSize}"
-                    Text="{Binding CurrentAgent.Symbol}"
-                    Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
-            </Grid>
-        </Border>
-    </Grid>
+    <Border
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Style="{DynamicResource Border}">
+        <Grid>
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                </EventTrigger>
+            </Grid.Triggers>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MaxHeight="70" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock
+                Margin="10"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level0FontSize}"
+                Text="Connecting to the system"
+                Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+            <TextBlock
+                Grid.Row="1"
+                Margin="10"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level0FontSize}"
+                Text="Please, wait"
+                Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+            <controls:LoadingSpinner Grid.Row="2" Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
+            <TextBlock
+                Grid.Row="3"
+                Margin="10"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level0FontSize}"
+                Text="Greetings, Agent"
+                Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
+            <TextBlock
+                Grid.Row="4"
+                Margin="10"
+                HorizontalAlignment="Center"
+                FontSize="{DynamicResource Level1FontSize}"
+                Text="{Binding CurrentAgent.Symbol}"
+                Visibility="{Binding CurrentAgent, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}" />
+        </Grid>
+    </Border>
 </UserControl>
