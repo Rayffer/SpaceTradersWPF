@@ -6,7 +6,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
-    VerticalContentAlignment="Bottom"
     d:DataContext="{d:DesignInstance viewmodels:SplashScreenViewModel}"
     Background="{DynamicResource MainBackgroundSolidColorBrush}"
     mc:Ignorable="d">
