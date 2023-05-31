@@ -59,11 +59,12 @@
                 Margin="11"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
+                Command="{Binding CloseDetailViewCommand}"
                 Content="Close">
                 <Button.Visibility>
                     <MultiBinding Converter="{StaticResource ListAndDetailContentToButtonVisibilityConverter}">
-                        <Binding Path="HasContent" ElementName="ListArea" />
-                        <Binding Path="HasContent" ElementName="DetailArea" />
+                        <Binding ElementName="ListArea" Path="HasContent" />
+                        <Binding ElementName="DetailArea" Path="HasContent" />
                     </MultiBinding>
                 </Button.Visibility>
             </Button>
