@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 
 using Prism.Commands;
@@ -95,6 +96,7 @@ internal class MainMenuViewModel : BindableBase
 
     private void ExitApplication()
     {
+        Application.Current.Shutdown();
     }
 
     private void OpenShipInformation()
