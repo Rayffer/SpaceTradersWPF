@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="ResourceDictionaries/ButtonStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/DatagridStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/TextBlockStyles.xaml" />
+                <ResourceDictionary Source="ResourceDictionaries/TextboxStyles.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/FontSizes.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/DarkThemeColors.xaml" />
                 <ResourceDictionary Source="ResourceDictionaries/BorderStyles.xaml" />
