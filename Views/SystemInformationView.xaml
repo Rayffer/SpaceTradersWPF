@@ -114,46 +114,39 @@
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="0"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="Sector symbol:" />
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="1"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="{Binding SelectedSystem.SectorSymbol}" />
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="2"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="System symbol:" />
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="4"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="{Binding SelectedSystem.Symbol}" />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="Type:" />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="1"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="{Binding SelectedSystem.Type}" />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="2"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="Coordinates:" />
                     <StackPanel
                         Grid.Row="1"
                         Grid.Column="4"
                         Orientation="Horizontal">
-                        <TextBlock Style="{DynamicResource BasicTextBlock}" Text="X:" />
-                        <TextBlock Style="{DynamicResource BasicTextBlock}" Text="{Binding SelectedSystem.X}" />
-                        <TextBlock Style="{DynamicResource BasicTextBlock}" Text="Y:" />
-                        <TextBlock Style="{DynamicResource BasicTextBlock}" Text="{Binding SelectedSystem.Y}" />
+                        <TextBlock Text="X:" />
+                        <TextBlock Text="{Binding SelectedSystem.X}" />
+                        <TextBlock Text="Y:" />
+                        <TextBlock Text="{Binding SelectedSystem.Y}" />
                     </StackPanel>
                     <Border
                         Grid.Row="2"
@@ -171,7 +164,6 @@
                         Grid.ColumnSpan="4"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Style="{DynamicResource BasicTextBlock}"
                         Text="No waypoints in this system"
                         Visibility="{Binding SelectedSystem.Waypoints, Converter={StaticResource CollectionIsNullOrEmptyConverter}}" />
                     <ItemsControl
@@ -204,7 +196,6 @@
                                                 Margin="0,0,0,2"
                                                 VerticalAlignment="Center"
                                                 FontSize="{DynamicResource Level5FontSize}"
-                                                Style="{DynamicResource BasicTextBlock}"
                                                 Text="{Binding Symbol}" />
                                             <Border Style="{DynamicResource AccentFitBorder}" />
                                             <TextBlock Grid.Row="1" Text="{Binding Type}" />

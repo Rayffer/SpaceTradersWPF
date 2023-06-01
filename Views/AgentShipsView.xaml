@@ -114,101 +114,81 @@
                 </Grid.RowDefinitions>
                 <TextBlock
                     Grid.Row="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Ship Symbol:" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Symbol}" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Role:" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Registration.Role}" />
                 <TextBlock
                     Grid.Row="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Faction:" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Registration.FactionSymbol}" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Ship Frame:" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="3"
                     Cursor="Help"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Frame.Name}"
                     ToolTip="{Binding SelectedShip.Frame.Description}" />
                 <TextBlock
                     Grid.Row="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Fuel:" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Fuel, Converter={StaticResource FuelToStringConverter}}" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Crew:" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
                 <TextBlock
                     Grid.Row="4"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Crew Rotation:" />
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Crew.Rotation}" />
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Required crew:" />
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Crew.Required}" />
                 <TextBlock
                     Grid.Row="5"
                     Grid.Column="0"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Crew Morale:" />
                 <TextBlock
                     Grid.Row="5"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Crew.Morale}" />
                 <TextBlock
                     Grid.Row="5"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Crew Wages:" />
                 <TextBlock
                     Grid.Row="5"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.Crew.Wages}" />
                 <TextBlock
                     Grid.Row="6"
@@ -223,53 +203,43 @@
                 <TextBlock
                     Grid.Row="7"
                     Grid.Column="0"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Status:" />
                 <TextBlock
                     Grid.Row="7"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.NavigationInformation.Status}" />
                 <TextBlock
                     Grid.Row="7"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Flight mode:" />
                 <TextBlock
                     Grid.Row="7"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.NavigationInformation.FlightMode, Converter={StaticResource ApiFlightModeToStringConverter}}" />
                 <TextBlock
                     Grid.Row="8"
                     Grid.Column="0"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="System:" />
                 <TextBlock
                     Grid.Row="8"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.NavigationInformation.SystemSymbol}" />
                 <TextBlock
                     Grid.Row="8"
                     Grid.Column="2"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Waypoint:" />
                 <TextBlock
                     Grid.Row="8"
                     Grid.Column="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.NavigationInformation.WaypointSymbol}" />
                 <TextBlock
                     Grid.Row="9"
                     Grid.Column="0"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Route:" />
                 <TextBlock
                     Grid.Row="9"
                     Grid.Column="1"
                     Grid.ColumnSpan="3"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding SelectedShip.NavigationInformation, Converter={StaticResource ShipNavigationInformationToStringConverter}}" />
                 <Grid Grid.Row="12" Grid.ColumnSpan="4">
                     <Grid.ColumnDefinitions>
@@ -299,7 +269,6 @@
                             </DataGrid>
                             <TextBlock
                                 Margin="0,4,0,0"
-                                Style="{DynamicResource BasicTextBlock}"
                                 Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
@@ -323,7 +292,6 @@
                             </DataGrid>
                             <TextBlock
                                 Margin="0,4,0,0"
-                                Style="{DynamicResource BasicTextBlock}"
                                 Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
@@ -355,12 +323,11 @@
                             <TextBlock
                                 Margin="0,4,0,0"
                                 VerticalAlignment="Top"
-                                Style="{DynamicResource BasicTextBlock}"
                                 Text="{Binding SelectedShip, Converter={StaticResource ShipCargoCapacityToStringConverter}}" />
                             <TextBlock Grid.Row="1" Text="{Binding SelectedInventory, Converter={StaticResource InventoryToStringConverter}}" />
                             <DockPanel Grid.Row="2">
                                 <TextBlock Text="Units to sell:" />
-                                <TextBox Text="{Binding CargoToSell}" />
+                                <controls:IntegerNumericTextbox Text="{Binding CargoToSell}" />
                             </DockPanel>
                         </Grid>
                     </Border>
@@ -373,7 +340,6 @@
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="{DynamicResource Level2FontSize}"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Available actions:" />
                 <Button
                     Command="{Binding PerformDockCommand}"

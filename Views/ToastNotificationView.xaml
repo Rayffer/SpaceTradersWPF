@@ -61,9 +61,10 @@
                 <TextBlock
                     Padding="5"
                     FontSize="{DynamicResource Level1FontSize}"
-                    Text="{Binding Header}">
+                    Text="{Binding Header}"
+                    TextWrapping="Wrap">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource BasicTextBlock}" TargetType="TextBlock">
+                        <Style TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                                     <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />
@@ -76,11 +77,15 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
-                <TextBlock Grid.Row="1" Text="{Binding Message}">
+                    </TextBlock.Style></TextBlock>
+                <TextBlock
+                    Grid.Row="1"
+                    Padding="5,0,5,5"
+                    Text="{Binding Message}"
+                    FontSize="{DynamicResource Level3FontSize}"
+                    TextWrapping="Wrap">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource BasicTextBlock}" TargetType="TextBlock">
+                        <Style TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                                     <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />
@@ -93,8 +98,7 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style>
-                </TextBlock>
+                    </TextBlock.Style></TextBlock>
             </Grid>
         </Border>
     </Grid>

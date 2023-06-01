@@ -76,7 +76,7 @@
                     FontSize="{DynamicResource Level1FontSize}"
                     Text="{Binding Header}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource BasicTextBlock}"  TargetType="TextBlock">
+                        <Style TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                                     <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />
@@ -92,7 +92,7 @@
                     </TextBlock.Style></TextBlock>
                 <TextBlock Grid.Row="1" Text="{Binding Message}">
                     <TextBlock.Style>
-                        <Style BasedOn="{StaticResource BasicTextBlock}" TargetType="TextBlock">
+                        <Style TargetType="TextBlock">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding NotificationType}" Value="{x:Static types:NotificationTypes.WarningFeedback}">
                                     <Setter Property="Foreground" Value="{DynamicResource TextFontComplementaryColorSolidColorBrush}" />

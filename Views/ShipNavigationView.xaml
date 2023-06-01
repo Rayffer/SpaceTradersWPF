@@ -51,14 +51,12 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Style="{DynamicResource BasicTextBlock}" Text="Ship:" />
+                <TextBlock Text="Ship:" />
                 <TextBlock
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding Ship.Symbol}" />
                 <TextBlock
                     Grid.Row="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Waypoint to navigate:" />
                 <ComboBox
                     Grid.Row="1"
@@ -79,12 +77,6 @@
                                 </TextBlock.Text></TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
-                    <!--<ComboBox.DisplayMemberPath>
-                        <MultiBinding StringFormat="{}{0} ({1})">
-                            <Binding Path="Waypoints.Symbol" />
-                            <Binding Path="Type" />
-                        </MultiBinding>
-                    </ComboBox.DisplayMemberPath>-->
                     <behavior:Interaction.Triggers>
                         <behavior:EventTrigger EventName="SelectionChanged">
                             <behavior:InvokeCommandAction Command="{Binding UpdateFuelCommand}" CommandParameter="{Binding SelectedWaypoint}" />
@@ -94,16 +86,13 @@
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="0"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Estimated fuel cost:" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="{Binding EstimatedFuelCost}" />
                 <TextBlock
                     Grid.Row="1"
-                    Style="{DynamicResource BasicTextBlock}"
                     Text="Waypoint to navigate:" />
                 <StackPanel Orientation="Horizontal"
                             Grid.Row="3"

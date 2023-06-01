@@ -2,10 +2,6 @@
     <Style TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
         <Setter Property="TextWrapping" Value="Wrap" />
-    </Style>
-    <Style x:Key="BasicTextBlock" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
-        <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Padding" Value="2" />
         <Setter Property="FontSize" Value="{DynamicResource Level3FontSize}" />
     </Style>
