@@ -28,6 +28,21 @@ internal class SystemInformationViewModel : BindableBase
     private DelegateCommand loadInformationCommand;
     private DelegateCommand<Waypoint> openWaypointInformationCommand;
     private Waypoint[] systemWaypoints;
+    private int pageNumber;
+    private int lastPageNumberLoaded;
+    private int maxPage;
+
+    public int PageNumber
+    {
+        get => this.pageNumber;
+        set => this.SetProperty(ref this.pageNumber, value);
+    }
+
+    public int MaxPage
+    {
+        get => this.maxPage;
+        set => this.SetProperty(ref this.maxPage, value);
+    }
 
     public IEnumerable<ApiSystem> Systems
     {
@@ -41,10 +56,13 @@ internal class SystemInformationViewModel : BindableBase
         set
         {
             this.SetProperty(ref this.selectedSystem, value);
-            this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Publish(new SystemWaypointInformationEventArgs
+            if (value is not null)
             {
-                SystemSymbol = value.Symbol
-            });
+                this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Publish(new SystemWaypointInformationEventArgs
+                {
+                    SystemSymbol = value.Symbol
+                });
+            }
         }
     }
 
@@ -67,6 +85,9 @@ internal class SystemInformationViewModel : BindableBase
         this.spaceTradersApi = spaceTradersApi;
         this.eventAggregator.GetEvent<SystemInformationEvent>().Subscribe(async (arguments) => await this.GetSystemInformation(arguments));
         this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Subscribe(async (arguments) => await this.GetSystemWaypointsInformation(arguments));
+
+        this.PageNumber = 1;
+        this.MaxPage = 8999 / 20;
     }
 
     ~SystemInformationViewModel()
@@ -87,7 +108,15 @@ internal class SystemInformationViewModel : BindableBase
 
     private async Task LoadInformation()
     {
-        this.Systems = await this.spaceTradersApi.GetSystems(1, 20);
+        if (this.PageNumber == this.lastPageNumberLoaded)
+        {
+            return;
+        }
+        this.Systems = await this.spaceTradersApi.GetSystems(this.PageNumber, 20);
+        this.SystemWaypoints = Enumerable.Empty<Waypoint>().ToArray();
+        this.SelectedSystem = this.Systems.First();
+
+        this.lastPageNumberLoaded = this.PageNumber;
     }
 
     private void OpenWaypointInformationDetail(Waypoint waypoint)

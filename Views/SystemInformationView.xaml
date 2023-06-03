@@ -56,32 +56,71 @@
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             Visibility="{Binding Systems, Converter={StaticResource ObjectIsNullVisibilityConverter}, FallbackValue={x:Static Visibility.Collapsed}}" />
-        <DataGrid
-            Grid.Row="1"
-            Margin="5,0"
-            AutoGenerateColumns="False"
-            ItemsSource="{Binding Systems}"
-            SelectedIndex="0"
-            SelectedItem="{Binding SelectedSystem}">
-            <DataGrid.Columns>
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding SectorSymbol}"
-                    Header="Sector Symbol" />
-                <DataGridTextColumn
-                    Width="*"
-                    Binding="{Binding Symbol}"
-                    Header="Symbol" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Type}"
-                    Header="Type" />
-                <DataGridTextColumn
-                    Width="Auto"
-                    Binding="{Binding Factions, Converter={StaticResource SystemFactionCollectionToStringConverter}}"
-                    Header="Factions" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <Grid Grid.Row="1" Margin="5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <DataGrid
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding Systems}"
+                SelectedIndex="0"
+                SelectedItem="{Binding SelectedSystem}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding SectorSymbol}"
+                        Header="Sector Symbol" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Symbol}"
+                        Header="Symbol" />
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding Type}"
+                        Header="Type" />
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding Factions, Converter={StaticResource SystemFactionCollectionToStringConverter}}"
+                        Header="Factions" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Button Content="First" />
+                <Button Grid.Column="1" Content="Previous" />
+                <controls:IntegerNumericTextbox Grid.Column="2" NumericValue="{Binding PageNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <controls:IntegerNumericTextbox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding LoadInformationCommand}" />
+                    </controls:IntegerNumericTextbox.InputBindings>
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="LostFocus">
+                            <behaviors:InvokeCommandAction Command="{Binding LoadInformationCommand}" />
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </controls:IntegerNumericTextbox>
+                <TextBlock
+                    Grid.Column="3"
+                    Style="{DynamicResource RegularTextBlockCenterAligned}"
+                    Text="/" />
+                <TextBlock
+                    Grid.Column="4"
+                    Style="{DynamicResource RegularTextBlockCenterAligned}"
+                    Text="{Binding MaxPage}" />
+                <Button Grid.Column="5" Content="Go to" />
+                <Button Grid.Column="6" Content="Next" />
+                <Button Grid.Column="7" Content="Last" />
+            </Grid>
+        </Grid>
         <Grid
             Grid.Row="1"
             Grid.Column="1"
@@ -90,7 +129,6 @@
             <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Style="{DynamicResource BasicTextBlock}"
                 Text="No System Selected"
                 Visibility="{Binding SelectedSystem, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
             <Grid Visibility="{Binding SelectedSystem, Converter={StaticResource ObjectIsNotNullVisibilityConverter}}">
@@ -175,9 +213,9 @@
                         <ItemsControl.ItemTemplate>
                             <ItemContainerTemplate DataType="apiModels:Waypoint">
                                 <Border
-                                    Cursor="Hand"
                                     MinWidth="130"
                                     Margin="5,10"
+                                    Cursor="Hand"
                                     MouseUp="Border_MouseUp"
                                     Style="{DynamicResource BorderBackgroundLight}">
                                     <Grid Margin="5,2">
