@@ -38,6 +38,7 @@ internal class AgentGreetingViewModel : BindableBase
     {
         await Task.Delay(500);
         this.CurrentAgent = await this.spaceTradersApi.GetAgent();
+        ApplicationInformation.CurrentAgentSymbol = this.currentAgent.Symbol;
 
         await Task.Delay(3000);
         this.regionManager.Regions[RegionNames.SplashScreenRegion].RemoveAll();
