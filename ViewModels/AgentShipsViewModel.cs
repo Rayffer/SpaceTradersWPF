@@ -73,7 +73,15 @@ internal class AgentShipsViewModel : BindableBase
     public Inventory SelectedInventory
     {
         get => this.selectedInventory;
-        set => this.SetProperty(ref this.selectedInventory, value);
+        set
+        {
+            this.SetProperty(ref this.selectedInventory, value);
+            if (value is not null && this.SelectedShip.NavigationInformation.Status == "DOCKED")
+            {
+                this.CargoToSell = value.Units.ToString();
+                this.RaisePropertyChanged(nameof(this.CargoToSell));
+            }
+        }
     }
 
     public ICommand LoadShipsCommand => this.loadShipsCommand ??= new DelegateCommand(async () => await this.LoadShips());
@@ -194,6 +202,10 @@ internal class AgentShipsViewModel : BindableBase
     private async Task PerformDock(Ship ship)
     {
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
+        if (this.SelectedInventory is null)
+        {
+            this.CargoToSell = string.Empty;
+        }
         await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} docked succesfully",
