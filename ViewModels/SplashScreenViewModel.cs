@@ -45,7 +45,7 @@ internal class SplashScreenViewModel : BindableBase
                     })
                 },
             };
-            this.regionManager.RequestNavigate(RegionNames.SplashScreenRegion, "YesNoDialogView", navigationParameters);
+            this.regionManager.RequestNavigate(RegionNames.SplashScreenRegion, nameof(YesNoDialogView), navigationParameters);
 
             return;
         }
