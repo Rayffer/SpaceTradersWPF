@@ -65,7 +65,8 @@
             AutoGenerateColumns="False"
             ItemsSource="{Binding Ships}"
             SelectedIndex="0"
-            SelectedItem="{Binding SelectedShip, Mode=TwoWay}">
+            SelectedItem="{Binding SelectedShip, Mode=TwoWay}"
+            SelectionMode="Single">
             <DataGrid.Columns>
                 <DataGridTextColumn
                     Width="*"
@@ -254,7 +255,8 @@
                                 Margin="0,5"
                                 AutoGenerateColumns="False"
                                 HorizontalScrollBarVisibility="Disabled"
-                                ItemsSource="{Binding SelectedShip.Modules}">
+                                ItemsSource="{Binding SelectedShip.Modules}"
+                                SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="*" Binding="{Binding Name}" />
                                     <DataGridTextColumn
@@ -278,7 +280,8 @@
                                 Margin="0,5"
                                 AutoGenerateColumns="False"
                                 HorizontalScrollBarVisibility="Disabled"
-                                ItemsSource="{Binding SelectedShip.Mounts}">
+                                ItemsSource="{Binding SelectedShip.Mounts}"
+                                SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
                                         Width="*"
@@ -308,7 +311,8 @@
                                 AutoGenerateColumns="False"
                                 HorizontalScrollBarVisibility="Disabled"
                                 ItemsSource="{Binding SelectedShip.Cargo.Inventory}"
-                                SelectedItem="{Binding SelectedInventory}">
+                                SelectedItem="{Binding SelectedInventory}"
+                                SelectionMode="Single">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn
                                         Width="*"
