@@ -53,14 +53,6 @@ internal class AgentShipsViewModel : BindableBase
         set
         {
             this.SetProperty(ref this.selectedShip, value);
-            this.RaisePropertyChanged(nameof(CanDock));
-            this.RaisePropertyChanged(nameof(CanExtract));
-            this.RaisePropertyChanged(nameof(CanNavigate));
-            this.RaisePropertyChanged(nameof(CanOrbit));
-            this.RaisePropertyChanged(nameof(CanRefuel));
-            this.RaisePropertyChanged(nameof(CanSell));
-            this.RaisePropertyChanged(nameof(CanSurvey));
-            this.RaisePropertyChanged(nameof(CanWarp));
         }
     }
 
