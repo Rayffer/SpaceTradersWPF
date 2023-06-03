@@ -11,6 +11,10 @@ internal class InventoryToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        if (value is null)
+        {
+            return "No cargo selected";
+        }
         if (value is not Inventory inventory)
         {
             return "";
