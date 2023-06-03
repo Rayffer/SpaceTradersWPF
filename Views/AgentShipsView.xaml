@@ -23,6 +23,7 @@
         <converters:ShipMountsCapacityToStringConverter x:Key="ShipMountsCapacityToStringConverter" />
         <converters:ShipCargoCapacityToStringConverter x:Key="ShipCargoCapacityToStringConverter" />
         <converters:InventoryToStringConverter x:Key="InventoryToStringConverter" />
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -113,9 +114,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    Grid.Row="1"
-                    Text="Ship Symbol:" />
+                <TextBlock Grid.Row="1" Text="Ship Symbol:" />
                 <TextBlock
                     Grid.Row="1"
                     Grid.Column="1"
@@ -128,9 +127,7 @@
                     Grid.Row="1"
                     Grid.Column="3"
                     Text="{Binding SelectedShip.Registration.Role}" />
-                <TextBlock
-                    Grid.Row="2"
-                    Text="Faction:" />
+                <TextBlock Grid.Row="2" Text="Faction:" />
                 <TextBlock
                     Grid.Row="2"
                     Grid.Column="1"
@@ -145,9 +142,7 @@
                     Cursor="Help"
                     Text="{Binding SelectedShip.Frame.Name}"
                     ToolTip="{Binding SelectedShip.Frame.Description}" />
-                <TextBlock
-                    Grid.Row="3"
-                    Text="Fuel:" />
+                <TextBlock Grid.Row="3" Text="Fuel:" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="1"
@@ -160,9 +155,7 @@
                     Grid.Row="3"
                     Grid.Column="3"
                     Text="{Binding SelectedShip.Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
-                <TextBlock
-                    Grid.Row="4"
-                    Text="Crew Rotation:" />
+                <TextBlock Grid.Row="4" Text="Crew Rotation:" />
                 <TextBlock
                     Grid.Row="4"
                     Grid.Column="1"
@@ -269,9 +262,7 @@
                                         Header="Range" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <TextBlock
-                                Margin="0,4,0,0"
-                                Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
+                            <TextBlock Margin="0,4,0,0" Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
                     <Border Grid.Column="1" Style="{DynamicResource AccentBorder}">
@@ -293,9 +284,7 @@
                                         Header="Strength" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <TextBlock
-                                Margin="0,4,0,0"
-                                Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
+                            <TextBlock Margin="0,4,0,0" Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
                     <Border Grid.Column="2" Style="{DynamicResource AccentBorder}">
@@ -329,63 +318,78 @@
                                 VerticalAlignment="Top"
                                 Text="{Binding SelectedShip, Converter={StaticResource ShipCargoCapacityToStringConverter}}" />
                             <TextBlock Grid.Row="1" Text="{Binding SelectedInventory, Converter={StaticResource InventoryToStringConverter}}" />
-                            <DockPanel Grid.Row="2">
-                                <TextBlock Text="Units to sell:" />
+                            <DockPanel Grid.Row="2" Visibility="{Binding IsEnabled, ElementName=SellCargoButton, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <TextBlock Style="{DynamicResource RegularTextBlockCenterAligned}" Text="Units to sell:" />
                                 <controls:IntegerNumericTextbox Text="{Binding CargoToSell}" />
                             </DockPanel>
                         </Grid>
                     </Border>
                 </Grid>
             </Grid>
-            <StackPanel
-                Grid.Row="1"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="{DynamicResource Level2FontSize}"
                     Text="Available actions:" />
-                <Button
-                    Command="{Binding PerformDockCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Dock"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformOrbitCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Orbit"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformRefuelCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Refuel"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformExtractionCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Extract"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformWarpCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Warp"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformSurveyCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Survey"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformNavigateCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Navigate"
-                    FontSize="{DynamicResource Level5FontSize}" />
-                <Button
-                    Command="{Binding PerformInventorySellCommand}"
-                    CommandParameter="{Binding SelectedShip}"
-                    Content="Sell cargo"
-                    FontSize="{DynamicResource Level5FontSize}" />
-            </StackPanel>
+                <WrapPanel
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Button
+                        Command="{Binding PerformDockCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Dock"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformOrbitCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Orbit"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformRefuelCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Refuel"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformExtractionCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Extract"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformWarpCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Warp"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformSurveyCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Survey"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding PerformNavigateCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Navigate"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        x:Name="SellCargoButton"
+                        Command="{Binding PerformInventorySellCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Sell cargo"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </WrapPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
