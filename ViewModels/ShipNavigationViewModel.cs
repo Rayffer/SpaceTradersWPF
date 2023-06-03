@@ -23,6 +23,7 @@ internal class ShipNavigationViewModel : BindableBase
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly IRegionManager regionManager;
     private readonly IEventAggregator eventAggregator;
+    private readonly INotificationService notificationService;
     private readonly SubscriptionToken subscriptionToken;
     private Waypoint selectedWaypoint;
     private Ship ship;
@@ -67,14 +68,16 @@ internal class ShipNavigationViewModel : BindableBase
         set => this.SetProperty(ref this.closeRequested, value);
     }
 
-    public ShipNavigationViewModel(ISpaceTradersApi spaceTradersApi,
+    public ShipNavigationViewModel(
+        ISpaceTradersApi spaceTradersApi,
         IRegionManager regionManager,
-        IEventAggregator eventAggregator)
+        IEventAggregator eventAggregator,
+        INotificationService notificationService)
     {
         this.spaceTradersApi = spaceTradersApi;
         this.regionManager = regionManager;
         this.eventAggregator = eventAggregator;
-
+        this.notificationService = notificationService;
         this.subscriptionToken = this.eventAggregator
             .GetEvent<ShipNavigationRequestEvent>()
             .Subscribe(async eventInformation => await this.LoadInformation(eventInformation));
@@ -116,11 +119,17 @@ internal class ShipNavigationViewModel : BindableBase
 
     private async Task PerformNavigation()
     {
-        await this.spaceTradersApi.PostShipNavigate(this.Ship.Symbol, this.SelectedWaypoint.Symbol);
+        var navigationResponse = await this.spaceTradersApi.PostShipNavigate(this.Ship.Symbol, this.SelectedWaypoint.Symbol);
         this.eventAggregator.GetEvent<ShipInformationEvent>().Publish(new ShipInformationEventArguments
         {
             Ship = this.Ship
         });
+
+        this.notificationService
+            .ShowFlyoutNotification(
+                $"Ship enroute to {this.SelectedWaypoint.Symbol}",
+                $"Estimated arrival at: {navigationResponse.NavigationInformation.Route.Arrival}",
+                Types.NotificationTypes.PositiveFeedback);
 
         this.RemoveView();
     }
