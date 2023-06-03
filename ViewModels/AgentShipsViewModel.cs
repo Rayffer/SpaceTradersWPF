@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -37,7 +36,7 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<Ship> performDockCommand;
     private DelegateCommand<Ship> performNavigateCommand;
     private DelegateCommand<Ship> performRefuelCommand;
-    private DelegateCommand<Ship> performInventorySellCommand;
+    private DelegateCommand<object[]> performInventorySellCommand;
     private bool alreadyLoaded;
     private string cargoToSell;
 
@@ -73,6 +72,7 @@ internal class AgentShipsViewModel : BindableBase
                 this.CargoToSell = value.Units.ToString();
                 this.RaisePropertyChanged(nameof(this.CargoToSell));
             }
+            this.performInventorySellCommand.RaiseCanExecuteChanged();
         }
     }
 
@@ -84,7 +84,7 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => this.CanDock(ship));
     public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), ship => this.CanNavigate(ship));
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => this.CanRefuel(ship));
-    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformInventorySell(ship), ship => this.CanSell(ship));
+    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), parameters => this.CanSell(parameters));
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -237,20 +237,24 @@ internal class AgentShipsViewModel : BindableBase
         }
     }
 
-    private async Task PerformInventorySell(Ship ship)
+    private async Task PerformInventorySell(object[] commandParameters)
     {
-        var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
+        if (commandParameters.Length == 2 &&
+            commandParameters[0] is Ship ship)
         {
-            Symbol = this.SelectedInventory.Symbol,
-            Units = int.Parse(this.CargoToSell)
-        });
+            var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
+            {
+                Symbol = this.SelectedInventory.Symbol,
+                Units = int.Parse(this.CargoToSell)
+            });
 
-        this.notificationService.ShowToastNotification(
-            $"Ship {ship.Symbol} sold cargo",
-            $"Sold {this.CargoToSell} units of {this.SelectedInventory.Name}, current credits {sellCargoResponse.Agent.Credits}",
-            NotificationTypes.PositiveFeedback);
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} sold cargo",
+                $"Sold {this.CargoToSell} units of {this.SelectedInventory.Name}, current credits {sellCargoResponse.Agent.Credits}",
+                NotificationTypes.PositiveFeedback);
 
-        await this.RefreshShips(this.SelectedShip);
+            await this.RefreshShips(this.SelectedShip);
+        }
     }
 
     private bool CanExtract(Ship ship)
@@ -297,9 +301,13 @@ internal class AgentShipsViewModel : BindableBase
                && ship.NavigationInformation.Status == "DOCKED";
     }
 
-    private bool CanSell(Ship ship)
+    private bool CanSell(object[] commandParameters)
     {
-        return ship != null
-               && ship.NavigationInformation.Status == "DOCKED";
+        return commandParameters != null
+            && commandParameters.Length == 2
+            && commandParameters[0] is Ship ship
+            && ship.NavigationInformation.Status == "DOCKED"
+            && commandParameters[1] is Inventory inventory
+            && inventory is not null;
     }
 }

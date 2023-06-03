@@ -23,6 +23,7 @@
         <converters:ShipMountsCapacityToStringConverter x:Key="ShipMountsCapacityToStringConverter" />
         <converters:ShipCargoCapacityToStringConverter x:Key="ShipCargoCapacityToStringConverter" />
         <converters:InventoryToStringConverter x:Key="InventoryToStringConverter" />
+        <converters:BindingsToJointListMultiConverter x:Key="BindingsToJointListMultiConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
@@ -262,7 +263,10 @@
                                         Header="Range" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <TextBlock Margin="0,4,0,0" Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                VerticalAlignment="Top"
+                                Text="{Binding SelectedShip, Converter={StaticResource ShipModuleCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
                     <Border Grid.Column="1" Style="{DynamicResource AccentBorder}">
@@ -284,7 +288,10 @@
                                         Header="Strength" />
                                 </DataGrid.Columns>
                             </DataGrid>
-                            <TextBlock Margin="0,4,0,0" Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                VerticalAlignment="Top"
+                                Text="{Binding SelectedShip, Converter={StaticResource ShipMountsCapacityToStringConverter}}" />
                         </Grid>
                     </Border>
                     <Border Grid.Column="2" Style="{DynamicResource AccentBorder}">
@@ -384,10 +391,16 @@
                     <Button
                         x:Name="SellCargoButton"
                         Command="{Binding PerformInventorySellCommand}"
-                        CommandParameter="{Binding SelectedShip}"
                         Content="Sell cargo"
                         FontSize="{DynamicResource Level5FontSize}"
-                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource BindingsToJointListMultiConverter}">
+                                <Binding Path="SelectedShip" />
+                                <Binding Path="SelectedInventory" />
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
                 </WrapPanel>
             </Grid>
         </Grid>
