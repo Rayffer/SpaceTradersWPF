@@ -25,10 +25,21 @@ internal class NotificationService : INotificationService
 
     public void ShowFlyoutNotification(string headerMessage, string bodyMessage, NotificationTypes notificationType, bool clearOtherNotifications = false)
     {
-        throw new NotImplementedException();
+        if (clearOtherNotifications)
+        {
+            this.regionManager.Regions[RegionNames.FlyoutNotificationArea].RemoveAll();
+        }
+
+        this.regionManager.RegisterViewWithRegion(RegionNames.FlyoutNotificationArea, typeof(FlyoutNotificationView));
+        this.eventAggregator.GetEvent<NotificationEvent>().Publish(new NotificationEventArguments
+        {
+            ToastNotificationHeader = headerMessage,
+            ToastNotificationMessage = bodyMessage,
+            ToastNotificationTypes = notificationType
+        });
     }
 
-    public void ShowToastNotification(string headerMessage, string bodyMessage, NotificationTypes notificationType, bool clearOtherNotifications = false)
+    public void ShowToastNotification(string headerMessage, string bodyMessage, NotificationTypes notificationType, bool clearOtherNotifications = true)
     {
         if (clearOtherNotifications)
         {
