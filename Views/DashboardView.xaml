@@ -137,6 +137,7 @@
                     Text="{Binding Headquarters.Chart.SubmittedOn, FallbackValue='N/A'}" />
                 <TextBlock
                     Grid.Row="9"
+                    VerticalAlignment="Top"
                     FontSize="{DynamicResource Level1FontSize}"
                     Text="Traits:" />
                 <ItemsControl
