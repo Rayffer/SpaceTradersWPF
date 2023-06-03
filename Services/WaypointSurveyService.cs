@@ -10,18 +10,19 @@ namespace SpaceTradersWPF.Services;
 
 internal class WaypointSurveyService : IWaypointSurveyService
 {
-    private readonly IInformationRepository<Survey> informationRepository;
+    private IInformationRepository<Survey> informationRepository;
     private readonly CancellationTokenSource cancellationTokenSource;
     private bool finishTask;
 
     public WaypointSurveyService(
-        IInformationRepository<Survey> informationRepository)
+        Lazy<IInformationRepository<Survey>> informationRepository)
     {
         this.informationRepository = informationRepository;
         this.cancellationTokenSource = new CancellationTokenSource();
         Task.Run(async () =>
         {
             await Task.Delay(TimeSpan.FromSeconds(3));
+            this.informationRepository = informationRepository.Value;
             while (true)
             {
                 if (this.finishTask)
