@@ -191,7 +191,10 @@
                                     <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
                                 </EventTrigger>
                             </DataTemplate.Triggers>
-                            <Border Cursor="Hand" Style="{DynamicResource BorderBackgroundLight}" MouseUp="Border_MouseUp">
+                            <Border
+                                Cursor="Hand"
+                                MouseUp="Border_MouseUp"
+                                Style="{DynamicResource BorderBackgroundLight}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
@@ -206,9 +209,15 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Column="0" Text="Ship:" />
-                                    <TextBlock Grid.Column="1" Text="{Binding Symbol}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Style="{DynamicResource DetailTextBlock}"
+                                        Text="{Binding Symbol}" />
                                     <TextBlock Grid.Column="2" Text="Ship Frame:" />
-                                    <TextBlock Grid.Column="3" Text="{Binding Frame.Name}" />
+                                    <TextBlock
+                                        Grid.Column="3"
+                                        Style="{DynamicResource DetailTextBlock}"
+                                        Text="{Binding Frame.Name}" />
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="0"
@@ -216,6 +225,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="1"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding Fuel, Converter={StaticResource FuelToStringConverter}}" />
                                     <TextBlock
                                         Grid.Row="1"
@@ -224,6 +234,7 @@
                                     <TextBlock
                                         Grid.Row="1"
                                         Grid.Column="3"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding Frame.Condition}" />
                                     <TextBlock
                                         Grid.Row="2"
@@ -232,6 +243,7 @@
                                     <TextBlock
                                         Grid.Row="2"
                                         Grid.Column="1"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding NavigationInformation.Status}" />
                                     <TextBlock
                                         Grid.Row="2"
@@ -240,6 +252,7 @@
                                     <TextBlock
                                         Grid.Row="2"
                                         Grid.Column="3"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding NavigationInformation.FlightMode, Converter={StaticResource ApiFlightModeToStringConverter}}" />
                                     <TextBlock
                                         Grid.Row="3"
@@ -248,6 +261,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="1"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
                                     <TextBlock
                                         Grid.Row="3"
@@ -256,6 +270,7 @@
                                     <TextBlock
                                         Grid.Row="3"
                                         Grid.Column="3"
+                                        Style="{DynamicResource DetailTextBlock}"
                                         Text="{Binding Crew.Wages}" />
                                 </Grid>
                             </Border>
