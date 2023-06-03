@@ -12,7 +12,7 @@ internal class JsonFileRepository<TypeToStore> : IInformationRepository<TypeToSt
 
     public JsonFileRepository()
     {
-        var directoryPath = Path.Join("Repositories");
+        var directoryPath = Path.Join("Agents", ApplicationInformation.CurrentAgentSymbol, "Repositories");
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);
@@ -30,39 +30,20 @@ internal class JsonFileRepository<TypeToStore> : IInformationRepository<TypeToSt
 
     public void SaveInformation(params TypeToStore[] elements)
     {
-        TextWriter writer = null;
-        try
+        if (elements is not null)
         {
-            if (elements is not null)
+            foreach (var element in elements)
             {
-                foreach (var element in elements)
-                {
-                    this.Store.Add(element);
-                }
+                this.Store.Add(element);
             }
-            var contentsToWriteToFile = JsonConvert.SerializeObject(this.Store, Formatting.Indented);
-            writer = new StreamWriter(this.jsonFilePath, false);
-            writer.Write(contentsToWriteToFile);
         }
-        finally
-        {
-            writer?.Close();
-        }
+        var contentsToWriteToFile = JsonConvert.SerializeObject(this.Store, Formatting.Indented);
+        File.WriteAllText(this.jsonFilePath, contentsToWriteToFile);
     }
 
     private IList<TypeToStore> ReadFromFile()
     {
-        TextReader reader = null;
-        try
-        {
-            reader = new StreamReader(this.jsonFilePath);
-            var fileContents = reader.ReadToEnd();
-            return JsonConvert.DeserializeObject<IList<TypeToStore>>(fileContents, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
-        }
-        finally
-        {
-            if (reader != null)
-                reader.Close();
-        }
+        var content = File.ReadAllText(this.jsonFilePath);
+        return JsonConvert.DeserializeObject<IList<TypeToStore>>(content, new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore });
     }
 }
