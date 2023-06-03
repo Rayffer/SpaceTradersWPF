@@ -235,11 +235,18 @@ internal class AgentShipsViewModel : BindableBase
 
     private async Task PerformInventorySell(Ship ship)
     {
-        await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
+        var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
         {
             Symbol = this.SelectedInventory.Symbol,
             Units = int.Parse(this.CargoToSell)
         });
+
+        this.notificationService.ShowToastNotification(
+            $"Ship {ship.Symbol} sold cargo",
+            $"Sold {this.CargoToSell} units of {this.SelectedInventory.Name}, current credits {sellCargoResponse.Agent.Credits}",
+            NotificationTypes.PositiveFeedback);
+
+        await this.RefreshShips(this.SelectedShip);
     }
 
     private bool CanExtract(Ship ship)
