@@ -7,4 +7,6 @@ internal interface IWaypointSurveyService
     Survey GetSurvey(string waypointSymbol);
 
     void SaveSurveyDetails(params Survey[] surveyInformation);
+
+    void RemoveSurvey(Survey surveyToRemove);
 }

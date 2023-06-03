@@ -17,7 +17,6 @@ internal class WaypointSurveyService : IWaypointSurveyService
     public WaypointSurveyService(
         Lazy<IInformationRepository<Survey>> informationRepository)
     {
-        this.informationRepository = informationRepository;
         this.cancellationTokenSource = new CancellationTokenSource();
         Task.Run(async () =>
         {
@@ -44,6 +43,12 @@ internal class WaypointSurveyService : IWaypointSurveyService
     public Survey GetSurvey(string waypointSymbol)
     {
         return this.informationRepository.Store.Where(x => x.Symbol == waypointSymbol).LastOrDefault();
+    }
+
+    public void RemoveSurvey(Survey surveyToRemove)
+    {
+        this.informationRepository.Store.Remove(surveyToRemove);
+        this.informationRepository.SaveInformation();
     }
 
     public void SaveSurveyDetails(params Survey[] surveyInformations)

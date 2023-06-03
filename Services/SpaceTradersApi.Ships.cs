@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using RestSharp;
 
 using SpaceTradersWPF.ApiModels;
+using SpaceTradersWPF.ApiModels.ErrorCodes;
 using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.ApiModels.Responses;
 using SpaceTradersWPF.Extensions;
@@ -165,8 +166,17 @@ internal partial class SpaceTradersApi
             });
         }
 
-        var response = await this.restClient.ExecuteAsync(request);
-        return JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(response.Content).Data;
+        var apiResponse = await this.restClient.ExecuteAsync(request);
+        var response = JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(apiResponse.Content);
+        if (response.Error is not null &&
+            response.Error.Code == ShipErrorCodes.shipSurveyExhaustedError)
+        {
+            this.waypointSurveyService.RemoveSurvey(survey);
+            request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
+            apiResponse = await this.restClient.ExecuteAsync(request);
+            response = JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(apiResponse.Content);
+        }
+        return response.Data;
     }
 
     public async Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol)
