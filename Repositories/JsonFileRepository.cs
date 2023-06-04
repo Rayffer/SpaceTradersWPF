@@ -21,7 +21,7 @@ internal class JsonFileRepository<TypeToStore> : IInformationRepository<TypeToSt
         this.jsonFilePath = Path.Join(directoryPath, $"{genericName}.json");
         if (!File.Exists(this.jsonFilePath))
         {
-            File.WriteAllText(this.jsonFilePath, "");
+            File.WriteAllText(this.jsonFilePath, JsonConvert.SerializeObject(this.Store));
             this.SaveInformation();
         }
 
