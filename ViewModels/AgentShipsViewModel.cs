@@ -291,7 +291,7 @@ internal class AgentShipsViewModel : BindableBase
                 if (shipCargo >= ship.Cargo.Capacity * 0.75)
                 {
                     ship = await this.spaceTradersApi.GetShip(ship.Symbol);
-                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" || cargo.Symbol == "ALUMINUM_ORE").Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
+                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" /*|| cargo.Symbol == "ALUMINUM_ORE"*/).Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
                     {
                         cancellationToken.Cancel(false);
                         Application.Current.Dispatcher.Invoke(() =>
@@ -309,7 +309,7 @@ internal class AgentShipsViewModel : BindableBase
                         await Task.Delay(TimeSpan.FromSeconds(1));
                     }
                     var creditsAfterTransaction = 0;
-                    var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" && cargo.Symbol != "ALUMINUM_ORE");
+                    var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" /*&& cargo.Symbol != "ALUMINUM_ORE"*/);
                     foreach (var cargo in cargoToSell)
                     {
                         var transaction = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest { Symbol = cargo.Symbol, Units = cargo.Units });
@@ -341,21 +341,21 @@ internal class AgentShipsViewModel : BindableBase
                 {
                     await Task.Delay(TimeSpan.FromSeconds((cooldown.Expiration - DateTime.UtcNow).TotalSeconds + 1));
                 }
-                if (this.SelectedShip.Mounts.Any(mount => mount.Symbol.StartsWith("MOUNT_SURVEYOR_")) &&
-                    this.waypointSurveyService.GetSurvey(ship.NavigationInformation.WaypointSymbol) is null)
-                {
-                    var survey = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
-                    this.waypointSurveyService.SaveSurveyDetails(survey.Surveys);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        this.notificationService.ShowFlyoutNotification(
-                            $"Ship {ship.Symbol} surveyed waypoint {ship.NavigationInformation.WaypointSymbol}",
-                            $"Found fields: {string.Join(", ", survey.Surveys.SelectMany(survey => survey.Deposits.Select(deposit => deposit.Symbol)))}",
-                            NotificationTypes.PositiveFeedback,
-                            true);
-                    });
-                    await Task.Delay(TimeSpan.FromSeconds(survey.Cooldown.RemainingSeconds));
-                }
+                //if (this.SelectedShip.Mounts.Any(mount => mount.Symbol.StartsWith("MOUNT_SURVEYOR_")) &&
+                //    this.waypointSurveyService.GetSurvey(ship.NavigationInformation.WaypointSymbol) is null)
+                //{
+                //    var survey = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
+                //    this.waypointSurveyService.SaveSurveyDetails(survey.Surveys);
+                //    Application.Current.Dispatcher.Invoke(() =>
+                //    {
+                //        this.notificationService.ShowFlyoutNotification(
+                //            $"Ship {ship.Symbol} surveyed waypoint {ship.NavigationInformation.WaypointSymbol}",
+                //            $"Found fields: {string.Join(", ", survey.Surveys.SelectMany(survey => survey.Deposits.Select(deposit => deposit.Symbol)))}",
+                //            NotificationTypes.PositiveFeedback,
+                //            true);
+                //    });
+                //    await Task.Delay(TimeSpan.FromSeconds(survey.Cooldown.RemainingSeconds));
+                //}
                 var extractionResponse = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol, ship.NavigationInformation.WaypointSymbol);
                 if (extractionResponse is not null)
                 {
