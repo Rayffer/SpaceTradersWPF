@@ -92,7 +92,8 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenSystemInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers></TextBlock>
+                    </behaviors:Interaction.Triggers>
+                </TextBlock>
                 <TextBlock
                     Grid.Row="5"
                     FontSize="{DynamicResource Level1FontSize}"
@@ -107,7 +108,8 @@
                         <behaviors:EventTrigger EventName="MouseLeftButtonUp">
                             <behaviors:InvokeCommandAction Command="{Binding OpenWaypointInformation}" />
                         </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers></TextBlock>
+                    </behaviors:Interaction.Triggers>
+                </TextBlock>
                 <TextBlock
                     Grid.Row="6"
                     FontSize="{DynamicResource Level1FontSize}"
@@ -176,108 +178,108 @@
                     FontSize="{DynamicResource Level0FontSize}"
                     Text="Ships" />
                 <controls:LoadingSpinner Grid.Row="1" Visibility="{Binding Ships, Converter={StaticResource ObjectIsNullVisibilityConverter}}" />
-                <ItemsControl
-                    Grid.Row="1"
-                    ItemsSource="{Binding Ships}"
-                    ScrollViewer.VerticalScrollBarVisibility="Auto">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="models:Ship">
-                            <DataTemplate.Triggers>
-                                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                                    <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
-                                </EventTrigger>
-                            </DataTemplate.Triggers>
-                            <Border
-                                Cursor="Hand"
-                                MouseUp="Border_MouseUp"
-                                Style="{DynamicResource BorderBackgroundLight}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Column="0" Text="Ship:" />
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Symbol}" />
-                                    <TextBlock Grid.Column="2" Text="Ship Frame:" />
-                                    <TextBlock
-                                        Grid.Column="3"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Frame.Name}" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Text="Fuel:" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Fuel, Converter={StaticResource FuelToStringConverter}}" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="2"
-                                        Text="Condition:" />
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        Grid.Column="3"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Frame.Condition}" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="0"
-                                        Text="Current Nav Status:" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="1"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding NavigationInformation.Status}" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="2"
-                                        Text="Current Flight Mode:" />
-                                    <TextBlock
-                                        Grid.Row="2"
-                                        Grid.Column="3"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding NavigationInformation.FlightMode, Converter={StaticResource ApiFlightModeToStringConverter}}" />
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="0"
-                                        Text="Crew:" />
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="1"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="2"
-                                        Text="Crew Wages:" />
-                                    <TextBlock
-                                        Grid.Row="3"
-                                        Grid.Column="3"
-                                        Style="{DynamicResource DetailTextBlock}"
-                                        Text="{Binding Crew.Wages}" />
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                <ScrollViewer Grid.Row="1">
+
+                    <ItemsControl ItemsSource="{Binding Ships}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="models:Ship">
+                                <DataTemplate.Triggers>
+                                    <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                                        <BeginStoryboard Storyboard="{StaticResource FadeInAnimation}" />
+                                    </EventTrigger>
+                                </DataTemplate.Triggers>
+                                <Border
+                                    Cursor="Hand"
+                                    MouseUp="Border_MouseUp"
+                                    Style="{DynamicResource BorderBackgroundLight}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.Column="0" Text="Ship:" />
+                                        <TextBlock
+                                            Grid.Column="1"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Symbol}" />
+                                        <TextBlock Grid.Column="2" Text="Ship Frame:" />
+                                        <TextBlock
+                                            Grid.Column="3"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Frame.Name}" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Text="Fuel:" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Fuel, Converter={StaticResource FuelToStringConverter}}" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Text="Condition:" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Grid.Column="3"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Frame.Condition}" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="0"
+                                            Text="Nav Status:" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="1"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding NavigationInformation.Status}" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                            Text="Flight Mode:" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="3"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding NavigationInformation.FlightMode, Converter={StaticResource ApiFlightModeToStringConverter}}" />
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="0"
+                                            Text="Crew:" />
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="1"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Crew, Converter={StaticResource ShipCrewToStringConverter}}" />
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="2"
+                                            Text="Crew Wages:" />
+                                        <TextBlock
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            Style="{DynamicResource DetailTextBlock}"
+                                            Text="{Binding Crew.Wages}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
             </Grid>
         </Border>
     </Grid>
