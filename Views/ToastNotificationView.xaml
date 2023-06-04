@@ -17,7 +17,7 @@
     <UserControl.Resources>
         <Storyboard x:Key="ClearDataContextStoryboard">
             <DoubleAnimation
-                BeginTime="0:0:3"
+                BeginTime="0:0:8"
                 Completed="DoubleAnimation_Completed"
                 Storyboard.TargetProperty="Opacity"
                 From="1"
@@ -77,12 +77,13 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style></TextBlock>
+                    </TextBlock.Style>
+                </TextBlock>
                 <TextBlock
                     Grid.Row="1"
                     Padding="5,0,5,5"
-                    Text="{Binding Message}"
                     FontSize="{DynamicResource Level3FontSize}"
+                    Text="{Binding Message}"
                     TextWrapping="Wrap">
                     <TextBlock.Style>
                         <Style TargetType="TextBlock">
@@ -98,7 +99,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </TextBlock.Style></TextBlock>
+                    </TextBlock.Style>
+                </TextBlock>
             </Grid>
         </Border>
     </Grid>

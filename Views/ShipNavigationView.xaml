@@ -21,7 +21,6 @@
                 To="0"
                 Duration="0:0:1" />
         </Storyboard>
-        <converters:WaypointToComboboxItemStringConverter x:Key="WaypointToComboboxItemStringConverter" />
     </UserControl.Resources>
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.Triggers>
@@ -52,12 +51,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Ship:" />
-                <TextBlock
-                    Grid.Column="1"
-                    Text="{Binding Ship.Symbol}" />
-                <TextBlock
-                    Grid.Row="1"
-                    Text="Waypoint to navigate:" />
+                <TextBlock Grid.Column="1" Text="{Binding Ship.Symbol}" />
+                <TextBlock Grid.Row="1" Text="Waypoint to navigate:" />
                 <ComboBox
                     Grid.Row="1"
                     Grid.Column="1"
@@ -74,7 +69,8 @@
                                         <Binding Path="Symbol" />
                                         <Binding Path="Type" />
                                     </MultiBinding>
-                                </TextBlock.Text></TextBlock>
+                                </TextBlock.Text>
+                            </TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                     <behavior:Interaction.Triggers>
@@ -91,13 +87,12 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Text="{Binding EstimatedFuelCost}" />
-                <TextBlock
-                    Grid.Row="1"
-                    Text="Waypoint to navigate:" />
-                <StackPanel Orientation="Horizontal"
-                            Grid.Row="3"
-                            HorizontalAlignment="Center"
-                            Grid.ColumnSpan="2">
+                <TextBlock Grid.Row="1" Text="Waypoint to navigate:" />
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
                     <Button
                         Grid.Row="3"
                         Command="{Binding PerformNavigationCommand}"
