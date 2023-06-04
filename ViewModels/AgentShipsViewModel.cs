@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 using Prism.Commands;
 using Prism.Events;
@@ -10,6 +14,7 @@ using Prism.Regions;
 
 using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.ApiModels.Requests;
+using SpaceTradersWPF.ClassExtensions;
 using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
@@ -37,6 +42,11 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<Ship> performNavigateCommand;
     private DelegateCommand<Ship> performRefuelCommand;
     private DelegateCommand<object[]> performInventorySellCommand;
+    private DelegateCommand<Ship> automateMiningCommand;
+    private DelegateCommand<Ship> cancelShipAutomationCommand;
+
+    private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new Dictionary<string, CancellationTokenSource>();
+
     private bool alreadyLoaded;
     private string cargoToSell;
 
@@ -77,14 +87,16 @@ internal class AgentShipsViewModel : BindableBase
     }
 
     public ICommand LoadShipsCommand => this.loadShipsCommand ??= new DelegateCommand(async () => await this.LoadShips());
-    public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), ship => this.CanExtract(ship));
-    public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), ship => this.CanSurvey(ship));
-    public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), ship => this.CanWarp(ship));
-    public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), ship => this.CanOrbit(ship));
-    public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), ship => this.CanDock(ship));
-    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), ship => this.CanNavigate(ship));
-    public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), ship => this.CanRefuel(ship));
-    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), parameters => this.CanSell(parameters));
+    public ICommand PerformExtractionCommand => this.performExtractionCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformExtraction(ship), this.CanExtract);
+    public ICommand PerformSurveyCommand => this.performSurveyCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformSurvey(ship), this.CanSurvey);
+    public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), this.CanWarp);
+    public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), this.CanOrbit);
+    public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), this.CanDock);
+    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), this.CanNavigate);
+    public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), this.CanRefuel);
+    public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), this.CanSell);
+    public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartAutomation);
+    public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -119,7 +131,8 @@ internal class AgentShipsViewModel : BindableBase
             this.alreadyLoaded = false;
             return;
         }
-        this.Ships = await this.spaceTradersApi.GetShips(1, 20);
+
+        await this.RefreshShips(this.SelectedShip);
     }
 
     private async Task PerformExtraction(Ship ship)
@@ -250,16 +263,156 @@ internal class AgentShipsViewModel : BindableBase
 
             this.notificationService.ShowToastNotification(
                 $"Ship {ship.Symbol} sold cargo",
-                $"Sold {this.CargoToSell} units of {this.SelectedInventory.Name}, current credits {sellCargoResponse.Agent.Credits}",
+                $"Sold {sellCargoResponse.Transaction.Units} units of {sellCargoResponse.Transaction.TradeSymbol} for {sellCargoResponse.Transaction.TotalPrice} credits, current credits: {sellCargoResponse.Agent.Credits}",
                 NotificationTypes.PositiveFeedback);
 
             await this.RefreshShips(this.SelectedShip);
         }
     }
 
+    private void AutomateMining(Ship shipToAutomate)
+    {
+        var clonedShip = shipToAutomate.Clone();
+        var shipCancellationTokenSource = new CancellationTokenSource();
+        shipCancellationTokens.Add(clonedShip.Symbol, shipCancellationTokenSource);
+        this.UpdateActionButtons();
+
+        var automationAction = new Action<Ship, CancellationTokenSource>(async (ship, cancellationToken) =>
+        {
+            var shipCargo = ship.Cargo.Units;
+            var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+            if (cooldown is not null)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(cooldown.RemainingSeconds));
+                cooldown = default;
+            }
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (shipCargo >= ship.Cargo.Capacity * 0.75)
+                {
+                    ship = await this.spaceTradersApi.GetShip(ship.Symbol);
+                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" || cargo.Symbol == "ALUMINUM_ORE").Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
+                    {
+                        cancellationToken.Cancel(false);
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} cannot continue mining",
+                            "Cargo is full of excluded goods",
+                            NotificationTypes.WarningFeedback);
+                        });
+                        continue;
+                    }
+                    if (ship.NavigationInformation.Status != "DOCKED")
+                    {
+                        await this.spaceTradersApi.PostShipDock(ship.Symbol);
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                    var creditsAfterTransaction = 0;
+                    var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" && cargo.Symbol != "ALUMINUM_ORE");
+                    foreach (var cargo in cargoToSell)
+                    {
+                        var transaction = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest { Symbol = cargo.Symbol, Units = cargo.Units });
+                        if (transaction is null)
+                        {
+                            return;
+                        }
+                        creditsAfterTransaction += transaction.Transaction.TotalPrice;
+                        shipCargo -= transaction.Transaction.Units;
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                        $"{ship.Symbol} sold goods",
+                        $"Total sale price {creditsAfterTransaction}",
+                        NotificationTypes.PositiveFeedback);
+                    });
+                    var orbitResponse = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+                    ship.NavigationInformation.Status = "IN_ORBIT";
+                }
+
+                if (ship.NavigationInformation.Status != "IN_ORBIT")
+                {
+                    await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+                }
+
+                if (cooldown is not null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds((cooldown.Expiration - DateTime.UtcNow).TotalSeconds + 1));
+                }
+                if (this.SelectedShip.Mounts.Any(mount => mount.Symbol.StartsWith("MOUNT_SURVEYOR_")) &&
+                    this.waypointSurveyService.GetSurvey(ship.NavigationInformation.WaypointSymbol) is null)
+                {
+                    var survey = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
+                    this.waypointSurveyService.SaveSurveyDetails(survey.Surveys);
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"Ship {ship.Symbol} surveyed waypoint {ship.NavigationInformation.WaypointSymbol}",
+                            $"Found fields: {string.Join(", ", survey.Surveys.SelectMany(survey => survey.Deposits.Select(deposit => deposit.Symbol)))}",
+                            NotificationTypes.PositiveFeedback,
+                            true);
+                    });
+                    await Task.Delay(TimeSpan.FromSeconds(survey.Cooldown.RemainingSeconds));
+                }
+                var extractionResponse = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol, ship.NavigationInformation.WaypointSymbol);
+                if (extractionResponse is not null)
+                {
+                    shipCargo += extractionResponse.Extraction.Yield.Units;
+                    cooldown = extractionResponse.Cooldown;
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} extracted from {ship.NavigationInformation.WaypointSymbol}",
+                            $"Yield: {extractionResponse.Extraction.Yield.Units} units of {extractionResponse.Extraction.Yield.Symbol}, remaining cargo capacity: {ship.Cargo.Capacity - shipCargo}",
+                            NotificationTypes.PositiveFeedback);
+                    });
+                }
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                shipCancellationTokens.Remove(ship.Symbol);
+                this.UpdateActionButtons();
+                this.notificationService.ShowFlyoutNotification(
+                    $"Ship {ship.Symbol} finished its orders",
+                    "Ship is now available for manual control",
+                    NotificationTypes.PositiveFeedback);
+            });
+        });
+        Task.Run(() => automationAction(clonedShip, shipCancellationTokenSource));
+    }
+
+    private void UpdateActionButtons()
+    {
+        this.automateMiningCommand.RaiseCanExecuteChanged();
+        this.cancelShipAutomationCommand.RaiseCanExecuteChanged();
+        this.performDockCommand.RaiseCanExecuteChanged();
+        this.performOrbitCommand.RaiseCanExecuteChanged();
+        this.performNavigateCommand.RaiseCanExecuteChanged();
+        this.performRefuelCommand.RaiseCanExecuteChanged();
+        this.performWarpCommand.RaiseCanExecuteChanged();
+        this.performExtractionCommand.RaiseCanExecuteChanged();
+        this.performInventorySellCommand.RaiseCanExecuteChanged();
+        this.performSurveyCommand.RaiseCanExecuteChanged();
+    }
+
+    private void CancelShipAutomation(Ship ship)
+    {
+        if (shipCancellationTokens.TryGetValue(ship.Symbol, out var cancelToken))
+        {
+            cancelToken.Cancel(false);
+            this.notificationService.ShowFlyoutNotification(
+                $"Requested ship {ship.Symbol} to stop its orders",
+                "Once current orders finish it will be available",
+                NotificationTypes.WarningFeedback);
+        }
+    }
+
     private bool CanExtract(Ship ship)
     {
         return ship != null
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT"
                && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
@@ -267,38 +420,44 @@ internal class AgentShipsViewModel : BindableBase
     private bool CanSurvey(Ship ship)
     {
         return ship != null
-            && ship.NavigationInformation.Status == "IN_ORBIT"
-            && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.NavigationInformation.Status == "IN_ORBIT"
+               && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
 
     private bool CanWarp(Ship ship)
     {
         return ship != null
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanOrbit(Ship ship)
     {
         return ship != null
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "DOCKED";
     }
 
     private bool CanDock(Ship ship)
     {
         return ship != null
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanNavigate(Ship ship)
     {
         return ship != null
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanRefuel(Ship ship)
     {
         return ship != null
-               && ship.NavigationInformation.Status == "DOCKED";
+               && ship.NavigationInformation.Status == "DOCKED"
+               && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
 
     private bool CanSell(object[] commandParameters)
@@ -308,6 +467,24 @@ internal class AgentShipsViewModel : BindableBase
             && commandParameters[0] is Ship ship
             && ship.NavigationInformation.Status == "DOCKED"
             && commandParameters[1] is Inventory inventory
+            && !shipCancellationTokens.ContainsKey(ship.Symbol)
             && inventory is not null;
+    }
+
+    private bool CanStartAutomation(Ship ship)
+    {
+        return ship != null
+            && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD"
+            && ship.NavigationInformation.Status == "IN_ORBIT"
+            && ship.Mounts.Any(mount => mount.Symbol == "MOUNT_MINING_LASER_II" || mount.Symbol == "MOUNT_MINING_LASER_I" || mount.Symbol == "MOUNT_MINING_LASER_III")
+            && ship.Modules.Any(module => module.Symbol == "MODULE_MINERAL_PROCESSOR_I")
+            && !shipCancellationTokens.ContainsKey(ship.Symbol);
+    }
+
+    private bool CanCancelAutomation(Ship ship)
+    {
+        return ship != null
+            && shipCancellationTokens.ContainsKey(ship.Symbol)
+            && !shipCancellationTokens[ship.Symbol].IsCancellationRequested;
     }
 }

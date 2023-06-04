@@ -6,7 +6,6 @@
     xmlns:controls="clr-namespace:SpaceTradersWPF.Controls"
     xmlns:converters="clr-namespace:SpaceTradersWPF.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:SpaceTradersWPF.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewmodels="clr-namespace:SpaceTradersWPF.ViewModels"
     d:DataContext="{d:DesignInstance Type=viewmodels:AgentShipsViewModel}"
@@ -43,6 +42,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Button
+            HorizontalAlignment="Left"
+            Command="{Binding LoadShipsCommand}"
+            Content="Refresh ships" />
         <TextBlock
             Margin="0,0,0,2"
             HorizontalAlignment="Center"
@@ -340,9 +343,11 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     VerticalAlignment="Center"
+                    Padding="2,8"
                     FontSize="{DynamicResource Level2FontSize}"
                     Text="Available actions:" />
                 <WrapPanel
+                    x:Name="ActionsWrapPanel"
                     Grid.Column="1"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
@@ -401,6 +406,18 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
+                    <Button
+                        Command="{Binding AutomateMiningCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Set Mining Order"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
+                        Command="{Binding CancelShipAutomationCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Stop Orders"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                 </WrapPanel>
             </Grid>
         </Grid>
