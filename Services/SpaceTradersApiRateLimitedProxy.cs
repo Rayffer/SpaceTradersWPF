@@ -21,7 +21,7 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
     {
         this.secondsLimitBucket = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
-            ReplenishmentPeriod = TimeSpan.FromSeconds(1.5),
+            ReplenishmentPeriod = TimeSpan.FromSeconds(2),
             TokensPerPeriod = 2,
             TokenLimit = 2
         });
