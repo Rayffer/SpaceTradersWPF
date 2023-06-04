@@ -121,12 +121,36 @@ internal class AgentContractsViewModel : BindableBase
 
     private async Task DeliverContract(Contract contract)
     {
-        throw new NotImplementedException();
+        var contractCargoToDeliver = this.SelectedContract.Terms.Deliver.FirstOrDefault(delivery =>
+            delivery.DestinationSymbol == this.SelectedShip.NavigationInformation.WaypointSymbol &&
+            this.SelectedShip.Cargo.Inventory.Any(inventory => inventory.Symbol == delivery.TradeSymbol));
+
+        var cargoToDeliver = this.SelectedShip.Cargo.Inventory.FirstOrDefault(inventory => inventory.Symbol == contractCargoToDeliver.TradeSymbol);
+
+        var deliver = await this.spaceTradersApi.PostDeliverContract(contract.Id, new ApiModels.Requests.ContractDeliverRequest
+        {
+            ShipSymbol = this.SelectedShip.Symbol,
+            TradeSymbol = cargoToDeliver.Symbol,
+            Units = Math.Min(contractCargoToDeliver.UnitsRequired - contractCargoToDeliver.UnitsFulfilled, cargoToDeliver.Units)
+        });
+
+        this.notificationService.ShowToastNotification(
+            $"Delivered cargo for contract {contract.Id}",
+            string.Empty,
+            NotificationTypes.PositiveFeedback);
+
+        await this.RefreshContracts(contract);
+        await this.RefreshShips(this.SelectedShip);
     }
 
     private async Task FulfillContract(Contract contract)
     {
-        throw new NotImplementedException();
+        var fulfilledContract = await this.spaceTradersApi.PostFulfillContract(contract.Id);
+
+        this.notificationService.ShowToastNotification(
+            $"Fulfilled contract {contract.Id}",
+            $"received {contract.Terms.Payment.OnFulfilled}",
+            NotificationTypes.PositiveFeedback);
     }
 
     private async Task RefreshContracts(Contract contract)
