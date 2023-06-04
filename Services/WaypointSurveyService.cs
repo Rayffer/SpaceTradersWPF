@@ -13,6 +13,7 @@ internal class WaypointSurveyService : IWaypointSurveyService
     private IInformationRepository<Survey> informationRepository;
     private readonly CancellationTokenSource cancellationTokenSource;
     private bool finishTask;
+    private readonly object lockObject = new();
 
     public WaypointSurveyService(
         Lazy<IInformationRepository<Survey>> informationRepository)
@@ -29,7 +30,7 @@ internal class WaypointSurveyService : IWaypointSurveyService
                     break;
                 }
                 this.DeleteExpiredSurveys();
-                await Task.Delay(TimeSpan.FromMinutes(3), this.cancellationTokenSource.Token);
+                await Task.Delay(TimeSpan.FromSeconds(10), this.cancellationTokenSource.Token);
             }
         });
     }
@@ -42,24 +43,36 @@ internal class WaypointSurveyService : IWaypointSurveyService
 
     public Survey GetSurvey(string waypointSymbol)
     {
-        return this.informationRepository.Store.Where(x => x.Symbol == waypointSymbol).LastOrDefault();
+        lock (this.lockObject)
+        {
+            return this.informationRepository.Store.Where(x => x.Symbol == waypointSymbol).LastOrDefault();
+        }
     }
 
     public void RemoveSurvey(Survey surveyToRemove)
     {
-        this.informationRepository.Store.Remove(surveyToRemove);
-        this.informationRepository.SaveInformation();
+        lock (this.lockObject)
+        {
+            this.informationRepository.Store.Remove(surveyToRemove);
+            this.informationRepository.SaveInformation();
+        }
     }
 
     public void SaveSurveyDetails(params Survey[] surveyInformations)
     {
-        this.informationRepository.SaveInformation(surveyInformations);
+        lock (this.lockObject)
+        {
+            this.informationRepository.SaveInformation(surveyInformations);
+        }
     }
 
     private void DeleteExpiredSurveys()
     {
-        var nonExpiredSurveys = this.informationRepository.Store.Where(x => x.Expiration > DateTimeOffset.UtcNow).ToList();
-        this.informationRepository.Store.Clear();
-        this.informationRepository.SaveInformation(nonExpiredSurveys.ToArray());
+        lock (this.lockObject)
+        {
+            var nonExpiredSurveys = this.informationRepository.Store.Where(x => x.Expiration > DateTimeOffset.UtcNow).ToList();
+            this.informationRepository.Store.Clear();
+            this.informationRepository.SaveInformation(nonExpiredSurveys.ToArray());
+        }
     }
 }
