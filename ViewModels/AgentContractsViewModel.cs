@@ -149,7 +149,7 @@ internal class AgentContractsViewModel : BindableBase
 
         this.notificationService.ShowToastNotification(
             $"Fulfilled contract {contract.Id}",
-            $"received {contract.Terms.Payment.OnFulfilled}",
+            $"received {contract.Terms.Payment.OnFulfilled} credits",
             NotificationTypes.PositiveFeedback);
     }
 
