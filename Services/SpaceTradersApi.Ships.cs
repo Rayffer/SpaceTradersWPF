@@ -169,7 +169,8 @@ internal partial class SpaceTradersApi
         var apiResponse = await this.restClient.ExecuteAsync(request);
         var response = JsonConvert.DeserializeObject<ApiResponse<ExtractionResponse>>(apiResponse.Content);
         if (response.Error is not null &&
-            response.Error.Code == ShipErrorCodes.shipSurveyExhaustedError)
+            (response.Error.Code == ShipErrorCodes.shipSurveyExhaustedError ||
+            response.Error.Code == ShipErrorCodes.shipSurveyExpirationError))
         {
             this.waypointSurveyService.RemoveSurvey(survey);
             request = new RestRequest(string.Format(PostShipExtractResource, shipSymbol), Method.Post);
@@ -211,8 +212,9 @@ internal partial class SpaceTradersApi
         var request = new RestRequest(string.Format(PostShipSellCargoResource, shipSymbol), Method.Post);
         request.AddBody(shipSellCargoRequest);
         var response = await this.restClient.ExecuteAsync(request);
+        var deserializedResponse = JsonConvert.DeserializeObject<ApiResponse<CargoTransactionResponse>>(response.Content);
 
-        return JsonConvert.DeserializeObject<ApiResponse<CargoTransactionResponse>>(response.Content).Data;
+        return deserializedResponse.Data;
     }
 
     public async Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol)
