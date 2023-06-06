@@ -28,16 +28,19 @@ internal class AgentContractsViewModel : BindableBase
 
     public bool IsSelectedContractFulfilled
     {
-        get => this.SelectedContract != null &&
-            this.SelectedContract.Terms.Deliver.All(delivery => delivery.UnitsRequired <= delivery.UnitsFulfilled);
+        get => this.SelectedContract != null
+               && !this.SelectedContract.Fulfilled
+               && this.SelectedContract.Terms.Deliver.All(delivery => delivery.UnitsRequired <= delivery.UnitsFulfilled);
     }
 
     public bool SelectedShipCanDeliverSelectedContract
     {
-        get => this.SelectedContract != null &&
-            this.SelectedShip != null &&
-            this.SelectedContract.Terms.Deliver.Any(delivery => delivery.DestinationSymbol == this.SelectedShip.NavigationInformation.WaypointSymbol &&
-                                                                   this.SelectedShip.Cargo.Inventory.Any(inventory => inventory.Symbol == delivery.TradeSymbol));
+        get => this.SelectedContract != null 
+               && this.SelectedShip != null 
+               && this.SelectedContract.Terms.Deliver
+                   .Any(delivery => delivery.UnitsRequired < delivery.UnitsFulfilled
+                                    && delivery.DestinationSymbol == this.SelectedShip.NavigationInformation.WaypointSymbol
+                                    && this.SelectedShip.Cargo.Inventory.Any(inventory => inventory.Symbol == delivery.TradeSymbol));
     }
 
     public bool CanAcceptContract
