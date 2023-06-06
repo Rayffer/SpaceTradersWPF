@@ -58,7 +58,7 @@ internal class ShipNavigationViewModel : BindableBase
 
     public Waypoint[] Waypoints
     {
-        get => this.waypoints;
+        get => this.waypoints?.Where(waypoint => waypoint.Symbol != this.Ship?.NavigationInformation.WaypointSymbol).ToArray();
         set => this.SetProperty(ref this.waypoints, value);
     }
 
