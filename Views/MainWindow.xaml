@@ -70,11 +70,6 @@
             </Button>
         </Grid>
         <ContentControl
-            x:Name="DialogArea"
-            Grid.Column="1"
-            Margin="5"
-            prism:RegionManager.RegionName="{x:Static local:RegionNames.DialogAreaRegion}" />
-        <ContentControl
             x:Name="ToastNotificationArea"
             Grid.Column="1"
             Width="400"
@@ -88,6 +83,11 @@
             Margin="0,100,0,0"
             HorizontalAlignment="Right"
             prism:RegionManager.RegionName="{x:Static local:RegionNames.FlyoutNotificationArea}" />
+        <ContentControl
+            x:Name="DialogArea"
+            Grid.Column="1"
+            Margin="5"
+            prism:RegionManager.RegionName="{x:Static local:RegionNames.DialogAreaRegion}" />
         <ContentControl
             x:Name="SplashScreen"
             Grid.ColumnSpan="2"
