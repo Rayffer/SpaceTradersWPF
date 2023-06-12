@@ -35,10 +35,12 @@ internal class AgentContractsViewModel : BindableBase
 
     public bool SelectedShipCanDeliverSelectedContract
     {
-        get => this.SelectedContract != null 
-               && this.SelectedShip != null 
+        get => this.SelectedContract != null
+               && this.SelectedShip != null
+               && (this.SelectedShip.NavigationInformation.Status == "DOCKED" ||
+                   this.SelectedShip.NavigationInformation.Status == "IN_ORBIT")
                && this.SelectedContract.Terms.Deliver
-                   .Any(delivery => delivery.UnitsRequired < delivery.UnitsFulfilled
+                   .Any(delivery => delivery.UnitsRequired > delivery.UnitsFulfilled
                                     && delivery.DestinationSymbol == this.SelectedShip.NavigationInformation.WaypointSymbol
                                     && this.SelectedShip.Cargo.Inventory.Any(inventory => inventory.Symbol == delivery.TradeSymbol));
     }
@@ -124,6 +126,12 @@ internal class AgentContractsViewModel : BindableBase
 
     private async Task DeliverContract(Contract contract)
     {
+        if (this.SelectedShip.NavigationInformation.Status == "IN_ORBIT")
+        {
+            await this.spaceTradersApi.PostShipDock(this.SelectedShip.Symbol);
+            await Task.Delay(TimeSpan.FromSeconds(1));
+            this.SelectedShip.NavigationInformation.Status = "DOCKED";
+        }
         var contractCargoToDeliver = this.SelectedContract.Terms.Deliver.FirstOrDefault(delivery =>
             delivery.DestinationSymbol == this.SelectedShip.NavigationInformation.WaypointSymbol &&
             this.SelectedShip.Cargo.Inventory.Any(inventory => inventory.Symbol == delivery.TradeSymbol));
@@ -136,11 +144,19 @@ internal class AgentContractsViewModel : BindableBase
             TradeSymbol = cargoToDeliver.Symbol,
             Units = Math.Min(contractCargoToDeliver.UnitsRequired - contractCargoToDeliver.UnitsFulfilled, cargoToDeliver.Units)
         });
+        await Task.Delay(TimeSpan.FromSeconds(1));
 
         this.notificationService.ShowToastNotification(
             $"Delivered cargo for contract {contract.Id}",
             string.Empty,
             NotificationTypes.PositiveFeedback);
+
+
+        if (this.SelectedShip.NavigationInformation.Status == "DOCKED")
+        {
+            await this.spaceTradersApi.PostShipOrbit(this.SelectedShip.Symbol);
+            await Task.Delay(TimeSpan.FromSeconds(1));
+        }
 
         await this.RefreshContracts(contract);
         await this.RefreshShips(this.SelectedShip);
