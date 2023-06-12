@@ -291,7 +291,7 @@ internal class AgentShipsViewModel : BindableBase
                 if (shipCargo >= ship.Cargo.Capacity * 0.75)
                 {
                     ship = await this.spaceTradersApi.GetShip(ship.Symbol);
-                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" /*|| cargo.Symbol == "ALUMINUM_ORE"*/).Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
+                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" /*|| cargo.Symbol == "IRON_ORE"*/ || cargo.Symbol == "MOUNT_SENSOR_ARRAY_I").Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
                     {
                         cancellationToken.Cancel(false);
                         Application.Current.Dispatcher.Invoke(() =>
@@ -309,7 +309,7 @@ internal class AgentShipsViewModel : BindableBase
                         await Task.Delay(TimeSpan.FromSeconds(1));
                     }
                     var creditsAfterTransaction = 0;
-                    var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" /*&& cargo.Symbol != "ALUMINUM_ORE"*/);
+                    var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" /*&& cargo.Symbol != "IRON_ORE"*/ && cargo.Symbol != "MOUNT_SENSOR_ARRAY_I");
                     foreach (var cargo in cargoToSell)
                     {
                         var transaction = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest { Symbol = cargo.Symbol, Units = cargo.Units });
@@ -339,7 +339,18 @@ internal class AgentShipsViewModel : BindableBase
 
                 if (cooldown is not null)
                 {
-                    await Task.Delay(TimeSpan.FromSeconds((cooldown.Expiration - DateTime.UtcNow).TotalSeconds + 1));
+                    try
+                    {
+                        if (cooldown.Expiration > DateTime.UtcNow)
+                        {
+                            await Task.Delay(TimeSpan.FromSeconds((cooldown.Expiration - DateTime.UtcNow).TotalSeconds + 1), shipCancellationTokenSource.Token);
+                            cooldown = null;
+                        }
+                    }
+                    catch (TaskCanceledException)
+                    {
+                        continue;
+                    }
                 }
                 //if (this.SelectedShip.Mounts.Any(mount => mount.Symbol.StartsWith("MOUNT_SURVEYOR_")) &&
                 //    this.waypointSurveyService.GetSurvey(ship.NavigationInformation.WaypointSymbol) is null)
@@ -406,6 +417,7 @@ internal class AgentShipsViewModel : BindableBase
                 $"Requested ship {ship.Symbol} to stop its orders",
                 "Once current orders finish it will be available",
                 NotificationTypes.WarningFeedback);
+            this.UpdateActionButtons();
         }
     }
 
