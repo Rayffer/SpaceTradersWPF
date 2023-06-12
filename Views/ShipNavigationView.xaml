@@ -49,6 +49,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="Ship:" />
                 <TextBlock Grid.Column="1" Text="{Binding Ship.Symbol}" />
@@ -75,10 +76,11 @@
                     <behavior:Interaction.Triggers>
                         <behavior:EventTrigger EventName="SelectionChanged">
                             <behavior:InvokeCommandAction Command="{Binding UpdateFuelCommand}" CommandParameter="{Binding SelectedWaypoint}" />
+                            <behavior:InvokeCommandAction Command="{Binding UpdateFlightTimeCommand}" CommandParameter="{Binding SelectedWaypoint}" />
                         </behavior:EventTrigger>
                     </behavior:Interaction.Triggers>
                 </ComboBox>
-                <!--<TextBlock
+                <TextBlock
                     Grid.Row="2"
                     Grid.Column="0"
                     Text="Estimated fuel cost:" />
@@ -86,21 +88,21 @@
                     Grid.Row="2"
                     Grid.Column="1"
                     Text="{Binding EstimatedFuelCost}" />
-                <TextBlock Grid.Row="1" Text="Waypoint to navigate:" />-->
-                <StackPanel
+                <TextBlock
                     Grid.Row="3"
+                    Grid.Column="0"
+                    Text="Estimated travel time:" />
+                <TextBlock
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Text="{Binding EstimatedFlightTime}" />
+                <StackPanel
+                    Grid.Row="4"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-                    <Button
-                        Grid.Row="3"
-                        Command="{Binding PerformNavigationCommand}"
-                        Content="Navigate to waypoint" />
-                    <Button
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        Command="{Binding CancelNavigationCommand}"
-                        Content="Cancel Navigation" />
+                    <Button Command="{Binding PerformNavigationCommand}" Content="Navigate to waypoint" />
+                    <Button Command="{Binding CancelNavigationCommand}" Content="Cancel Navigation" />
                 </StackPanel>
             </Grid>
         </Border>

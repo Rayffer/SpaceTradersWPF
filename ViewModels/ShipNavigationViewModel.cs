@@ -25,16 +25,20 @@ internal class ShipNavigationViewModel : BindableBase
     private readonly IEventAggregator eventAggregator;
     private readonly INotificationService notificationService;
     private readonly SubscriptionToken subscriptionToken;
+    private double estimatedFlightTime;
     private Waypoint selectedWaypoint;
+    private Waypoint currentShipWaypoint;
     private Ship ship;
     private Waypoint[] waypoints;
     private DelegateCommand cancelNavigationCommand;
     private DelegateCommand performNavigationCommand;
     private DelegateCommand<Waypoint> updateFuelCommand;
+    private DelegateCommand<Waypoint> updateFlightTimeCommand;
 
     public ICommand CancelNavigationCommand => this.cancelNavigationCommand ??= new DelegateCommand(this.CancelNavigation);
     public ICommand PerformNavigationCommand => this.performNavigationCommand ??= new DelegateCommand(async () => await this.PerformNavigation());
     public ICommand UpdateFuelCommand => this.updateFuelCommand ??= new DelegateCommand<Waypoint>(this.UpdateFuel);
+    public ICommand UpdateFlightTimeCommand => this.updateFlightTimeCommand ??= new DelegateCommand<Waypoint>(this.UpdateFlightTime);
 
     public double EstimatedFuelCost
     {
@@ -54,8 +58,6 @@ internal class ShipNavigationViewModel : BindableBase
         set => this.SetProperty(ref this.ship, value);
     }
 
-    private Waypoint currentShipWaypoint;
-
     public Waypoint[] Waypoints
     {
         get => this.waypoints?.Where(waypoint => waypoint.Symbol != this.Ship?.NavigationInformation.WaypointSymbol).ToArray();
@@ -66,6 +68,12 @@ internal class ShipNavigationViewModel : BindableBase
     {
         get => this.closeRequested;
         set => this.SetProperty(ref this.closeRequested, value);
+    }
+
+    public double EstimatedFlightTime
+    {
+        get => estimatedFlightTime;
+        set => this.SetProperty(ref this.estimatedFlightTime, value);
     }
 
     public ShipNavigationViewModel(
@@ -109,7 +117,37 @@ internal class ShipNavigationViewModel : BindableBase
         var xDistance = destinationWaypoint.X - this.currentShipWaypoint.X;
         var yDistance = destinationWaypoint.Y - this.currentShipWaypoint.Y;
 
-        this.EstimatedFuelCost = Math.Sqrt(Math.Pow(xDistance, 2) + Math.Pow(yDistance, 2));
+        if (this.Ship.Frame.Symbol == "FRAME_PROBE")
+        {
+            this.EstimatedFuelCost = 0;
+            return;
+        }
+
+        var distance = Math.Sqrt(Math.Pow(xDistance, 2) + Math.Pow(yDistance, 2));
+        this.EstimatedFuelCost = this.ship.NavigationInformation.FlightMode switch
+        {
+            "DRIFT" => 1,
+            "CRUISE" => distance,
+            "STEALTH" => distance,
+            "BURN" => distance * 2,
+            _ => 0
+        };
+    }
+
+    private void UpdateFlightTime(Waypoint destinationWaypoint)
+    {
+        var xDistance = destinationWaypoint.X - this.currentShipWaypoint.X;
+        var yDistance = destinationWaypoint.Y - this.currentShipWaypoint.Y;
+
+        var distance = Math.Sqrt(Math.Pow(xDistance, 2) + Math.Pow(yDistance, 2));
+        this.EstimatedFlightTime = this.ship.NavigationInformation.FlightMode switch
+        {
+            "DRIFT" => 15 + 100 * distance / this.Ship.Engine.Speed,
+            "CRUISE" => 15 + 10 * distance / this.Ship.Engine.Speed,
+            "STEALTH" => 15 + 20 * distance / this.Ship.Engine.Speed,
+            "BURN" => 15 + 5 * distance / this.Ship.Engine.Speed,
+            _ => 0
+        };
     }
 
     private void CancelNavigation()
