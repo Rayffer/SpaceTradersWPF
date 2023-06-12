@@ -21,7 +21,7 @@ internal class WaypointSurveyService : IWaypointSurveyService
         this.cancellationTokenSource = new CancellationTokenSource();
         Task.Run(async () =>
         {
-            await Task.Delay(TimeSpan.FromSeconds(3));
+            await Task.Delay(TimeSpan.FromSeconds(6));
             this.informationRepository = informationRepository.Value;
             while (true)
             {
