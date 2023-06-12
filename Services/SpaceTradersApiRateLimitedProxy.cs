@@ -41,11 +41,11 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         {
             while (!this.burstLimitBucket.AttemptAcquire().IsAcquired)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(250);
             }
             while (!this.secondsLimitBucket.AttemptAcquire().IsAcquired)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(250);
             }
         });
         await Task.Run(() => RateLimitAction(callerName));
