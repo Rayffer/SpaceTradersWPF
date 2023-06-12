@@ -26,6 +26,10 @@ internal class JsonFileRepository<TypeToStore> : IInformationRepository<TypeToSt
         }
 
         this.Store = this.ReadFromFile();
+        if (this.Store == null)
+        {
+            this.Store = new List<TypeToStore>();
+        }
     }
 
     public void SaveInformation(params TypeToStore[] elements)
