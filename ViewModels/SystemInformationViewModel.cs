@@ -58,7 +58,7 @@ internal class SystemInformationViewModel : BindableBase
             this.SetProperty(ref this.selectedSystem, value);
             if (value is not null)
             {
-                this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Publish(new SystemWaypointInformationEventArgs
+                this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Publish(new SystemWaypointInformationEventArguments
                 {
                     SystemSymbol = value.Symbol
                 });
@@ -96,7 +96,7 @@ internal class SystemInformationViewModel : BindableBase
         this.eventAggregator.GetEvent<SystemWaypointInformationEvent>().Unsubscribe(async (arguments) => await this.GetSystemWaypointsInformation(arguments));
     }
 
-    private async Task GetSystemWaypointsInformation(SystemWaypointInformationEventArgs eventInformation)
+    private async Task GetSystemWaypointsInformation(SystemWaypointInformationEventArguments eventInformation)
     {
         this.SystemWaypoints = await this.spaceTradersApi.GetWaypoints(eventInformation.SystemSymbol, 1, 20);
     }
