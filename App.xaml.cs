@@ -39,6 +39,8 @@ public partial class App : PrismApplication
     private static void RegisterRepositories(IContainerRegistry containerRegistry)
     {
         containerRegistry.Register<IInformationRepository<Survey>, JsonFileRepository<Survey>>();
+        containerRegistry.Register<IInformationRepository<Market>, JsonFileRepository<Market>>();
+        containerRegistry.Register<IInformationRepository<Shipyard>, JsonFileRepository<Shipyard>>();
     }
 
     private static void RegisterDialogs(IContainerRegistry containerRegistry)
@@ -58,7 +60,10 @@ public partial class App : PrismApplication
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApi>("SpaceTradersApi");
         containerRegistry.Register<ISpaceTradersApi, SpaceTradersApiRateLimitedProxy>();
         containerRegistry.Register<INotificationService, NotificationService>();
+
         containerRegistry.RegisterSingleton<IWaypointSurveyService, WaypointSurveyService>();
+        containerRegistry.RegisterSingleton<IMarketService, MarketCachedService>();
+        containerRegistry.RegisterSingleton<IShipyardService, ShipyardCachedService>();
     }
 
     private static void RegisterEvents(IContainerRegistry containerRegistry)
