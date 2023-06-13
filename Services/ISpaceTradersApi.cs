@@ -53,7 +53,7 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PostShipRefine(string shipSymbol, TradeSymbols tradeSymbol);
 
-    Task<ShipNavigationInformation> PostShipCreateChart(string shipSymbol);
+    Task<ChartResponse> PostShipCreateChart(string shipSymbol);
 
     Task<ShipNavigationInformation> PostShipDock(string shipSymbol);
 
@@ -67,11 +67,11 @@ internal interface ISpaceTradersApi
 
     Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol);
 
-    Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol);
+    Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel);
 
     Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol);
 
-    Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, ShipSellCargoRequest shipSellCargoRequest);
+    Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, PostShipSellCargoRequest shipSellCargoRequest);
 
     Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol);
 

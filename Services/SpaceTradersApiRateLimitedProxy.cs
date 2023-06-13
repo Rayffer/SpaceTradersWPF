@@ -157,13 +157,13 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.GetWaypoints(waypointSymbol, pageNumber, pageSize);
     }
 
-    public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol)
+    public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PatchShipNavigation(shipSymbol);
+        return await this.spaceTradersApi.PatchShipNavigation(shipSymbol, shipNavigationRequestModel);
     }
 
-    public async Task<ShipNavigationInformation> PostShipCreateChart(string shipSymbol)
+    public async Task<ChartResponse> PostShipCreateChart(string shipSymbol)
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.PostShipCreateChart(shipSymbol);
@@ -265,7 +265,7 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipWarp(shipSymbol, waypointSymbol);
     }
 
-    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, ShipSellCargoRequest shipSellCargoRequest)
+    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, PostShipSellCargoRequest shipSellCargoRequest)
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.PostShipSellCargo(shipSymbol, shipSellCargoRequest);

@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.ApiModels.Requests;
 
-internal class ShipExtractRequestModel
+internal class PostShipExtractRequestModel
 {
     [JsonProperty("survey")]
     public Survey Survey { get; set; }

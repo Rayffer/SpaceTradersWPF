@@ -133,9 +133,12 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
 
-    public async Task<ShipNavigationInformation> PostShipCreateChart(string shipSymbol)
+    public async Task<ChartResponse> PostShipCreateChart(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipChartResource, shipSymbol), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ChartResponse>>(response.Content).Data;
     }
 
     public async Task<ShipNavigationInformation> PostShipDock(string shipSymbol)
@@ -160,7 +163,7 @@ internal partial class SpaceTradersApi
         var survey = this.waypointSurveyService.GetSurvey(waypointSymbol);
         if (survey is not null)
         {
-            request.AddBody(new ShipExtractRequestModel
+            request.AddBody(new PostShipExtractRequestModel
             {
                 Survey = survey
             });
@@ -207,7 +210,7 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, ShipSellCargoRequest shipSellCargoRequest)
+    public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, PostShipSellCargoRequest shipSellCargoRequest)
     {
         var request = new RestRequest(string.Format(PostShipSellCargoResource, shipSymbol), Method.Post);
         request.AddBody(shipSellCargoRequest);
@@ -250,8 +253,12 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol)
+    public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel)
     {
-        throw new NotImplementedException();
+        var request= new RestRequest(string.Format(PatchShipNavigationInformationResource, shipSymbol), Method.Patch);
+        request.AddBody(shipNavigationRequestModel);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
 }

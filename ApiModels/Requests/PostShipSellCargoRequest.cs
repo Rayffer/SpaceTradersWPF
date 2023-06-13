@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.ApiModels.Requests;
 
-public class ShipSellCargoRequest
+public class PostShipSellCargoRequest
 {
     [JsonProperty("symbol")]
     public string Symbol { get; set; }
