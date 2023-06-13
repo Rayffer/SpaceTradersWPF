@@ -8,7 +8,6 @@ using RestSharp;
 using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Events;
 using SpaceTradersWPF.Mappers;
-using SpaceTradersWPF.Models;
 using SpaceTradersWPF.Repositories;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
