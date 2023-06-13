@@ -27,7 +27,7 @@ internal partial class SpaceTradersApi
     public async Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize)
     {
         var systemSymbol = waypointSymbol;
-        if (waypointSymbol.Count(x => x.Equals("-")) > 1)
+        if (waypointSymbol.Count(x => x.Equals('-')) > 1)
         {
             systemSymbol = ExtractSystemSymbol(waypointSymbol);
         }
