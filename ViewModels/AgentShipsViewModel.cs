@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 
 using Prism.Commands;
 using Prism.Events;
@@ -95,7 +94,7 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), this.CanNavigate);
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), this.CanRefuel);
     public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), this.CanSell);
-    public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartAutomation);
+    public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartMiningAutomation);
     public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
 
     public AgentShipsViewModel(
@@ -138,7 +137,7 @@ internal class AgentShipsViewModel : BindableBase
     private async Task PerformExtraction(Ship ship)
     {
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
-        if (cooldown != null)
+        if (cooldown is not null)
         {
             this.notificationService.ShowToastNotification(
                 $"Ship {ship.Symbol} is cooling down",
@@ -160,7 +159,7 @@ internal class AgentShipsViewModel : BindableBase
     private async Task PerformSurvey(Ship ship)
     {
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
-        if (cooldown != null)
+        if (cooldown is not null)
         {
             this.notificationService.ShowToastNotification(
                 $"Ship {ship.Symbol} is cooling down",
@@ -182,7 +181,7 @@ internal class AgentShipsViewModel : BindableBase
     private async Task PerformWarp(Ship ship)
     {
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
-        if (cooldown != null)
+        if (cooldown is not null)
         {
             this.notificationService.ShowToastNotification(
                 $"Ship {ship.Symbol} is cooling down",
@@ -244,7 +243,7 @@ internal class AgentShipsViewModel : BindableBase
     private async Task RefreshShips(Ship ship)
     {
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
-        if (ship != null)
+        if (ship is not null)
         {
             this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
         }
@@ -255,7 +254,7 @@ internal class AgentShipsViewModel : BindableBase
         if (commandParameters.Length == 2 &&
             commandParameters[0] is Ship ship)
         {
-            var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest
+            var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new PostShipSellCargoRequest
             {
                 Symbol = this.SelectedInventory.Symbol,
                 Units = int.Parse(this.CargoToSell)
@@ -283,7 +282,18 @@ internal class AgentShipsViewModel : BindableBase
             var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
             if (cooldown is not null)
             {
-                await Task.Delay(TimeSpan.FromSeconds(cooldown.RemainingSeconds));
+                try
+                {
+                    if (cooldown.Expiration > DateTime.UtcNow)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds((cooldown.Expiration - DateTime.UtcNow).TotalSeconds + 1), shipCancellationTokenSource.Token);
+                        cooldown = null;
+                    }
+                }
+                catch (TaskCanceledException)
+                {
+                    // Do nothing as we just need to handle the exception of the cancelled task.
+                }
                 cooldown = default;
             }
             while (!cancellationToken.IsCancellationRequested)
@@ -312,7 +322,7 @@ internal class AgentShipsViewModel : BindableBase
                     var cargoToSell = ship.Cargo.Inventory.Where(cargo => cargo.Symbol != "ANTIMATTER" /*&& cargo.Symbol != "IRON_ORE"*/ && cargo.Symbol != "MOUNT_SENSOR_ARRAY_I");
                     foreach (var cargo in cargoToSell)
                     {
-                        var transaction = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new ShipSellCargoRequest { Symbol = cargo.Symbol, Units = cargo.Units });
+                        var transaction = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new PostShipSellCargoRequest { Symbol = cargo.Symbol, Units = cargo.Units });
                         if (transaction is null)
                         {
                             return;
@@ -417,13 +427,13 @@ internal class AgentShipsViewModel : BindableBase
                 $"Requested ship {ship.Symbol} to stop its orders",
                 "Once current orders finish it will be available",
                 NotificationTypes.WarningFeedback);
-            this.UpdateActionButtons();
+            this.cancelShipAutomationCommand.RaiseCanExecuteChanged();
         }
     }
 
     private bool CanExtract(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT"
                && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
@@ -431,7 +441,7 @@ internal class AgentShipsViewModel : BindableBase
 
     private bool CanSurvey(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT"
                && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
@@ -439,42 +449,42 @@ internal class AgentShipsViewModel : BindableBase
 
     private bool CanWarp(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanOrbit(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "DOCKED";
     }
 
     private bool CanDock(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanNavigate(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanRefuel(Ship ship)
     {
-        return ship != null
+        return ship is not null
                && ship.NavigationInformation.Status == "DOCKED"
                && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
 
     private bool CanSell(object[] commandParameters)
     {
-        return commandParameters != null
+        return commandParameters is not null
             && commandParameters.Length == 2
             && commandParameters[0] is Ship ship
             && ship.NavigationInformation.Status == "DOCKED"
@@ -485,7 +495,7 @@ internal class AgentShipsViewModel : BindableBase
 
     private bool CanStartAutomation(Ship ship)
     {
-        return ship != null
+        return ship is not null
             && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD"
             && ship.NavigationInformation.Status == "IN_ORBIT"
             && ship.Mounts.Any(mount => mount.Symbol == "MOUNT_MINING_LASER_II" || mount.Symbol == "MOUNT_MINING_LASER_I" || mount.Symbol == "MOUNT_MINING_LASER_III")
@@ -495,7 +505,7 @@ internal class AgentShipsViewModel : BindableBase
 
     private bool CanCancelAutomation(Ship ship)
     {
-        return ship != null
+        return ship is not null
             && shipCancellationTokens.ContainsKey(ship.Symbol)
             && !shipCancellationTokens[ship.Symbol].IsCancellationRequested;
     }

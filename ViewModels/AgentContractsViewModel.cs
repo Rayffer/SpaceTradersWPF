@@ -28,15 +28,15 @@ internal class AgentContractsViewModel : BindableBase
 
     public bool IsSelectedContractFulfilled
     {
-        get => this.SelectedContract != null
+        get => this.SelectedContract is not null
                && !this.SelectedContract.Fulfilled
                && this.SelectedContract.Terms.Deliver.All(delivery => delivery.UnitsRequired <= delivery.UnitsFulfilled);
     }
 
     public bool SelectedShipCanDeliverSelectedContract
     {
-        get => this.SelectedContract != null
-               && this.SelectedShip != null
+        get => this.SelectedContract is not null
+               && this.SelectedShip is not null
                && (this.SelectedShip.NavigationInformation.Status == "DOCKED" ||
                    this.SelectedShip.NavigationInformation.Status == "IN_ORBIT")
                && this.SelectedContract.Terms.Deliver
@@ -47,7 +47,7 @@ internal class AgentContractsViewModel : BindableBase
 
     public bool CanAcceptContract
     {
-        get => this.SelectedContract != null &&
+        get => this.SelectedContract is not null &&
             !this.SelectedContract.Accepted;
     }
 
@@ -175,7 +175,7 @@ internal class AgentContractsViewModel : BindableBase
     private async Task RefreshContracts(Contract contract)
     {
         this.Contracts = await this.spaceTradersApi.GetContracts();
-        if (contract != null)
+        if (contract is not null)
         {
             this.SelectedContract = this.Contracts.First(x => x.Id == contract.Id);
         }
@@ -184,7 +184,7 @@ internal class AgentContractsViewModel : BindableBase
     private async Task RefreshShips(Ship ship)
     {
         this.Ships = await this.spaceTradersApi.GetShips(1, 20);
-        if (ship != null)
+        if (ship is not null)
         {
             this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
         }
