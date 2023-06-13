@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.ApiModels;
 
-public class JumpGateConnectedsystem
+public class JumpGateConnectedSystem
 {
     [JsonProperty("symbol")]
     public string Symbol { get; set; }

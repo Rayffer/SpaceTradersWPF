@@ -11,5 +11,5 @@ public class JumpGate
     public string FactionSymbol { get; set; }
 
     [JsonProperty("connectedSystems")]
-    public JumpGateConnectedsystem[] ConnectedSystems { get; set; }
+    public JumpGateConnectedSystem[] ConnectedSystems { get; set; }
 }
