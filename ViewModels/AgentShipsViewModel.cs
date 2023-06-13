@@ -29,6 +29,8 @@ internal class AgentShipsViewModel : BindableBase
     private readonly INotificationService notificationService;
     private readonly IRegionManager regionManager;
     private readonly IWaypointSurveyService waypointSurveyService;
+    private readonly IMarketService marketService;
+    private readonly IShipyardService shipyardService;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private Inventory selectedInventory;
@@ -43,6 +45,7 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<object[]> performInventorySellCommand;
     private DelegateCommand<Ship> automateMiningCommand;
     private DelegateCommand<Ship> cancelShipAutomationCommand;
+    private DelegateCommand<Ship> automateExplorationCommand;
 
     private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new Dictionary<string, CancellationTokenSource>();
 
@@ -95,6 +98,7 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), this.CanRefuel);
     public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), this.CanSell);
     public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartMiningAutomation);
+    public ICommand AutomateExplorationCommand => this.automateExplorationCommand ??= new DelegateCommand<Ship>(this.AutomateExploration, this.CanStartExplorationAutomation);
     public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
 
     public AgentShipsViewModel(
@@ -102,12 +106,16 @@ internal class AgentShipsViewModel : BindableBase
         IEventAggregator eventAggregator,
         INotificationService notificationService,
         IRegionManager regionManager,
-        IWaypointSurveyService waypointSurveyService)
+        IWaypointSurveyService waypointSurveyService,
+        IMarketService marketService,
+        IShipyardService shipyardService)
     {
         this.spaceTradersApi = spaceTradersApi;
         this.notificationService = notificationService;
         this.regionManager = regionManager;
         this.waypointSurveyService = waypointSurveyService;
+        this.marketService = marketService;
+        this.shipyardService = shipyardService;
         this.eventAggregator = eventAggregator;
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
     }
@@ -298,10 +306,10 @@ internal class AgentShipsViewModel : BindableBase
             }
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (shipCargo >= ship.Cargo.Capacity * 0.75)
+                if (shipCargo >= ship.Cargo.Capacity * 0.6)
                 {
                     ship = await this.spaceTradersApi.GetShip(ship.Symbol);
-                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" /*|| cargo.Symbol == "IRON_ORE"*/ || cargo.Symbol == "MOUNT_SENSOR_ARRAY_I").Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.75)
+                    if (ship.Cargo.Inventory.Where(cargo => cargo.Symbol == "ANTIMATTER" /*|| cargo.Symbol == "IRON_ORE"*/ || cargo.Symbol == "MOUNT_SENSOR_ARRAY_I").Sum(cargo => cargo.Units) >= ship.Cargo.Capacity * 0.6)
                     {
                         cancellationToken.Cancel(false);
                         Application.Current.Dispatcher.Invoke(() =>
@@ -404,9 +412,97 @@ internal class AgentShipsViewModel : BindableBase
         Task.Run(() => automationAction(clonedShip, shipCancellationTokenSource));
     }
 
+    private void AutomateExploration(Ship shipToAutomate)
+    {
+        var clonedShip = shipToAutomate.Clone();
+        var shipCancellationTokenSource = new CancellationTokenSource();
+        shipCancellationTokens.Add(clonedShip.Symbol, shipCancellationTokenSource);
+        this.UpdateActionButtons();
+
+        var automationAction = new Action<Ship, CancellationTokenSource>(async (ship, cancellationToken) =>
+        {
+            if (ship.NavigationInformation.FlightMode != "BURN")
+            {
+                await this.spaceTradersApi.PatchShipNavigation(ship.Symbol, new PatchShipNavigationRequestModel
+                {
+                    FlightMode = "BURN"
+                });
+            }
+
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                ship = await this.spaceTradersApi.GetShip(ship.Symbol);
+                var waypoints = await this.spaceTradersApi.GetWaypoints(ship.NavigationInformation.WaypointSymbol, 1, 20);
+                var jumpgateWaypoints = waypoints.Where(waypoint => waypoint.Type == "JUMP_GATE");
+                var systemWaypoints = waypoints.Except(jumpgateWaypoints);
+
+                foreach (var waypoint in systemWaypoints)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        break;
+                    }
+
+                    var navigationInformation = await this.spaceTradersApi.PostShipNavigate(ship.Symbol, waypoint.Symbol);
+                    await Task.Delay(navigationInformation.NavigationInformation.Route.Arrival - DateTime.UtcNow + TimeSpan.FromSeconds(5));
+
+                    var currentWaypoint = await this.spaceTradersApi.GetWaypoint(waypoint.Symbol);
+                    if (currentWaypoint.Chart is null)
+                    {
+                        await this.spaceTradersApi.PostShipCreateChart(ship.Symbol);
+                        await Task.Delay(1);
+                    }
+                    await this.spaceTradersApi.PostShipDock(ship.Symbol);
+                    await Task.Delay(1);
+                    var market = await this.spaceTradersApi.GetMarket(currentWaypoint.Symbol);
+                    var shipyard = await this.spaceTradersApi.GetShipyard(currentWaypoint.Symbol);
+
+                    if (market is not null)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.notificationService.ShowFlyoutNotification(
+                                $"{ship.Symbol} found a market on {ship.NavigationInformation.WaypointSymbol}",
+                                $"Saving current market information",
+                                NotificationTypes.PositiveFeedback);
+                        });
+                        this.marketService.RemoveMarket(market.Symbol);
+                        this.marketService.SaveMarket(market);
+                    }
+                    if (shipyard is not null)
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            this.notificationService.ShowFlyoutNotification(
+                                $"{ship.Symbol} found a shipyard on {ship.NavigationInformation.WaypointSymbol}",
+                                $"Saving current market information",
+                                NotificationTypes.PositiveFeedback);
+                        });
+                        this.shipyardService.RemoveShipyard(shipyard.Symbol);
+                        this.shipyardService.SaveShipyard(shipyard);
+                    }
+
+                    await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+                    await Task.Delay(1);
+                }
+            }
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                shipCancellationTokens.Remove(ship.Symbol);
+                this.UpdateActionButtons();
+                this.notificationService.ShowFlyoutNotification(
+                    $"Ship {ship.Symbol} finished its orders",
+                    "Ship is now available for manual control",
+                    NotificationTypes.PositiveFeedback);
+            });
+        });
+        Task.Run(() => automationAction(clonedShip, shipCancellationTokenSource));
+    }
+
     private void UpdateActionButtons()
     {
         this.automateMiningCommand.RaiseCanExecuteChanged();
+        this.automateExplorationCommand.RaiseCanExecuteChanged();
         this.cancelShipAutomationCommand.RaiseCanExecuteChanged();
         this.performDockCommand.RaiseCanExecuteChanged();
         this.performOrbitCommand.RaiseCanExecuteChanged();
@@ -493,7 +589,7 @@ internal class AgentShipsViewModel : BindableBase
             && inventory is not null;
     }
 
-    private bool CanStartAutomation(Ship ship)
+    private bool CanStartMiningAutomation(Ship ship)
     {
         return ship is not null
             && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD"
@@ -508,5 +604,12 @@ internal class AgentShipsViewModel : BindableBase
         return ship is not null
             && shipCancellationTokens.ContainsKey(ship.Symbol)
             && !shipCancellationTokens[ship.Symbol].IsCancellationRequested;
+    }
+
+    private bool CanStartExplorationAutomation(Ship ship)
+    {
+        return ship is not null
+            && ship.Frame.Symbol.Equals("FRAME_PROBE")
+            && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
 }

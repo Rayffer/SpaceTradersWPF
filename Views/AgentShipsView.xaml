@@ -412,6 +412,12 @@
                         Content="Set Mining Order"
                         FontSize="{DynamicResource Level5FontSize}"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button 
+                        Command="{Binding AutomateExplorationCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Set Exploration Order"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Button
                         Command="{Binding CancelShipAutomationCommand}"
                         CommandParameter="{Binding SelectedShip}"
