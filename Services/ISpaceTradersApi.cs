@@ -63,7 +63,7 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol);
 
-    Task<JumpResponse> PostShipJump(string shipSymbol);
+    Task<JumpResponse> PostShipJump(string shipSymbol, string systemSymbol);
 
     Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol);
 

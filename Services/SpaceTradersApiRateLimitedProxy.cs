@@ -247,10 +247,10 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipExtractResources(shipSymbol, waypointSymbol);
     }
 
-    public async Task<JumpResponse> PostShipJump(string shipSymbol)
+    public async Task<JumpResponse> PostShipJump(string shipSymbol, string systemSymbol)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PostShipJump(shipSymbol);
+        return await this.spaceTradersApi.PostShipJump(shipSymbol, systemSymbol);
     }
 
     public async Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol)

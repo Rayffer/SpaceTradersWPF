@@ -188,9 +188,16 @@ internal partial class SpaceTradersApi
         throw new NotImplementedException();
     }
 
-    public async Task<JumpResponse> PostShipJump(string shipSymbol)
+    public async Task<JumpResponse> PostShipJump(string shipSymbol, string systemSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipJumpResource, shipSymbol), Method.Post);
+        request.AddBody(new ShipJumpRequestModel
+        {
+            SystemSymbol = systemSymbol
+        });
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<JumpResponse>>(response.Content).Data;
     }
 
     public async Task<NavigationResponse> PostShipNavigate(string shipSymbol, string waypointSymbol)
@@ -255,7 +262,7 @@ internal partial class SpaceTradersApi
 
     public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel)
     {
-        var request= new RestRequest(string.Format(PatchShipNavigationInformationResource, shipSymbol), Method.Patch);
+        var request = new RestRequest(string.Format(PatchShipNavigationInformationResource, shipSymbol), Method.Patch);
         request.AddBody(shipNavigationRequestModel);
         var response = await this.restClient.ExecuteAsync(request);
 
