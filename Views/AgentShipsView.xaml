@@ -382,6 +382,12 @@
                         FontSize="{DynamicResource Level5FontSize}"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Button
+                        Command="{Binding PerformJumpCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Jump"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <Button
                         Command="{Binding PerformSurveyCommand}"
                         CommandParameter="{Binding SelectedShip}"
                         Content="Survey"
@@ -412,7 +418,7 @@
                         Content="Set Mining Order"
                         FontSize="{DynamicResource Level5FontSize}"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                    <Button 
+                    <Button
                         Command="{Binding AutomateExplorationCommand}"
                         CommandParameter="{Binding SelectedShip}"
                         Content="Set Exploration Order"

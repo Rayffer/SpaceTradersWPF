@@ -46,6 +46,7 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<Ship> automateMiningCommand;
     private DelegateCommand<Ship> cancelShipAutomationCommand;
     private DelegateCommand<Ship> automateExplorationCommand;
+    private DelegateCommand<Ship> performJumpCommand;
 
     private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new Dictionary<string, CancellationTokenSource>();
 
@@ -94,12 +95,13 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand PerformWarpCommand => this.performWarpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformWarp(ship), this.CanWarp);
     public ICommand PerformOrbitCommand => this.performOrbitCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformOrbit(ship), this.CanOrbit);
     public ICommand PerformDockCommand => this.performDockCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformDock(ship), this.CanDock);
-    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(ship => this.PerformNavigate(ship), this.CanNavigate);
+    public ICommand PerformNavigateCommand => this.performNavigateCommand ??= new DelegateCommand<Ship>(this.PerformNavigate, this.CanNavigate);
     public ICommand PerformRefuelCommand => this.performRefuelCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefuel(ship), this.CanRefuel);
     public ICommand PerformInventorySellCommand => this.performInventorySellCommand ??= new DelegateCommand<object[]>(async parameters => await this.PerformInventorySell(parameters), this.CanSell);
     public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartMiningAutomation);
     public ICommand AutomateExplorationCommand => this.automateExplorationCommand ??= new DelegateCommand<Ship>(this.AutomateExploration, this.CanStartExplorationAutomation);
     public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
+    public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand<Ship>(this.PerformJump, this.CanJump);
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -198,6 +200,17 @@ internal class AgentShipsViewModel : BindableBase
                 true);
             return;
         }
+    }
+
+    private void PerformJump(Ship ship)
+    {
+        this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipJumpView));
+        this.eventAggregator
+            .GetEvent<ShipJumpRequestEvent>()
+            .Publish(new ShipJumpRequestEventArguments
+            {
+                Ship = ship
+            });
     }
 
     private async Task PerformOrbit(Ship ship)
@@ -443,9 +456,23 @@ internal class AgentShipsViewModel : BindableBase
                         break;
                     }
 
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} departed for {ship.NavigationInformation.WaypointSymbol}",
+                            string.Empty,
+                            NotificationTypes.PositiveFeedback);
+                    });
                     var navigationInformation = await this.spaceTradersApi.PostShipNavigate(ship.Symbol, waypoint.Symbol);
                     await Task.Delay(navigationInformation.NavigationInformation.Route.Arrival - DateTime.UtcNow + TimeSpan.FromSeconds(5));
 
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} arrived at {ship.NavigationInformation.WaypointSymbol}",
+                            $"Inspecting for charts, markets and shipyards",
+                            NotificationTypes.PositiveFeedback);
+                    });
                     var currentWaypoint = await this.spaceTradersApi.GetWaypoint(waypoint.Symbol);
                     if (currentWaypoint.Chart is null)
                     {
@@ -527,6 +554,8 @@ internal class AgentShipsViewModel : BindableBase
         }
     }
 
+    #region Commands CanExecute Methods
+
     private bool CanExtract(Ship ship)
     {
         return ship is not null
@@ -547,6 +576,13 @@ internal class AgentShipsViewModel : BindableBase
     {
         return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.NavigationInformation.Status == "IN_ORBIT";
+    }
+
+    private bool CanJump(Ship ship)
+    {
+        return ship is not null
+               && ship.NavigationInformation.Route.Destination.Type == "JUMP_GATE"
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
@@ -612,4 +648,6 @@ internal class AgentShipsViewModel : BindableBase
             && ship.Frame.Symbol.Equals("FRAME_PROBE")
             && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
+
+    #endregion Commands CanExecute Methods
 }
