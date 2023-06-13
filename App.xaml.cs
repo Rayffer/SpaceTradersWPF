@@ -71,6 +71,9 @@ public partial class App : PrismApplication
         containerRegistry.RegisterSingleton<WaypointInformationEvent>();
         containerRegistry.RegisterSingleton<SystemInformationEvent>();
         containerRegistry.RegisterSingleton<NotificationEvent>();
-        containerRegistry.RegisterSingleton<ShipInformationEvent>();
+        containerRegistry.RegisterSingleton<SystemInformationEvent>();
+        containerRegistry.RegisterSingleton<ShipJumpRequestEvent>();
+        containerRegistry.RegisterSingleton<SystemWaypointInformationEvent>();
+        containerRegistry.RegisterSingleton<WaypointInformationEvent>();
     }
 }
