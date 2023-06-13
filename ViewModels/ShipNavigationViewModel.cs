@@ -18,7 +18,6 @@ namespace SpaceTradersWPF.ViewModels;
 
 internal class ShipNavigationViewModel : BindableBase
 {
-    private bool closeRequested;
     private double estimatedFuelCost;
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly IRegionManager regionManager;
@@ -64,15 +63,9 @@ internal class ShipNavigationViewModel : BindableBase
         set => this.SetProperty(ref this.waypoints, value);
     }
 
-    public bool CloseRequested
-    {
-        get => this.closeRequested;
-        set => this.SetProperty(ref this.closeRequested, value);
-    }
-
     public double EstimatedFlightTime
     {
-        get => estimatedFlightTime;
+        get => this.estimatedFlightTime;
         set => this.SetProperty(ref this.estimatedFlightTime, value);
     }
 
@@ -100,16 +93,6 @@ internal class ShipNavigationViewModel : BindableBase
         this.Ship = eventInformation.Ship;
         this.currentShipWaypoint = await this.spaceTradersApi.GetWaypoint(this.Ship.NavigationInformation.WaypointSymbol);
         this.Waypoints = await this.spaceTradersApi.GetWaypoints(this.Ship.NavigationInformation.SystemSymbol, 1, 20);
-    }
-
-    internal void RemoveElementAnimationCompleted(FlyoutNotificationView view)
-    {
-        if (!this.regionManager.Regions[RegionNames.DialogAreaRegion].Views.Contains(view))
-        {
-            return;
-        }
-
-        this.regionManager.Regions[RegionNames.DialogAreaRegion].Remove(view);
     }
 
     private void UpdateFuel(Waypoint destinationWaypoint)
