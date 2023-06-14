@@ -21,7 +21,7 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
     {
         this.secondsLimitBucket = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
-            ReplenishmentPeriod = TimeSpan.FromSeconds(2),
+            ReplenishmentPeriod = TimeSpan.FromSeconds(1.5),
             TokensPerPeriod = 2,
             TokenLimit = 2
         });
@@ -175,10 +175,10 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipDock(shipSymbol);
     }
 
-    public async Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol)
+    public async Task<CargoJettisonResponse> PostShipJettisonCargo(string shipSymbol, PostShipJettisonCargoRequest shipJettisonCargoRequest)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PostShipJettisonCargo(shipSymbol);
+        return await this.spaceTradersApi.PostShipJettisonCargo(shipSymbol, shipJettisonCargoRequest);
     }
 
     public async Task<ShipNavigationInformation> PostShipOrbit(string shipSymbol)
@@ -259,7 +259,7 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipNavigate(shipSymbol, waypointSymbol);
     }
 
-    public async Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol)
+    public async Task<WarpResponse> PostShipWarp(string shipSymbol, string waypointSymbol)
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.PostShipWarp(shipSymbol, waypointSymbol);
@@ -295,9 +295,9 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipRefuel(shipSymbol);
     }
 
-    public async Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol)
+    public async Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol, PostShipPurchaseCargoRequest shipPurchaseCargoRequest)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PostShipPurchaseCargo(shipSymbol);
+        return await this.spaceTradersApi.PostShipPurchaseCargo(shipSymbol, shipPurchaseCargoRequest);
     }
 }
