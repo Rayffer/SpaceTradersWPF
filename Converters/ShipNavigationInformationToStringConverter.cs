@@ -18,7 +18,7 @@ internal class ShipNavigationInformationToStringConverter : IValueConverter
             }
             else if (shipNavigationInformation.Status == "IN_TRANSIT")
             {
-                return $"In transit to {shipNavigationInformation.Route.Destination.Symbol}, arrival at {shipNavigationInformation.Route.Arrival}";
+                return $"In transit to {shipNavigationInformation.Route.Destination.Symbol}, arrival at {shipNavigationInformation.Route.Arrival.Add(TimeZone.CurrentTimeZone.GetUtcOffset(DateTime.Now))}";
             }
             else if (shipNavigationInformation.Status == "IN_ORBIT")
             {
