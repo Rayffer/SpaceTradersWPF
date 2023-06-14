@@ -101,7 +101,7 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand AutomateMiningCommand => this.automateMiningCommand ??= new DelegateCommand<Ship>(this.AutomateMining, this.CanStartMiningAutomation);
     public ICommand AutomateExplorationCommand => this.automateExplorationCommand ??= new DelegateCommand<Ship>(this.AutomateExploration, this.CanStartExplorationAutomation);
     public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
-    public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand<Ship>(this.PerformJump, this.CanJump);
+    public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformJump(ship), this.CanJump);
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -202,8 +202,19 @@ internal class AgentShipsViewModel : BindableBase
         }
     }
 
-    private void PerformJump(Ship ship)
+    private async Task PerformJump(Ship ship)
     {
+        var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+        if (cooldown is not null)
+        {
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} is cooling down",
+                $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
+                NotificationTypes.WarningFeedback,
+                true);
+            return;
+        }
+
         this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipJumpView));
         this.eventAggregator
             .GetEvent<ShipJumpRequestEvent>()
@@ -442,77 +453,79 @@ internal class AgentShipsViewModel : BindableBase
                 });
             }
 
-            while (!cancellationToken.IsCancellationRequested)
+            ship = await this.spaceTradersApi.GetShip(ship.Symbol);
+            var waypoints = await this.spaceTradersApi.GetWaypoints(ship.NavigationInformation.WaypointSymbol, 1, 20);
+            var jumpgateWaypoints = waypoints.Where(waypoint => waypoint.Type == "JUMP_GATE");
+            var systemWaypoints = waypoints.Except(jumpgateWaypoints);
+
+            foreach (var waypoint in systemWaypoints)
             {
-                ship = await this.spaceTradersApi.GetShip(ship.Symbol);
-                var waypoints = await this.spaceTradersApi.GetWaypoints(ship.NavigationInformation.WaypointSymbol, 1, 20);
-                var jumpgateWaypoints = waypoints.Where(waypoint => waypoint.Type == "JUMP_GATE");
-                var systemWaypoints = waypoints.Except(jumpgateWaypoints);
-
-                foreach (var waypoint in systemWaypoints)
+                if (cancellationToken.IsCancellationRequested)
                 {
-                    if (cancellationToken.IsCancellationRequested)
-                    {
-                        break;
-                    }
+                    break;
+                }
 
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        this.notificationService.ShowFlyoutNotification(
-                            $"{ship.Symbol} departed for {ship.NavigationInformation.WaypointSymbol}",
-                            string.Empty,
-                            NotificationTypes.PositiveFeedback);
-                    });
-                    var navigationInformation = await this.spaceTradersApi.PostShipNavigate(ship.Symbol, waypoint.Symbol);
-                    await Task.Delay(navigationInformation.NavigationInformation.Route.Arrival - DateTime.UtcNow + TimeSpan.FromSeconds(5));
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.notificationService.ShowFlyoutNotification(
+                        $"{ship.Symbol} departed for {ship.NavigationInformation.WaypointSymbol}",
+                        string.Empty,
+                        NotificationTypes.PositiveFeedback);
+                });
+                var navigationInformation = await this.spaceTradersApi.PostShipNavigate(ship.Symbol, waypoint.Symbol);
+                if (navigationInformation is null)
+                {
+                    continue;
+                }
+                await Task.Delay(navigationInformation.NavigationInformation.Route.Arrival - DateTime.UtcNow + TimeSpan.FromSeconds(5));
 
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        this.notificationService.ShowFlyoutNotification(
-                            $"{ship.Symbol} arrived at {ship.NavigationInformation.WaypointSymbol}",
-                            $"Inspecting for charts, markets and shipyards",
-                            NotificationTypes.PositiveFeedback);
-                    });
-                    var currentWaypoint = await this.spaceTradersApi.GetWaypoint(waypoint.Symbol);
-                    if (currentWaypoint.Chart is null)
-                    {
-                        await this.spaceTradersApi.PostShipCreateChart(ship.Symbol);
-                        await Task.Delay(1);
-                    }
-                    await this.spaceTradersApi.PostShipDock(ship.Symbol);
-                    await Task.Delay(1);
-                    var market = await this.spaceTradersApi.GetMarket(currentWaypoint.Symbol);
-                    var shipyard = await this.spaceTradersApi.GetShipyard(currentWaypoint.Symbol);
-
-                    if (market is not null)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            this.notificationService.ShowFlyoutNotification(
-                                $"{ship.Symbol} found a market on {ship.NavigationInformation.WaypointSymbol}",
-                                $"Saving current market information",
-                                NotificationTypes.PositiveFeedback);
-                        });
-                        this.marketService.RemoveMarket(market.Symbol);
-                        this.marketService.SaveMarket(market);
-                    }
-                    if (shipyard is not null)
-                    {
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            this.notificationService.ShowFlyoutNotification(
-                                $"{ship.Symbol} found a shipyard on {ship.NavigationInformation.WaypointSymbol}",
-                                $"Saving current market information",
-                                NotificationTypes.PositiveFeedback);
-                        });
-                        this.shipyardService.RemoveShipyard(shipyard.Symbol);
-                        this.shipyardService.SaveShipyard(shipyard);
-                    }
-
-                    await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    this.notificationService.ShowFlyoutNotification(
+                        $"{ship.Symbol} arrived at {ship.NavigationInformation.WaypointSymbol}",
+                        $"Inspecting for charts, markets and shipyards",
+                        NotificationTypes.PositiveFeedback);
+                });
+                var currentWaypoint = await this.spaceTradersApi.GetWaypoint(waypoint.Symbol);
+                if (currentWaypoint.Chart is null)
+                {
+                    await this.spaceTradersApi.PostShipCreateChart(ship.Symbol);
                     await Task.Delay(1);
                 }
+                await this.spaceTradersApi.PostShipDock(ship.Symbol);
+                await Task.Delay(1);
+                var market = await this.spaceTradersApi.GetMarket(currentWaypoint.Symbol);
+                var shipyard = await this.spaceTradersApi.GetShipyard(currentWaypoint.Symbol);
+
+                if (market is not null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} found a market on {ship.NavigationInformation.WaypointSymbol}",
+                            $"Saving current market information",
+                            NotificationTypes.PositiveFeedback);
+                    });
+                    this.marketService.RemoveMarket(market.Symbol);
+                    this.marketService.SaveMarket(market);
+                }
+                if (shipyard is not null)
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        this.notificationService.ShowFlyoutNotification(
+                            $"{ship.Symbol} found a shipyard on {ship.NavigationInformation.WaypointSymbol}",
+                            $"Saving current market information",
+                            NotificationTypes.PositiveFeedback);
+                    });
+                    this.shipyardService.RemoveShipyard(shipyard.Symbol);
+                    this.shipyardService.SaveShipyard(shipyard);
+                }
+
+                await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
+                await Task.Delay(1);
             }
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 shipCancellationTokens.Remove(ship.Symbol);
