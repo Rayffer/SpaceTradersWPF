@@ -187,10 +187,10 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.PostShipOrbit(shipSymbol);
     }
 
-    public async Task<ShipCargo> PostShipTransferCargo(string shipSymbol)
+    public async Task<ShipCargo> PostShipTransferCargo(string shipSymbol, PostShipTransferCargoRequest shipTransferCargoRequest)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PostShipTransferCargo(shipSymbol);
+        return await this.spaceTradersApi.PostShipTransferCargo(shipSymbol, shipTransferCargoRequest);
     }
 
     public async Task<AgentResponse> RegisterAgent(string symbol, string faction)

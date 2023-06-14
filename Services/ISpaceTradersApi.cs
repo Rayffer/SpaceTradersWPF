@@ -83,7 +83,7 @@ internal interface ISpaceTradersApi
 
     Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol, PostShipPurchaseCargoRequest shipPurchaseCargoRequest);
 
-    Task<ShipCargo> PostShipTransferCargo(string shipSymbol);
+    Task<ShipCargo> PostShipTransferCargo(string shipSymbol, PostShipTransferCargoRequest shipTransferCargoRequest);
 
     Task<ShipCargo> GetShipCargo(string shipSymbol);
 
