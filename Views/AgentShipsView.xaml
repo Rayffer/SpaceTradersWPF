@@ -79,8 +79,8 @@
                     Header="Symbol" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Registration.Role}"
-                    Header="Role" />
+                    Binding="{Binding NavigationInformation.SystemSymbol}"
+                    Header="Current System" />
                 <DataGridTextColumn
                     Width="*"
                     Binding="{Binding Frame.Name}"
@@ -342,8 +342,8 @@
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <TextBlock
-                    VerticalAlignment="Center"
                     Padding="2,8"
+                    VerticalAlignment="Center"
                     FontSize="{DynamicResource Level2FontSize}"
                     Text="Available actions:" />
                 <WrapPanel
@@ -421,7 +421,7 @@
                     <Button
                         Command="{Binding AutomateExplorationCommand}"
                         CommandParameter="{Binding SelectedShip}"
-                        Content="Set Exploration Order"
+                        Content="Set System Exploration Order"
                         FontSize="{DynamicResource Level5FontSize}"
                         Visibility="{Binding IsEnabled, RelativeSource={RelativeSource Self}, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Button
