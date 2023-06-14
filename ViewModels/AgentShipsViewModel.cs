@@ -560,6 +560,7 @@ internal class AgentShipsViewModel : BindableBase
     {
         return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.Mounts.Any(module => module.Symbol.StartsWith("MOUNT_MINING_LASER"))
                && ship.NavigationInformation.Status == "IN_ORBIT"
                && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
@@ -568,6 +569,7 @@ internal class AgentShipsViewModel : BindableBase
     {
         return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.Mounts.Any(module => module.Symbol.StartsWith("MOUNT_SURVEYOR"))
                && ship.NavigationInformation.Status == "IN_ORBIT"
                && ship.NavigationInformation.Route.Destination.Type == "ASTEROID_FIELD";
     }
@@ -576,13 +578,16 @@ internal class AgentShipsViewModel : BindableBase
     {
         return ship is not null
                && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.Modules.Any(module => module.Symbol.StartsWith("MODULE_WARP_DRIVE"))
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
     private bool CanJump(Ship ship)
     {
         return ship is not null
-               && ship.NavigationInformation.Route.Destination.Type == "JUMP_GATE"
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && (ship.NavigationInformation.Route.Destination.Type == "JUMP_GATE" ||
+                   ship.Modules.Any(module => module.Symbol.StartsWith("MODULE_JUMP_DRIVE")))
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
@@ -645,6 +650,7 @@ internal class AgentShipsViewModel : BindableBase
     private bool CanStartExplorationAutomation(Ship ship)
     {
         return ship is not null
+            && ship.NavigationInformation.Status == "IN_ORBIT"
             && ship.Frame.Symbol.Equals("FRAME_PROBE")
             && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
