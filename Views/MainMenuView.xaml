@@ -42,10 +42,6 @@
             Margin="2"
             Orientation="Vertical">
             <Button
-                Command="{Binding LogoutAgentCommand}"
-                Content="Sign out"
-                FontSize="{DynamicResource Level2FontSize}" />
-            <Button
                 Command="{Binding ExitApplicationCommand}"
                 Content="Exit"
                 FontSize="{DynamicResource Level2FontSize}" />

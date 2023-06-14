@@ -19,14 +19,12 @@ internal class MainMenuViewModel : BindableBase
     private DelegateCommand openSystemsInformationCommand;
     private DelegateCommand openMapCommand;
     private DelegateCommand openSystemMapCommand;
-    private DelegateCommand logoutAgentCommand;
     private DelegateCommand exitApplicationCommand;
     private DelegateCommand openShipInformationCommand;
     private readonly IRegionManager regionManager;
 
     public ICommand OpenShipInformationCommand => this.openShipInformationCommand ??= new DelegateCommand(this.OpenShipInformation);
     public ICommand ExitApplicationCommand => this.exitApplicationCommand ??= new DelegateCommand(this.ExitApplication);
-    public ICommand LogoutAgentCommand => this.logoutAgentCommand ??= new DelegateCommand(this.LogoutAgent);
     public ICommand OpenSystemMapCommand => this.openSystemMapCommand ??= new DelegateCommand(this.OpenSystemMap);
     public ICommand OpenMapCommand => this.openMapCommand ??= new DelegateCommand(this.OpenMap);
     public ICommand OpenSystemsInformationCommand => this.openSystemsInformationCommand ??= new DelegateCommand(this.OpenSystemsInformation);
@@ -87,10 +85,6 @@ internal class MainMenuViewModel : BindableBase
     }
 
     private void OpenSystemMap()
-    {
-    }
-
-    private void LogoutAgent()
     {
     }
 
