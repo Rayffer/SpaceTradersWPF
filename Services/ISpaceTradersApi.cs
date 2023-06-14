@@ -61,7 +61,7 @@ internal interface ISpaceTradersApi
 
     Task<ExtractionResponse> PostShipExtractResources(string shipSymbol, string waypointSymbol);
 
-    Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol);
+    Task<CargoJettisonResponse> PostShipJettisonCargo(string shipSymbol, PostShipJettisonCargoRequest shipJettisonCargoRequest);
 
     Task<JumpResponse> PostShipJump(string shipSymbol, string systemSymbol);
 
@@ -69,7 +69,7 @@ internal interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel);
 
-    Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol);
+    Task<WarpResponse> PostShipWarp(string shipSymbol, string waypointSymbol);
 
     Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, PostShipSellCargoRequest shipSellCargoRequest);
 
@@ -81,7 +81,7 @@ internal interface ISpaceTradersApi
 
     Task<RefuelResponse> PostShipRefuel(string shipSymbol);
 
-    Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol);
+    Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol, PostShipPurchaseCargoRequest shipPurchaseCargoRequest);
 
     Task<ShipCargo> PostShipTransferCargo(string shipSymbol);
 

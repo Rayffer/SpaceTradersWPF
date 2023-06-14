@@ -183,9 +183,14 @@ internal partial class SpaceTradersApi
         return response.Data;
     }
 
-    public async Task<ShipNavigationInformation> PostShipJettisonCargo(string shipSymbol)
+    public async Task<CargoJettisonResponse> PostShipJettisonCargo(string shipSymbol, PostShipJettisonCargoRequest shipJettisonCargoRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipJettisonResource, shipSymbol), Method.Post);
+        request.AddBody(shipJettisonCargoRequest);
+        var response = await this.restClient.ExecuteAsync(request);
+        var deserializedResponse = JsonConvert.DeserializeObject<ApiResponse<CargoJettisonResponse>>(response.Content);
+
+        return deserializedResponse.Data;
     }
 
     public async Task<JumpResponse> PostShipJump(string shipSymbol, string systemSymbol)
@@ -212,9 +217,16 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<NavigationResponse>>(response.Content).Data;
     }
 
-    public async Task<NavigationResponse> PostShipWarp(string shipSymbol, string waypointSymbol)
+    public async Task<WarpResponse> PostShipWarp(string shipSymbol, string waypointSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipWarpResource, shipSymbol), Method.Post);
+        request.AddBody(new ShipWarpRequestModel
+        {
+            WaypointSymbol = waypointSymbol
+        });
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<WarpResponse>>(response.Content).Data;
     }
 
     public async Task<CargoTransactionResponse> PostShipSellCargo(string shipSymbol, PostShipSellCargoRequest shipSellCargoRequest)
@@ -229,17 +241,26 @@ internal partial class SpaceTradersApi
 
     public async Task<ScanSystemsResponse> PostShipScanSystems(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipScanSystemsResource, shipSymbol), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ScanSystemsResponse>>(response.Content).Data;
     }
 
     public async Task<ScanWaypointsResponse> PostShipScanWaypoints(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipScanWaypointsResource, shipSymbol), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ScanWaypointsResponse>>(response.Content).Data;
     }
 
     public async Task<ScanShipsResponse> PostShipScanShips(string shipSymbol)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipScanShipsResource, shipSymbol), Method.Post);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<ScanShipsResponse>>(response.Content).Data;
     }
 
     public async Task<RefuelResponse> PostShipRefuel(string shipSymbol)
@@ -250,14 +271,24 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<RefuelResponse>>(response.Content).Data;
     }
 
-    public async Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol)
+    public async Task<CargoTransactionResponse> PostShipPurchaseCargo(string shipSymbol, PostShipPurchaseCargoRequest shipPurchaseCargoRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipPurchaseCargoResource, shipSymbol), Method.Post);
+        request.AddBody(shipPurchaseCargoRequest);
+        var response = await this.restClient.ExecuteAsync(request);
+        var deserializedResponse = JsonConvert.DeserializeObject<ApiResponse<CargoTransactionResponse>>(response.Content);
+
+        return deserializedResponse.Data;
     }
 
-    public async Task<ShipCargo> PostShipTransferCargo(string shipSymbol)
+    public async Task<ShipCargo> PostShipTransferCargo(string shipSymbol, PostShipTransferCargoRequest shipTransferCargoRequest)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(string.Format(PostShipTransferCargoResource, shipSymbol), Method.Post);
+        request.AddBody(shipTransferCargoRequest);
+        var response = await this.restClient.ExecuteAsync(request);
+        var deserializedResponse = JsonConvert.DeserializeObject<ApiResponse<ShipCargo>>(response.Content);
+
+        return deserializedResponse.Data;
     }
 
     public async Task<ShipNavigationInformation> PatchShipNavigation(string shipSymbol, PatchShipNavigationRequestModel shipNavigationRequestModel)
