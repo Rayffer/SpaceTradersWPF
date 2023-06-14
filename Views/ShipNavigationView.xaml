@@ -50,7 +50,8 @@
                                         <Binding Path="Symbol" />
                                         <Binding Path="Type" />
                                     </MultiBinding>
-                                </TextBlock.Text></TextBlock>
+                                </TextBlock.Text>
+                            </TextBlock>
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                     <behavior:Interaction.Triggers>
@@ -64,18 +65,24 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Text="Estimated fuel cost:" />
-                <TextBlock
+                <StackPanel
                     Grid.Row="2"
                     Grid.Column="1"
-                    Text="{Binding EstimatedFuelCost}" />
+                    Orientation="Horizontal">
+                    <TextBlock Text="{Binding EstimatedFuelCost}" />
+                    <TextBlock Text=" fuel units" />
+                </StackPanel>
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
                     Text="Estimated travel time:" />
-                <TextBlock
+                <StackPanel
                     Grid.Row="3"
                     Grid.Column="1"
-                    Text="{Binding EstimatedFlightTime}" />
+                    Orientation="Horizontal">
+                    <TextBlock Text="{Binding EstimatedFlightTime}" />
+                    <TextBlock Text=" seconds" />
+                </StackPanel>
                 <StackPanel
                     Grid.Row="4"
                     Grid.ColumnSpan="2"

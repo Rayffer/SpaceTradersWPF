@@ -110,9 +110,9 @@ internal class ShipNavigationViewModel : BindableBase
         this.EstimatedFuelCost = this.ship.NavigationInformation.FlightMode switch
         {
             "DRIFT" => 1,
-            "CRUISE" => distance,
-            "STEALTH" => distance,
-            "BURN" => distance * 2,
+            "CRUISE" => Math.Ceiling(distance),
+            "STEALTH" => Math.Ceiling(distance),
+            "BURN" => Math.Ceiling(distance * 2),
             _ => 0
         };
     }
@@ -125,10 +125,10 @@ internal class ShipNavigationViewModel : BindableBase
         var distance = Math.Sqrt(Math.Pow(xDistance, 2) + Math.Pow(yDistance, 2));
         this.EstimatedFlightTime = this.ship.NavigationInformation.FlightMode switch
         {
-            "DRIFT" => 15 + 100 * distance / this.Ship.Engine.Speed,
-            "CRUISE" => 15 + 10 * distance / this.Ship.Engine.Speed,
-            "STEALTH" => 15 + 20 * distance / this.Ship.Engine.Speed,
-            "BURN" => 15 + 5 * distance / this.Ship.Engine.Speed,
+            "DRIFT" => Math.Ceiling(15 + 100 * distance / this.Ship.Engine.Speed),
+            "CRUISE" => Math.Ceiling(15 + 10 * distance / this.Ship.Engine.Speed),
+            "STEALTH" => Math.Ceiling(15 + 20 * distance / this.Ship.Engine.Speed),
+            "BURN" => Math.Ceiling(15 + 5 * distance / this.Ship.Engine.Speed),
             _ => 0
         };
     }
