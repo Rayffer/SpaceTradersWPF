@@ -95,7 +95,7 @@ internal class ShipJumpViewModel : BindableBase
 
         this.notificationService
             .ShowFlyoutNotification(
-                $"Ship jumped to {this.SelectedSystemToJump.Symbol}",
+                $"Ship {this.Ship.Symbol} jumped to {this.SelectedSystemToJump.Symbol}",
                 string.Empty,
                 Types.NotificationTypes.PositiveFeedback);
 
