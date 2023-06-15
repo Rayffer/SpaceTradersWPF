@@ -11,7 +11,7 @@ internal class SystemFactionCollectionToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is SystemFaction[] systemFactions && 
+        if (value is SolarSystemFaction[] systemFactions && 
             systemFactions.Length > 0)
         {
             return string.Join(", ", systemFactions.Select(x => x.Symbol));

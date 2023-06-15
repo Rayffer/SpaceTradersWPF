@@ -2,13 +2,10 @@
 
 namespace SpaceTradersWPF.ApiModels;
 
-public class System
+public class SolarSystemWaypoint
 {
     [JsonProperty("symbol")]
     public string Symbol { get; set; }
-
-    [JsonProperty("sectorSymbol")]
-    public string SectorSymbol { get; set; }
 
     [JsonProperty("type")]
     public string Type { get; set; }
@@ -18,10 +15,4 @@ public class System
 
     [JsonProperty("y")]
     public int Y { get; set; }
-
-    [JsonProperty("waypoints")]
-    public SystemWaypoint[] Waypoints { get; set; }
-
-    [JsonProperty("factions")]
-    public SystemFaction[] Factions { get; set; }
 }

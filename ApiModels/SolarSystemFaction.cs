@@ -2,7 +2,7 @@
 
 namespace SpaceTradersWPF.ApiModels;
 
-public class SystemFaction
+public class SolarSystemFaction
 {
     [JsonProperty("symbol")]
     public string Symbol { get; set; }

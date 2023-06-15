@@ -8,5 +8,5 @@ internal class ScanSystemsResponse
     public ShipCooldown cooldown { get; set; }
 
     [JsonProperty("systems")]
-    public System[] systems { get; set; }
+    public SolarSystem[] systems { get; set; }
 }

@@ -133,13 +133,13 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
         return await this.spaceTradersApi.GetShipyard(waypointSymbol);
     }
 
-    public async Task<ApiModels.System> GetSystem(string waypointSymbol)
+    public async Task<SolarSystem> GetSystem(string waypointSymbol)
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.GetSystem(waypointSymbol);
     }
 
-    public async Task<ApiModels.System[]> GetSystems(int pageNumber, int pageSize)
+    public async Task<SolarSystem[]> GetSystems(int pageNumber, int pageSize)
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.GetSystems(pageNumber, pageSize);

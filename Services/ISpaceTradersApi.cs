@@ -37,9 +37,9 @@ internal interface ISpaceTradersApi
 
     Task<Waypoint[]> GetWaypoints(string waypointSymbol, int pageNumber, int pageSize);
 
-    Task<ApiModels.System> GetSystem(string waypointSymbol);
+    Task<SolarSystem> GetSystem(string waypointSymbol);
 
-    Task<ApiModels.System[]> GetSystems(int pageNumber, int pageSize);
+    Task<SolarSystem[]> GetSystems(int pageNumber, int pageSize);
 
     Task<Faction> GetFaction(string factionSymbol);
 

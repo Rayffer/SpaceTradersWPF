@@ -14,8 +14,6 @@ using SpaceTradersWPF.Events.Models;
 using SpaceTradersWPF.Services;
 using SpaceTradersWPF.Views;
 
-using ApiSystem = SpaceTradersWPF.ApiModels.System;
-
 namespace SpaceTradersWPF.ViewModels;
 
 internal class SystemInformationViewModel : BindableBase
@@ -23,8 +21,8 @@ internal class SystemInformationViewModel : BindableBase
     private readonly IEventAggregator eventAggregator;
     private readonly IRegionManager regionManager;
     private readonly ISpaceTradersApi spaceTradersApi;
-    private IEnumerable<ApiSystem> systems;
-    private ApiSystem selectedSystem;
+    private IEnumerable<SolarSystem> systems;
+    private SolarSystem selectedSystem;
     private DelegateCommand loadInformationCommand;
     private DelegateCommand<Waypoint> openWaypointInformationCommand;
     private Waypoint[] systemWaypoints;
@@ -44,13 +42,13 @@ internal class SystemInformationViewModel : BindableBase
         set => this.SetProperty(ref this.maxPage, value);
     }
 
-    public IEnumerable<ApiSystem> Systems
+    public IEnumerable<SolarSystem> Systems
     {
         get => this.systems;
         set => this.SetProperty(ref this.systems, value);
     }
 
-    public ApiSystem SelectedSystem
+    public SolarSystem SelectedSystem
     {
         get => this.selectedSystem;
         set
