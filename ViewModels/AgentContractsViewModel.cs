@@ -15,6 +15,7 @@ namespace SpaceTradersWPF.ViewModels;
 
 internal class AgentContractsViewModel : BindableBase
 {
+    private bool isProcessingCommand;
     private readonly ISpaceTradersApi spaceTradersApi;
     private readonly INotificationService notificationService;
     private IEnumerable<Contract> contracts;
@@ -26,14 +27,20 @@ internal class AgentContractsViewModel : BindableBase
     private DelegateCommand<Contract> fulfillContractCommand;
     private DelegateCommand<Contract> deliverContractCommand;
 
-    public bool IsSelectedContractFulfilled
+    public bool IsProcessingCommand 
+    {
+        get => this.isProcessingCommand; 
+        set => this.SetProperty(ref this.isProcessingCommand, value); 
+    }
+
+    public bool CanFulfillContract
     {
         get => this.SelectedContract is not null
                && !this.SelectedContract.Fulfilled
                && this.SelectedContract.Terms.Deliver.All(delivery => delivery.UnitsRequired <= delivery.UnitsFulfilled);
     }
 
-    public bool SelectedShipCanDeliverSelectedContract
+    public bool CanShipDeliverContract
     {
         get => this.SelectedContract is not null
                && this.SelectedShip is not null
@@ -72,8 +79,8 @@ internal class AgentContractsViewModel : BindableBase
         set
         {
             this.SetProperty(ref this.selectedContract, value);
-            this.RaisePropertyChanged(nameof(this.IsSelectedContractFulfilled));
-            this.RaisePropertyChanged(nameof(this.SelectedShipCanDeliverSelectedContract));
+            this.RaisePropertyChanged(nameof(this.CanFulfillContract));
+            this.RaisePropertyChanged(nameof(this.CanShipDeliverContract));
             this.RaisePropertyChanged(nameof(this.CanAcceptContract));
         }
     }
@@ -84,8 +91,8 @@ internal class AgentContractsViewModel : BindableBase
         set
         {
             this.SetProperty(ref this.selectedShip, value);
-            this.RaisePropertyChanged(nameof(this.IsSelectedContractFulfilled));
-            this.RaisePropertyChanged(nameof(this.SelectedShipCanDeliverSelectedContract));
+            this.RaisePropertyChanged(nameof(this.CanFulfillContract));
+            this.RaisePropertyChanged(nameof(this.CanShipDeliverContract));
             this.RaisePropertyChanged(nameof(this.CanAcceptContract));
         }
     }
@@ -114,6 +121,8 @@ internal class AgentContractsViewModel : BindableBase
 
     private async Task AcceptContract(Contract contract)
     {
+        this.IsProcessingCommand = true;
+
         var acceptContractResult = await this.spaceTradersApi.PostAcceptContract(contract.Id);
 
         this.notificationService.ShowToastNotification(
@@ -122,10 +131,14 @@ internal class AgentContractsViewModel : BindableBase
             $"with dealine of {acceptContractResult.Contract.DeadlineToAccept}",
             NotificationTypes.PositiveFeedback,
             true);
+
+        this.IsProcessingCommand = false;
     }
 
     private async Task DeliverContract(Contract contract)
     {
+        this.IsProcessingCommand = true;
+
         if (this.SelectedShip.NavigationInformation.Status == "IN_ORBIT")
         {
             await this.spaceTradersApi.PostShipDock(this.SelectedShip.Symbol);
@@ -151,7 +164,6 @@ internal class AgentContractsViewModel : BindableBase
             string.Empty,
             NotificationTypes.PositiveFeedback);
 
-
         if (this.SelectedShip.NavigationInformation.Status == "DOCKED")
         {
             await this.spaceTradersApi.PostShipOrbit(this.SelectedShip.Symbol);
@@ -160,16 +172,22 @@ internal class AgentContractsViewModel : BindableBase
 
         await this.RefreshContracts(contract);
         await this.RefreshShips(this.SelectedShip);
+
+        this.IsProcessingCommand = false;
     }
 
     private async Task FulfillContract(Contract contract)
     {
-        var fulfilledContract = await this.spaceTradersApi.PostFulfillContract(contract.Id);
+        this.IsProcessingCommand = true;
+
+        _ = await this.spaceTradersApi.PostFulfillContract(contract.Id);
 
         this.notificationService.ShowToastNotification(
             $"Fulfilled contract {contract.Id}",
             $"received {contract.Terms.Payment.OnFulfilled} credits",
             NotificationTypes.PositiveFeedback);
+
+        this.IsProcessingCommand = false;
     }
 
     private async Task RefreshContracts(Contract contract)

@@ -15,6 +15,9 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <converters:ObjectIsNullVisibilityConverter x:Key="ObjectIsNullVisibilityConverter" />
+        <converters:BooleanToInvertedBooleanConverter x:Key="BooleanToInvertedBooleanConverter" />
+        <converters:ObjectIsNullBooleanConverter x:Key="ObjectIsNullBooleanConverter" />
+        <converters:BooleanToVisibilityMultiConverter x:Key="BooleanToVisibilityMultiConverter" />
     </UserControl.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -33,6 +36,10 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
+        <Button
+            HorizontalAlignment="Left"
+            Command="{Binding LoadInformationCommand}"
+            Content="Refresh Contracts" />
         <TextBlock
             Margin="0,0,0,2"
             HorizontalAlignment="Center"
@@ -47,11 +54,16 @@
             FontSize="{DynamicResource Level1FontSize}"
             Text="Contract Summary" />
         <Border Grid.Column="1" Style="{DynamicResource AccentBorder}" />
-        <controls:LoadingSpinner
-            Grid.Row="1"
+        <controls:LoadingSpinner Grid.RowSpan="2" Grid.ColumnSpan="2">
             Grid.RowSpan="2"
-            Grid.ColumnSpan="2"
-            Visibility="{Binding Contracts, Converter={StaticResource ObjectIsNullVisibilityConverter}, FallbackValue={x:Static Visibility.Collapsed}}" />
+            Grid.ColumnSpan="2">
+            <controls:LoadingSpinner.Visibility>
+                <MultiBinding Converter="{StaticResource BooleanToVisibilityMultiConverter}">
+                    <Binding Converter="{StaticResource ObjectIsNullBooleanConverter}" Path="Contracts" />
+                    <Binding Path="IsProcessingCommand" />
+                </MultiBinding>
+            </controls:LoadingSpinner.Visibility>
+        </controls:LoadingSpinner>
         <DataGrid
             Grid.Row="1"
             Margin="5,0"
@@ -249,14 +261,19 @@
                     </DataGrid>
                 </Grid>
             </Grid>
-            <StackPanel
-                Grid.Row="1"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="{DynamicResource Level2FontSize}"
                     Text="Available actions:" />
+                <WrapPanel
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
                 <Button
                     Command="{Binding AcceptContractCommand}"
                     CommandParameter="{Binding SelectedContract}"
@@ -268,14 +285,15 @@
                     CommandParameter="{Binding SelectedContract}"
                     Content="Deliver contract cargo"
                     FontSize="{DynamicResource Level5FontSize}"
-                    IsEnabled="{Binding SelectedShipCanDeliverSelectedContract}" />
+                    IsEnabled="{Binding CanShipDeliverContract}" />
                 <Button
                     Command="{Binding FulfillContractCommand}"
                     CommandParameter="{Binding SelectedContract}"
                     Content="Fulfill contract"
                     FontSize="{DynamicResource Level5FontSize}"
-                    IsEnabled="{Binding IsSelectedContractFulfilled}" />
-            </StackPanel>
+                    IsEnabled="{Binding CanFulfillContract}" />
+                </WrapPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
