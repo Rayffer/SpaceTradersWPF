@@ -26,9 +26,10 @@ internal class AgentContractsViewModel : BindableBase
     private DelegateCommand<Contract> acceptContractCommand;
     private DelegateCommand<Contract> fulfillContractCommand;
     private DelegateCommand<Contract> deliverContractCommand;
+    private DelegateCommand<Ship> negotiateContractCommand;
 
     public bool IsProcessingCommand 
-    {
+    { 
         get => this.isProcessingCommand; 
         set => this.SetProperty(ref this.isProcessingCommand, value); 
     }
@@ -58,6 +59,12 @@ internal class AgentContractsViewModel : BindableBase
             !this.SelectedContract.Accepted;
     }
 
+    public bool CanShipNegotiateContract
+    {
+        get => this.Contracts?.All(x => x.Accepted && x.Fulfilled) ?? false &&
+               this.SelectedShip.NavigationInformation.Status == "DOCKED";
+    }
+
     public IEnumerable<Contract> Contracts
     {
         get => this.contracts;
@@ -82,6 +89,7 @@ internal class AgentContractsViewModel : BindableBase
             this.RaisePropertyChanged(nameof(this.CanFulfillContract));
             this.RaisePropertyChanged(nameof(this.CanShipDeliverContract));
             this.RaisePropertyChanged(nameof(this.CanAcceptContract));
+            this.RaisePropertyChanged(nameof(this.CanShipNegotiateContract));
         }
     }
 
@@ -94,16 +102,15 @@ internal class AgentContractsViewModel : BindableBase
             this.RaisePropertyChanged(nameof(this.CanFulfillContract));
             this.RaisePropertyChanged(nameof(this.CanShipDeliverContract));
             this.RaisePropertyChanged(nameof(this.CanAcceptContract));
+            this.RaisePropertyChanged(nameof(this.CanShipNegotiateContract));
         }
     }
 
     public ICommand AcceptContractCommand => this.acceptContractCommand ??= new DelegateCommand<Contract>(async contract => await this.AcceptContract(contract));
-
     public ICommand DeliverContractCommand => this.deliverContractCommand ??= new DelegateCommand<Contract>(async contract => await this.DeliverContract(contract));
-
     public ICommand FulfillContractCommand => this.fulfillContractCommand ??= new DelegateCommand<Contract>(async contract => await this.FulfillContract(contract));
-
     public ICommand LoadInformationCommand => this.loadContractsCommand ??= new DelegateCommand(async () => await this.LoadInformation());
+    public ICommand NegotiateContractCommand => this.negotiateContractCommand ??= new DelegateCommand<Ship>(async ship => await this.NegotiateContract(ship));
 
     public AgentContractsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -210,5 +217,22 @@ internal class AgentContractsViewModel : BindableBase
         {
             this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
         }
+    }
+
+    private async Task NegotiateContract(Ship ship)
+    {
+        this.IsProcessingCommand = true;
+
+        var contract = await this.spaceTradersApi.PostShipNegotiateContract(ship.Symbol);
+
+        if (contract is not null)
+        {
+            this.notificationService.ShowToastNotification(
+                "New contract negotiated",
+                $"Contract {contract.Id} received, check details",
+                NotificationTypes.PositiveFeedback);
+        }
+
+        this.IsProcessingCommand = false;
     }
 }
