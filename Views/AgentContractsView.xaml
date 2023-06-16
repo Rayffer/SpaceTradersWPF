@@ -55,8 +55,6 @@
             Text="Contract Summary" />
         <Border Grid.Column="1" Style="{DynamicResource AccentBorder}" />
         <controls:LoadingSpinner Grid.RowSpan="2" Grid.ColumnSpan="2">
-            Grid.RowSpan="2"
-            Grid.ColumnSpan="2">
             <controls:LoadingSpinner.Visibility>
                 <MultiBinding Converter="{StaticResource BooleanToVisibilityMultiConverter}">
                     <Binding Converter="{StaticResource ObjectIsNullBooleanConverter}" Path="Contracts" />
@@ -274,24 +272,30 @@
                     Grid.Column="1"
                     VerticalAlignment="Center"
                     Orientation="Horizontal">
-                <Button
-                    Command="{Binding AcceptContractCommand}"
-                    CommandParameter="{Binding SelectedContract}"
-                    Content="Accept contract"
-                    FontSize="{DynamicResource Level5FontSize}"
-                    IsEnabled="{Binding CanAcceptContract}" />
-                <Button
-                    Command="{Binding DeliverContractCommand}"
-                    CommandParameter="{Binding SelectedContract}"
-                    Content="Deliver contract cargo"
-                    FontSize="{DynamicResource Level5FontSize}"
-                    IsEnabled="{Binding CanShipDeliverContract}" />
-                <Button
-                    Command="{Binding FulfillContractCommand}"
-                    CommandParameter="{Binding SelectedContract}"
-                    Content="Fulfill contract"
-                    FontSize="{DynamicResource Level5FontSize}"
-                    IsEnabled="{Binding CanFulfillContract}" />
+                    <Button
+                        Command="{Binding NegotiateContractCommand}"
+                        CommandParameter="{Binding SelectedShip}"
+                        Content="Negotiate new contract"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        IsEnabled="{Binding CanShipNegotiateContract}" />
+                    <Button
+                        Command="{Binding AcceptContractCommand}"
+                        CommandParameter="{Binding SelectedContract}"
+                        Content="Accept contract"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        IsEnabled="{Binding CanAcceptContract}" />
+                    <Button
+                        Command="{Binding DeliverContractCommand}"
+                        CommandParameter="{Binding SelectedContract}"
+                        Content="Deliver contract cargo"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        IsEnabled="{Binding CanShipDeliverContract}" />
+                    <Button
+                        Command="{Binding FulfillContractCommand}"
+                        CommandParameter="{Binding SelectedContract}"
+                        Content="Fulfill contract"
+                        FontSize="{DynamicResource Level5FontSize}"
+                        IsEnabled="{Binding CanFulfillContract}" />
                 </WrapPanel>
             </Grid>
         </Grid>
