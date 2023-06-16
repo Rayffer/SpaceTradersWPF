@@ -11,15 +11,15 @@ using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 
-internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
+internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi, IDisposable
 {
     private readonly ISpaceTradersApi spaceTradersApi;
-    private TokenBucketRateLimiter secondsLimitBucket;
+    private TokenBucketRateLimiter instantLimitBucket;
     private TokenBucketRateLimiter burstLimitBucket;
 
     public SpaceTradersApiRateLimitedProxy([Unity.Dependency("SpaceTradersApi")] ISpaceTradersApi spaceTradersApi)
     {
-        this.secondsLimitBucket = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
+        this.instantLimitBucket = new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
         {
             ReplenishmentPeriod = TimeSpan.FromSeconds(1.5),
             TokensPerPeriod = 2,
@@ -43,7 +43,7 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
             {
                 Thread.Sleep(250);
             }
-            while (!this.secondsLimitBucket.AttemptAcquire().IsAcquired)
+            while (!this.instantLimitBucket.AttemptAcquire().IsAcquired)
             {
                 Thread.Sleep(250);
             }
@@ -299,5 +299,18 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.PostShipPurchaseCargo(shipSymbol, shipPurchaseCargoRequest);
+    }
+
+    public async Task<Contract> PostShipNegotiateContract(string shipSymbol)
+    {
+        await this.AcquireRateLimitToken();
+        return await this.spaceTradersApi.PostShipNegotiateContract(shipSymbol);
+
+    }
+
+    public void Dispose()
+    {
+        this.instantLimitBucket.Dispose();
+        this.burstLimitBucket.Dispose();
     }
 }

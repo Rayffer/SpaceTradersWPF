@@ -39,6 +39,7 @@ internal partial class SpaceTradersApi
     private const string PostShipRefuelResource = "/my/ships/{0}/refuel";
     private const string PostShipPurchaseCargoResource = "/my/ships/{0}/purchase";
     private const string PostShipTransferCargoResource = "/my/ships/{0}/transfer";
+    private const string PostShipNegotiateContractResource = "my/ships/{0}/negotiate/contract";
     private const string PatchShipNavigationInformationResource = "/my/ships/{0}/nav";
 
     public async Task<Ship> GetShip(string shipSymbol)
@@ -298,5 +299,13 @@ internal partial class SpaceTradersApi
         var response = await this.restClient.ExecuteAsync(request);
 
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
+    }
+
+    public async Task<Contract> PostShipNegotiateContract(string shipSymbol)
+    {
+        var request = new RestRequest(string.Format(PostShipNegotiateContractResource, shipSymbol), Method.Patch);
+        var response = await this.restClient.ExecuteAsync(request);
+
+        return JsonConvert.DeserializeObject<ApiResponse<Contract>>(response.Content).Data;
     }
 }

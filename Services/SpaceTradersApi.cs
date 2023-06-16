@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using RestSharp;
 
+using SpaceTradersWPF.ApiModels;
 using SpaceTradersWPF.Mappers;
 
 namespace SpaceTradersWPF.Services;

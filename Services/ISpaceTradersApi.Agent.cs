@@ -1,15 +1,13 @@
 ﻿using System.Threading.Tasks;
 
 using SpaceTradersWPF.ApiModels;
-using SpaceTradersWPF.ApiModels.Requests;
 using SpaceTradersWPF.ApiModels.Responses;
-using SpaceTradersWPF.Types;
 
 namespace SpaceTradersWPF.Services;
 
 internal partial interface ISpaceTradersApi
 {
-    void ClearAccessToken();
+    Task<AgentResponse> RegisterAgent(string symbol, string faction);
 
-    void SetAccessTokenHeader(string token);
+    Task<Agent> GetAgent();
 }
