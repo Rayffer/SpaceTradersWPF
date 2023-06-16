@@ -31,6 +31,11 @@ internal class AgentShipsViewModel : BindableBase
     private readonly IWaypointSurveyService waypointSurveyService;
     private readonly IMarketService marketService;
     private readonly IShipyardService shipyardService;
+    private int pageNumber;
+    private bool isProcessingCommand;
+    private bool alreadyLoaded;
+    private int maxPage;
+    private string cargoToSell;
     private IEnumerable<Ship> ships;
     private Ship selectedShip;
     private Inventory selectedInventory;
@@ -47,11 +52,25 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<Ship> cancelShipAutomationCommand;
     private DelegateCommand<Ship> automateExplorationCommand;
     private DelegateCommand<Ship> performJumpCommand;
+    private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new();
 
-    private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new Dictionary<string, CancellationTokenSource>();
+    public int PageNumber
+    {
+        get => this.pageNumber;
+        set => this.SetProperty(ref this.pageNumber, value);
+    }
 
-    private bool alreadyLoaded;
-    private string cargoToSell;
+    public int MaxPage
+    {
+        get => this.maxPage;
+        set => this.SetProperty(ref this.maxPage, value);
+    }
+
+    public bool IsProcessingCommand
+    {
+        get => this.isProcessingCommand;
+        set => this.SetProperty(ref this.isProcessingCommand, value);
+    }
 
     public string CargoToSell
     {
@@ -120,6 +139,8 @@ internal class AgentShipsViewModel : BindableBase
         this.shipyardService = shipyardService;
         this.eventAggregator = eventAggregator;
         this.eventAggregator.GetEvent<ShipInformationEvent>().Subscribe(async (eventInformation) => await this.LoadSelectedShipInformation(eventInformation));
+
+        this.PageNumber = 1;
     }
 
     ~AgentShipsViewModel()
@@ -135,6 +156,7 @@ internal class AgentShipsViewModel : BindableBase
 
     private async Task LoadShips()
     {
+        this.IsProcessingCommand = true;
         if (this.alreadyLoaded)
         {
             this.alreadyLoaded = false;
@@ -142,10 +164,12 @@ internal class AgentShipsViewModel : BindableBase
         }
 
         await this.RefreshShips(this.SelectedShip);
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformExtraction(Ship ship)
     {
+        this.IsProcessingCommand = true;
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
         if (cooldown is not null)
         {
@@ -164,10 +188,12 @@ internal class AgentShipsViewModel : BindableBase
             NotificationTypes.PositiveFeedback,
             true);
         await this.RefreshShips(ship);
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformSurvey(Ship ship)
     {
+        this.IsProcessingCommand = true;
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
         if (cooldown is not null)
         {
@@ -186,10 +212,12 @@ internal class AgentShipsViewModel : BindableBase
             $"Found fields: {string.Join(", ", surveyInformation.Surveys.SelectMany(survey => survey.Deposits.Select(deposit => deposit.Symbol)))}",
             NotificationTypes.PositiveFeedback,
             true);
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformWarp(Ship ship)
     {
+        this.IsProcessingCommand = true;
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
         if (cooldown is not null)
         {
@@ -200,10 +228,12 @@ internal class AgentShipsViewModel : BindableBase
                 true);
             return;
         }
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformJump(Ship ship)
     {
+        this.IsProcessingCommand = true;
         var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
         if (cooldown is not null)
         {
@@ -222,10 +252,12 @@ internal class AgentShipsViewModel : BindableBase
             {
                 Ship = ship
             });
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformOrbit(Ship ship)
     {
+        this.IsProcessingCommand = true;
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
         await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
@@ -233,10 +265,12 @@ internal class AgentShipsViewModel : BindableBase
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformDock(Ship ship)
     {
+        this.IsProcessingCommand = true;
         _ = await this.spaceTradersApi.PostShipDock(ship.Symbol);
         if (this.SelectedInventory is null)
         {
@@ -248,10 +282,12 @@ internal class AgentShipsViewModel : BindableBase
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        this.IsProcessingCommand = false;
     }
 
     private void PerformNavigate(Ship ship)
     {
+        this.IsProcessingCommand = true;
         this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipNavigationView));
         this.eventAggregator
             .GetEvent<ShipNavigationRequestEvent>()
@@ -259,10 +295,12 @@ internal class AgentShipsViewModel : BindableBase
             {
                 Ship = ship
             });
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformRefuel(Ship ship)
     {
+        this.IsProcessingCommand = true;
         var refuelResponse = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
         await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
@@ -270,19 +308,21 @@ internal class AgentShipsViewModel : BindableBase
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        this.IsProcessingCommand = false;
     }
 
     private async Task RefreshShips(Ship ship)
     {
-        this.Ships = await this.spaceTradersApi.GetShips(1, 20);
+        this.Ships = await this.spaceTradersApi.GetShips(this.PageNumber, 20);
         if (ship is not null)
         {
-            this.SelectedShip = this.Ships.First(x => x.Symbol == ship.Symbol);
+            this.SelectedShip = this.Ships.FirstOrDefault(x => x.Symbol == ship.Symbol);
         }
     }
 
     private async Task PerformInventorySell(object[] commandParameters)
     {
+        this.IsProcessingCommand = true;
         if (commandParameters.Length == 2 &&
             commandParameters[0] is Ship ship)
         {
@@ -299,10 +339,12 @@ internal class AgentShipsViewModel : BindableBase
 
             await this.RefreshShips(this.SelectedShip);
         }
+        this.IsProcessingCommand = false;
     }
 
     private void AutomateMining(Ship shipToAutomate)
     {
+        this.IsProcessingCommand = true;
         var clonedShip = shipToAutomate.Clone();
         var shipCancellationTokenSource = new CancellationTokenSource();
         shipCancellationTokens.Add(clonedShip.Symbol, shipCancellationTokenSource);
@@ -434,10 +476,12 @@ internal class AgentShipsViewModel : BindableBase
             });
         });
         Task.Run(() => automationAction(clonedShip, shipCancellationTokenSource));
+        this.IsProcessingCommand = false;
     }
 
     private void AutomateExploration(Ship shipToAutomate)
     {
+        this.IsProcessingCommand = true;
         var clonedShip = shipToAutomate.Clone();
         var shipCancellationTokenSource = new CancellationTokenSource();
         shipCancellationTokens.Add(clonedShip.Symbol, shipCancellationTokenSource);
@@ -537,6 +581,7 @@ internal class AgentShipsViewModel : BindableBase
             });
         });
         Task.Run(() => automationAction(clonedShip, shipCancellationTokenSource));
+        this.IsProcessingCommand = false;
     }
 
     private void UpdateActionButtons()
@@ -556,6 +601,8 @@ internal class AgentShipsViewModel : BindableBase
 
     private void CancelShipAutomation(Ship ship)
     {
+        this.IsProcessingCommand = true;
+
         if (shipCancellationTokens.TryGetValue(ship.Symbol, out var cancelToken))
         {
             cancelToken.Cancel(false);
@@ -565,6 +612,8 @@ internal class AgentShipsViewModel : BindableBase
                 NotificationTypes.WarningFeedback);
             this.cancelShipAutomationCommand.RaiseCanExecuteChanged();
         }
+
+        this.IsProcessingCommand = false;
     }
 
     #region Commands CanExecute Methods
