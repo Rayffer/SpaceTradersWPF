@@ -132,6 +132,8 @@ internal class AgentContractsViewModel : BindableBase
             NotificationTypes.PositiveFeedback,
             true);
 
+        await this.RefreshContracts(this.SelectedContract);
+
         this.IsProcessingCommand = false;
     }
 
@@ -186,6 +188,8 @@ internal class AgentContractsViewModel : BindableBase
             $"Fulfilled contract {contract.Id}",
             $"received {contract.Terms.Payment.OnFulfilled} credits",
             NotificationTypes.PositiveFeedback);
+
+        await this.RefreshContracts(this.SelectedContract);
 
         this.IsProcessingCommand = false;
     }
