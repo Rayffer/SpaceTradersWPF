@@ -37,6 +37,19 @@ internal class AgentShipsViewModel : BindableBase
     private int maxPage;
     private string cargoToSell;
     private IEnumerable<Ship> ships;
+
+    private readonly IEnumerable<string> AcceptedRefineResources = new List<string>
+    {
+        "IRON_ORE",
+        "COPPER_ORE",
+        "SILVER_ORE",
+        "GOLD_ORE",
+        "ALUMINUM_ORE",
+        "PLATINUM_ORE",
+        "URANITE_ORE",
+        "MERITIUM_ORE"
+    };
+
     private Ship selectedShip;
     private Inventory selectedInventory;
     private DelegateCommand loadShipsCommand;
@@ -52,6 +65,9 @@ internal class AgentShipsViewModel : BindableBase
     private DelegateCommand<Ship> cancelShipAutomationCommand;
     private DelegateCommand<Ship> automateExplorationCommand;
     private DelegateCommand<Ship> performJumpCommand;
+    private DelegateCommand<Ship> performInventoryTransferCommand;
+    private DelegateCommand<Ship> performChartCommand;
+    private DelegateCommand<Ship> performRefineCommand;
     private static readonly Dictionary<string, CancellationTokenSource> shipCancellationTokens = new();
 
     public int PageNumber
@@ -105,6 +121,7 @@ internal class AgentShipsViewModel : BindableBase
                 this.RaisePropertyChanged(nameof(this.CargoToSell));
             }
             this.performInventorySellCommand.RaiseCanExecuteChanged();
+            this.performRefineCommand.RaiseCanExecuteChanged();
         }
     }
 
@@ -121,6 +138,9 @@ internal class AgentShipsViewModel : BindableBase
     public ICommand AutomateExplorationCommand => this.automateExplorationCommand ??= new DelegateCommand<Ship>(this.AutomateExploration, this.CanStartExplorationAutomation);
     public ICommand CancelShipAutomationCommand => this.cancelShipAutomationCommand ??= new DelegateCommand<Ship>(this.CancelShipAutomation, this.CanCancelAutomation);
     public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformJump(ship), this.CanJump);
+    public ICommand PerformInventoryTransferCommand => this.performInventoryTransferCommand ??= new DelegateCommand<Ship>(this.PerformInventoryTransfer, this.CanTransfer);
+    public ICommand PerformChartCommand => this.performChartCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformChart(ship), this.CanChart);
+    public ICommand PerformRefineCommand => this.performRefineCommand ??= new DelegateCommand<Ship>(async ship => await this.PerformRefine(ship), this.CanRefine);
 
     public AgentShipsViewModel(
         ISpaceTradersApi spaceTradersApi,
@@ -178,6 +198,7 @@ internal class AgentShipsViewModel : BindableBase
                 $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
                 NotificationTypes.WarningFeedback,
                 true);
+            this.IsProcessingCommand = false;
             return;
         }
         var result = await this.spaceTradersApi.PostShipExtractResources(ship.Symbol, ship.NavigationInformation.WaypointSymbol);
@@ -202,6 +223,7 @@ internal class AgentShipsViewModel : BindableBase
                 $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
                 NotificationTypes.WarningFeedback,
                 true);
+            this.IsProcessingCommand = false;
             return;
         }
         var surveyInformation = await this.spaceTradersApi.PostShipCreateSurvey(ship.Symbol);
@@ -226,6 +248,7 @@ internal class AgentShipsViewModel : BindableBase
                 $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
                 NotificationTypes.WarningFeedback,
                 true);
+            this.IsProcessingCommand = false;
             return;
         }
         this.IsProcessingCommand = false;
@@ -242,6 +265,7 @@ internal class AgentShipsViewModel : BindableBase
                 $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
                 NotificationTypes.WarningFeedback,
                 true);
+            this.IsProcessingCommand = false;
             return;
         }
 
@@ -259,12 +283,12 @@ internal class AgentShipsViewModel : BindableBase
     {
         this.IsProcessingCommand = true;
         _ = await this.spaceTradersApi.PostShipOrbit(ship.Symbol);
-        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} entered orbit succesfully",
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        await this.RefreshShips(ship);
         this.IsProcessingCommand = false;
     }
 
@@ -276,12 +300,12 @@ internal class AgentShipsViewModel : BindableBase
         {
             this.CargoToSell = string.Empty;
         }
-        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} docked succesfully",
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        await this.RefreshShips(ship);
         this.IsProcessingCommand = false;
     }
 
@@ -302,43 +326,123 @@ internal class AgentShipsViewModel : BindableBase
     {
         this.IsProcessingCommand = true;
         var refuelResponse = await this.spaceTradersApi.PostShipRefuel(ship.Symbol);
-        await this.RefreshShips(ship);
         this.notificationService.ShowToastNotification(
             $"Ship {ship.Symbol} refueled succesfully",
             null,
             NotificationTypes.PositiveFeedback,
             true);
+        await this.RefreshShips(ship);
         this.IsProcessingCommand = false;
     }
 
     private async Task RefreshShips(Ship ship)
     {
+        this.IsProcessingCommand = true;
+
         this.Ships = await this.spaceTradersApi.GetShips(this.PageNumber, 20);
         if (ship is not null)
         {
             this.SelectedShip = this.Ships.FirstOrDefault(x => x.Symbol == ship.Symbol);
         }
+
+        this.IsProcessingCommand = false;
     }
 
     private async Task PerformInventorySell(object[] commandParameters)
     {
         this.IsProcessingCommand = true;
-        if (commandParameters.Length == 2 &&
-            commandParameters[0] is Ship ship)
+
+        if (commandParameters.Length == 2)
         {
-            var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(ship.Symbol, new PostShipSellCargoRequest
+            var sellCargoResponse = await this.spaceTradersApi.PostShipSellCargo(this.SelectedShip.Symbol, new PostShipSellCargoRequest
             {
                 Symbol = this.SelectedInventory.Symbol,
                 Units = int.Parse(this.CargoToSell)
             });
 
-            this.notificationService.ShowToastNotification(
-                $"Ship {ship.Symbol} sold cargo",
-                $"Sold {sellCargoResponse.Transaction.Units} units of {sellCargoResponse.Transaction.TradeSymbol} for {sellCargoResponse.Transaction.TotalPrice} credits, current credits: {sellCargoResponse.Agent.Credits}",
-                NotificationTypes.PositiveFeedback);
+            if (sellCargoResponse is not null)
+            {
+                this.notificationService.ShowToastNotification(
+                    $"Ship {this.SelectedShip.Symbol} sold cargo",
+                    $"Sold {sellCargoResponse.Transaction.Units} units of {sellCargoResponse.Transaction.TradeSymbol} for {sellCargoResponse.Transaction.TotalPrice} credits, current credits: {sellCargoResponse.Agent.Credits}",
+                    NotificationTypes.PositiveFeedback);
 
-            await this.RefreshShips(this.SelectedShip);
+                await this.RefreshShips(this.SelectedShip);
+            }
         }
+
+        this.IsProcessingCommand = false;
+    }
+
+    private async Task PerformRefine(Ship ship)
+    {
+        this.IsProcessingCommand = true;
+
+        if (this.SelectedInventory is not null
+            && !this.AcceptedRefineResources.Contains(this.SelectedInventory.Symbol))
+        {
+            this.notificationService.ShowToastNotification(
+                "Can't start refine operation",
+                $"Resource {this.SelectedInventory.Symbol} can't be refined, valid resources are: {string.Join(", ", this.AcceptedRefineResources)}",
+                NotificationTypes.NegativeFeedback);
+            this.IsProcessingCommand = false;
+            return;
+        }
+
+        var cooldown = await this.spaceTradersApi.GetShipCooldown(ship.Symbol);
+        if (cooldown is not null)
+        {
+            this.notificationService.ShowToastNotification(
+                $"Ship {ship.Symbol} is cooling down",
+                $"Remaining cooldown: {cooldown.RemainingSeconds} seconds",
+                NotificationTypes.WarningFeedback,
+                true);
+            this.IsProcessingCommand = false;
+            return;
+        }
+
+        var refineResponse = await this.spaceTradersApi.PostShipRefine(ship.Symbol, this.SelectedInventory.Symbol);
+        if (refineResponse is not null)
+        {
+            this.notificationService
+                .ShowToastNotification(
+                    $"Ship {ship.Symbol} refined materials",
+                    $"Consumed {string.Join(", ", refineResponse.Consumed.Select(cargo => $"{cargo.Symbol}: {cargo.Units} units"))} to {Environment.NewLine} produce {string.Join(", ", refineResponse.Produced.Select(cargo => $"{cargo.Symbol}: {cargo.Units} units"))}",
+                    NotificationTypes.PositiveFeedback);
+        }
+        this.IsProcessingCommand = false;
+    }
+
+    private void PerformInventoryTransfer(Ship ship)
+    {
+        this.IsProcessingCommand = true;
+
+        this.regionManager.RegisterViewWithRegion(RegionNames.DialogAreaRegion, typeof(ShipCargoTransferView));
+        this.eventAggregator
+            .GetEvent<ShipCargoTransferEvent>()
+            .Publish(new ShipCargoTransferEventArguments
+            {
+                ShipToTransferFrom = ship
+            });
+
+        this.IsProcessingCommand = false;
+    }
+
+    private async Task PerformChart(Ship ship)
+    {
+        this.IsProcessingCommand = true;
+
+        var chartResult = await this.spaceTradersApi.PostShipCreateChart(ship.Symbol);
+
+        if (chartResult is not null)
+        {
+            this.notificationService
+                .ShowToastNotification(
+                    $"Charted waypoint {chartResult.Chart.WaypointSymbol}",
+                    $"discovered by {ship.Symbol} on {chartResult.Chart.SubmittedOn}",
+                    NotificationTypes.PositiveFeedback);
+        }
+
         this.IsProcessingCommand = false;
     }
 
@@ -653,6 +757,15 @@ internal class AgentShipsViewModel : BindableBase
                && ship.NavigationInformation.Status == "IN_ORBIT";
     }
 
+    private bool CanTransfer(Ship ship)
+    {
+        return ship is not null
+               && ship.NavigationInformation.Status is not "IN_TRANSIT"
+               && !shipCancellationTokens.ContainsKey(ship.Symbol)
+               && ship.Cargo.Capacity > 0
+               && ship.Cargo.Units > 0;
+    }
+
     private bool CanOrbit(Ship ship)
     {
         return ship is not null
@@ -715,6 +828,21 @@ internal class AgentShipsViewModel : BindableBase
             && ship.NavigationInformation.Status == "IN_ORBIT"
             && ship.Frame.Symbol.Equals("FRAME_PROBE")
             && !shipCancellationTokens.ContainsKey(ship.Symbol);
+    }
+
+    private bool CanChart(Ship ship)
+    {
+        return ship is not null
+               && ship.NavigationInformation.Status is not "IN_TRANSIT"
+               && !shipCancellationTokens.ContainsKey(ship.Symbol);
+    }
+
+    private bool CanRefine(Ship ship)
+    {
+        return ship is not null
+               && ship.NavigationInformation.Status is not "IN_TRANSIT"
+               && ship.Modules.Any(module => module.Symbol.StartsWith("MODULE_ORE_REFINERY"))
+               && !shipCancellationTokens.ContainsKey(ship.Symbol);
     }
 
     #endregion Commands CanExecute Methods

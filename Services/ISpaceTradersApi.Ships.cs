@@ -13,7 +13,7 @@ internal partial interface ISpaceTradersApi
 
     Task<ShipNavigationInformation> PostShipOrbit(string shipSymbol);
 
-    Task<ShipNavigationInformation> PostShipRefine(string shipSymbol, TradeSymbols tradeSymbol);
+    Task<ShipRefineResponse> PostShipRefine(string shipSymbol, string oreToRefine);
 
     Task<ChartResponse> PostShipCreateChart(string shipSymbol);
 

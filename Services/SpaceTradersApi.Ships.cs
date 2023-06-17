@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 
 using Newtonsoft.Json;
 
@@ -107,31 +108,34 @@ internal partial class SpaceTradersApi
         return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
     }
 
-    public async Task<ShipNavigationInformation> PostShipRefine(string shipSymbol, TradeSymbols tradeSymbol)
+    public async Task<ShipRefineResponse> PostShipRefine(string shipSymbol, string oreToRefine)
     {
-        switch (tradeSymbol)
+        var materialToProduce = oreToRefine switch
         {
-            default:
-                throw new ArgumentException("Invalid trade symbol specified, only Iron, Copper, Silver, Gold, Aluminum, Platinum, Uranite, Meritium and fuel are allowed", nameof(tradeSymbol));
-            case TradeSymbols.Iron:
-            case TradeSymbols.Copper:
-            case TradeSymbols.Aluminum:
-            case TradeSymbols.Silver:
-            case TradeSymbols.Gold:
-            case TradeSymbols.Platinum:
-            case TradeSymbols.Uranite:
-            case TradeSymbols.Meritium:
-            case TradeSymbols.Fuel:
-                break;
+            "IRON_ORE" => "IRON",
+            "COPPER_ORE" => "COPPER",
+            "SILVER_ORE" => "SILVER",
+            "GOLD_ORE" => "GOLD",
+            "ALUMINUM_ORE" => "ALUMINUM",
+            "PLATINUM_ORE" => "PLATINUM",
+            "URANITE_ORE" => "URANITE",
+            "MERITIUM_ORE" => "MERITIUM",
+            _ => default
+        };
+
+        if (materialToProduce is null or "")
+        {
+            return default;
         }
+
         var request = new RestRequest(string.Format(PostShipRefineResource, shipSymbol), Method.Post);
         request.AddBody(new ShipRefineRequestModel
         {
-            Produce = tradeSymbol.ToApiString()
+            Produce = materialToProduce
         });
         var response = await this.restClient.ExecuteAsync(request);
 
-        return JsonConvert.DeserializeObject<ApiResponse<ShipNavigationInformation>>(response.Content).Data;
+        return JsonConvert.DeserializeObject<ApiResponse<ShipRefineResponse>>(response.Content).Data;
     }
 
     public async Task<ChartResponse> PostShipCreateChart(string shipSymbol)

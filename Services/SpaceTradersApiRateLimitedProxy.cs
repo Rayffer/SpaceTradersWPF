@@ -229,10 +229,10 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi, IDisposable
         return await this.spaceTradersApi.PostShipPurchase(shipTypes, waypointSymbol);
     }
 
-    public async Task<ShipNavigationInformation> PostShipRefine(string shipSymbol, TradeSymbols tradeSymbol)
+    public async Task<ShipRefineResponse> PostShipRefine(string shipSymbol, string oreToRefine)
     {
         await this.AcquireRateLimitToken();
-        return await this.spaceTradersApi.PostShipRefine(shipSymbol, tradeSymbol);
+        return await this.spaceTradersApi.PostShipRefine(shipSymbol, oreToRefine);
     }
 
     public async Task<SurveyResponse> PostShipCreateSurvey(string shipSymbol)
@@ -305,7 +305,6 @@ internal class SpaceTradersApiRateLimitedProxy : ISpaceTradersApi, IDisposable
     {
         await this.AcquireRateLimitToken();
         return await this.spaceTradersApi.PostShipNegotiateContract(shipSymbol);
-
     }
 
     public void Dispose()
