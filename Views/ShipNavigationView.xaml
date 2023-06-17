@@ -40,8 +40,7 @@
                     VerticalContentAlignment="Center"
                     ItemsSource="{Binding Waypoints}"
                     SelectedIndex="0"
-                    SelectedValue="{Binding SelectedWaypoint}"
-                    Style="{DynamicResource SpaceTradersComboBox}">
+                    SelectedValue="{Binding SelectedWaypoint}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>

@@ -43,8 +43,7 @@
                     DisplayMemberPath="Name"
                     ItemsSource="{Binding Factions}"
                     SelectedIndex="0"
-                    SelectedValue="{Binding SelectedFaction}"
-                    Style="{DynamicResource SpaceTradersComboBox}" />
+                    SelectedValue="{Binding SelectedFaction}" />
                 <Button
                     Grid.Row="4"
                     Command="{Binding RegisterAgentCommand}"
