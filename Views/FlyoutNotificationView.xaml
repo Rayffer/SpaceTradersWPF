@@ -23,7 +23,7 @@
                 </ThicknessAnimation.EasingFunction>
             </ThicknessAnimation>
         </Storyboard>
-        <Storyboard x:Key="ClearDataContextStoryboard">
+        <Storyboard x:Key="ClearDataContextStoryboard" x:Shared="False">
             <DoubleAnimation
                 BeginTime="0:0:5"
                 Completed="DoubleAnimation_Completed"
