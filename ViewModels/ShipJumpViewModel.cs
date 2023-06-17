@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -27,10 +26,10 @@ internal class ShipJumpViewModel : BindableBase
     private JumpGateConnectedSystem selectedSystemToJump;
     private Ship ship;
     private DelegateCommand cancelJumpCommand;
-    private DelegateCommand performJumpCommand;
+    private DelegateCommand<JumpGateConnectedSystem> performJumpCommand;
 
     public ICommand CancelJumpCommand => this.cancelJumpCommand ??= new DelegateCommand(this.CancelJump);
-    public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand(async () => await this.PerformJump());
+    public ICommand PerformJumpCommand => this.performJumpCommand ??= new DelegateCommand<JumpGateConnectedSystem>(async system => await this.PerformJump(), this.CanJump);
 
     public JumpGateConnectedSystem[] JumpGateSystems
     {
@@ -100,6 +99,11 @@ internal class ShipJumpViewModel : BindableBase
                 Types.NotificationTypes.PositiveFeedback);
 
         this.RemoveView();
+    }
+
+    private bool CanJump(JumpGateConnectedSystem system)
+    {
+        return system is not null;
     }
 
     private void RemoveView()

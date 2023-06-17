@@ -28,14 +28,21 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="Ship:" />
-                <TextBlock Grid.Column="1" Text="{Binding Ship.Symbol}" />
-                <TextBlock Grid.Row="1" Text="Waypoint to navigate:" />
-                <ComboBox
+                <Border Grid.ColumnSpan="2" Style="{DynamicResource AccentBorder}" />
+                <TextBlock
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Center"
+                    FontSize="{DynamicResource Level2FontSize}"
+                    Text="Select Destination" />
+                <TextBlock Grid.Row="1" Text="Ship:" />
+                <TextBlock
                     Grid.Row="1"
+                    Grid.Column="1"
+                    Text="{Binding Ship.Symbol}" />
+                <TextBlock Grid.Row="2" Text="Waypoint to navigate:" />
+                <ComboBox
+                    Grid.Row="2"
                     Grid.Column="1"
                     VerticalContentAlignment="Center"
                     ItemsSource="{Binding JumpGateSystems}"
@@ -55,11 +62,14 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <StackPanel
-                    Grid.Row="4"
+                    Grid.Row="3"
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Center"
                     Orientation="Horizontal">
-                    <Button Command="{Binding PerformJumpCommand}" Content="Navigate to waypoint" />
+                    <Button
+                        Command="{Binding PerformJumpCommand}"
+                        CommandParameter="{Binding SelectedSystemToJump}"
+                        Content="Jump to waypoint" />
                     <Button Command="{Binding CancelJumpCommand}" Content="Cancel Navigation" />
                 </StackPanel>
             </Grid>

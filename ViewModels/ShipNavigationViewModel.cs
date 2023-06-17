@@ -30,12 +30,13 @@ internal class ShipNavigationViewModel : BindableBase
     private Ship ship;
     private Waypoint[] waypoints;
     private DelegateCommand cancelNavigationCommand;
-    private DelegateCommand performNavigationCommand;
+    private DelegateCommand<Waypoint> performNavigationCommand;
     private DelegateCommand<Waypoint> updateFuelCommand;
     private DelegateCommand<Waypoint> updateFlightTimeCommand;
 
     public ICommand CancelNavigationCommand => this.cancelNavigationCommand ??= new DelegateCommand(this.CancelNavigation);
-    public ICommand PerformNavigationCommand => this.performNavigationCommand ??= new DelegateCommand(async () => await this.PerformNavigation());
+    public ICommand PerformNavigationCommand => this.performNavigationCommand ??= new DelegateCommand<Waypoint>(async _ => await this.PerformNavigation(), this.CanNavigate);
+
     public ICommand UpdateFuelCommand => this.updateFuelCommand ??= new DelegateCommand<Waypoint>(this.UpdateFuel);
     public ICommand UpdateFlightTimeCommand => this.updateFlightTimeCommand ??= new DelegateCommand<Waypoint>(this.UpdateFlightTime);
 
@@ -164,5 +165,10 @@ internal class ShipNavigationViewModel : BindableBase
 
         var viewToRemove = this.regionManager.Regions[RegionNames.DialogAreaRegion].Views.OfType<ShipNavigationView>().Single();
         this.regionManager.Regions[RegionNames.DialogAreaRegion].Remove(viewToRemove);
+    }
+
+    private bool CanNavigate(Waypoint waypoint)
+    {
+        return waypoint is not null;
     }
 }
