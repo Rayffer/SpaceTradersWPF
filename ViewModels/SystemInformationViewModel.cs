@@ -110,6 +110,7 @@ internal class SystemInformationViewModel : BindableBase
         {
             return;
         }
+
         this.Systems = await this.spaceTradersApi.GetSystems(this.PageNumber, 20);
         this.SystemWaypoints = Enumerable.Empty<Waypoint>().ToArray();
         this.SelectedSystem = this.Systems.First();

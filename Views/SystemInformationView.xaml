@@ -110,11 +110,9 @@
                 </controls:IntegerNumericTextbox>
                 <TextBlock
                     Grid.Column="3"
-                    Style="{DynamicResource RegularTextBlockCenterAligned}"
                     Text="/" />
                 <TextBlock
                     Grid.Column="4"
-                    Style="{DynamicResource RegularTextBlockCenterAligned}"
                     Text="{Binding MaxPage}" />
                 <Button Grid.Column="5" Content="Go to" />
                 <Button Grid.Column="6" Content="Next" />

@@ -6,13 +6,6 @@
         <Setter Property="FontSize" Value="{DynamicResource Level3FontSize}" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <Style x:Key="RegularTextBlockCenterAligned" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="FontSize" Value="{DynamicResource Level3FontSize}" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-    </Style>
     <Style x:Key="DetailTextBlock" TargetType="TextBlock">
         <Setter Property="Foreground" Value="{DynamicResource TextFontColorSolidColorBrush}" />
         <Setter Property="TextWrapping" Value="Wrap" />
